@@ -1,0 +1,9 @@
+name: FilteringHoppers
+description: Allows you to add a filter to your hoppers for more efficient storage!
+main: me.cocolennon.filteringhoppers.Main
+version: 1.0.0
+author: Cocolennon
+api-version: '1.20'
+commands:
+  filteringhoppers:
+    description: Check out information about the plugin!
