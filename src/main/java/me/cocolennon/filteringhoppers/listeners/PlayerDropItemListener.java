@@ -45,28 +45,27 @@ public class PlayerDropItemListener implements Listener {
                     break;
                 }
             }
-            for(int i = 0; i < filter.length; i++) {
-                ItemStack currentItem = filter[i];
-                if(currentItem.hasItemMeta() && itemStack.hasItemMeta()) {
-                    if(currentItem.getItemMeta().hasDisplayName() && itemStack.getItemMeta().hasDisplayName()) {
-                        if(currentItem.getItemMeta().getDisplayName().equals(itemStack.getItemMeta().getDisplayName()) && currentItem.getType().equals(itemStack.getType())) {
+            for (ItemStack currentItem : filter) {
+                if (currentItem.hasItemMeta() && itemStack.hasItemMeta()) {
+                    if (currentItem.getItemMeta().hasDisplayName() && itemStack.getItemMeta().hasDisplayName()) {
+                        if (currentItem.getItemMeta().getDisplayName().equals(itemStack.getItemMeta().getDisplayName()) && currentItem.getType().equals(itemStack.getType())) {
                             try {
                                 Hopper hopper = (Hopper) current.getLocation().getBlock().getState();
                                 hopper.getSnapshotInventory().addItem(itemStack);
                                 item.remove();
                                 hopper.update();
-                            }catch(ClassCastException exception) {
+                            } catch (ClassCastException exception) {
                                 break;
                             }
                         }
                     }
-                }else if(currentItem.getType().equals(itemStack.getType())) {
+                } else if (currentItem.getType().equals(itemStack.getType())) {
                     try {
                         Hopper hopper = (Hopper) current.getLocation().getBlock().getState();
                         hopper.getSnapshotInventory().addItem(itemStack);
                         item.remove();
                         hopper.update();
-                    }catch(ClassCastException exception) {
+                    } catch (ClassCastException exception) {
                         break;
                     }
                 }

@@ -9,36 +9,34 @@ import org.bukkit.inventory.meta.ItemMeta;
 
 public class MenuCreator {
     private static final MenuCreator instance = new MenuCreator();
-    private final ItemStack filler = getItem(Material.BLACK_STAINED_GLASS_PANE, " ", "filler");
+    private final ItemStack filler = getItem();
 
     public void createFilterMenu(ItemStack[] filter, Player player) {
         Inventory inv = Bukkit.createInventory(null, 27, "§5Filtering Hoppers§f: §dFilter Menu");
 
         if(filter != null) {
-            for (int i = 0; i < filter.length; i++) {
-                inv.addItem(filter[i]);
+            for (ItemStack itemStack : filter) {
+                inv.addItem(itemStack);
             }
         }
 
-        fillEmpty(inv, filler, 18);
+        fillEmpty(inv, filler);
 
         player.openInventory(inv);
         player.sendMessage("§d[§5Filtering Hoppers§d] Successfully opened the filter menu.");
     }
 
-    private void fillEmpty(Inventory inv, ItemStack item, int start){
-        for(int i = start; i < inv.getSize(); i++){
+    private void fillEmpty(Inventory inv, ItemStack item){
+        for(int i = 18; i < inv.getSize(); i++){
             if(inv.getItem(i) != null) break;
             inv.setItem(i, item);
         }
     }
 
-    private ItemStack getItem(Material material, String newName, String localizedName){
-        ItemStack it = new ItemStack(material, 1);
+    private ItemStack getItem(){
+        ItemStack it = new ItemStack(Material.BLACK_STAINED_GLASS_PANE, 1);
         ItemMeta itM = it.getItemMeta();
         assert itM != null;
-        if(newName != null) itM.setDisplayName(newName);
-        if(localizedName != null) itM.setLocalizedName(localizedName);
         it.setItemMeta(itM);
         return it;
     }

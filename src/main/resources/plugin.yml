@@ -1,9 +1,16 @@
 name: FilteringHoppers
 description: Allows you to add a filter to your hoppers for more efficient storage!
 main: me.cocolennon.filteringhoppers.Main
-version: 1.0.1
+version: 1.0.2
 author: Cocolennon
 api-version: '1.20'
 commands:
   filteringhoppers:
     description: Check out information about the plugin!
+    aliases:
+      - fh
+permissions:
+  filteringhoppers.reload:
+    description: Allows user to reload the configuration
+  filteringhoppers.set-max-hopper:
+    description: Allows user to set the maximum amount of hoppers per chunk

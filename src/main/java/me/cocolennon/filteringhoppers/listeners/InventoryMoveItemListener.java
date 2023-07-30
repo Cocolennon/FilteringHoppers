@@ -30,13 +30,13 @@ public class InventoryMoveItemListener implements Listener {
         PersistentDataContainer container = tileState.getPersistentDataContainer();
         ItemStack[] filter = container.get(key, DataType.ITEM_STACK_ARRAY);
         if(filter == null) return;
-        for(int i = 0; i < filter.length; i++) {
-            ItemStack current = filter[i];
-            if(current.hasItemMeta() && item.hasItemMeta()) {
-                if(current.getItemMeta().hasDisplayName() && item.getItemMeta().hasDisplayName()) {
-                    if(!current.getItemMeta().getDisplayName().equals(item.getItemMeta().getDisplayName()) && current.getType().equals(item.getType())) event.setCancelled(true);
+        for (ItemStack current : filter) {
+            if (current.hasItemMeta() && item.hasItemMeta()) {
+                if (current.getItemMeta().hasDisplayName() && item.getItemMeta().hasDisplayName()) {
+                    if (!current.getItemMeta().getDisplayName().equals(item.getItemMeta().getDisplayName()) && current.getType().equals(item.getType()))
+                        event.setCancelled(true);
                 }
-            }else if(!current.getType().equals(item.getType())) event.setCancelled(true);
+            } else if (!current.getType().equals(item.getType())) event.setCancelled(true);
         }
     }
 
@@ -52,13 +52,13 @@ public class InventoryMoveItemListener implements Listener {
         PersistentDataContainer container = tileState.getPersistentDataContainer();
         ItemStack[] filter = container.get(key, DataType.ITEM_STACK_ARRAY);
         if(filter == null) return;
-        for(int i = 0; i < filter.length; i++) {
-            ItemStack current = filter[i];
-            if(current.hasItemMeta() && item.hasItemMeta()) {
-                if(current.getItemMeta().hasDisplayName() && item.getItemMeta().hasDisplayName()) {
-                    if(!current.getItemMeta().getDisplayName().equals(item.getItemMeta().getDisplayName()) && current.getType().equals(item.getType())) event.setCancelled(true);
+        for (ItemStack current : filter) {
+            if (current.hasItemMeta() && item.hasItemMeta()) {
+                if (current.getItemMeta().hasDisplayName() && item.getItemMeta().hasDisplayName()) {
+                    if (!current.getItemMeta().getDisplayName().equals(item.getItemMeta().getDisplayName()) && current.getType().equals(item.getType()))
+                        event.setCancelled(true);
                 }
-            }else if(!current.getType().equals(item.getType())) event.setCancelled(true);
+            } else if (!current.getType().equals(item.getType())) event.setCancelled(true);
         }
     }
 }
