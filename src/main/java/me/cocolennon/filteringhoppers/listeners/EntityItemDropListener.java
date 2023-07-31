@@ -10,16 +10,16 @@ import org.bukkit.block.TileState;
 import org.bukkit.entity.Item;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.player.PlayerDropItemEvent;
+import org.bukkit.event.entity.EntityDropItemEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.persistence.PersistentDataContainer;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class PlayerDropItemListener implements Listener {
+public class EntityItemDropListener implements Listener {
     @EventHandler
-    public void playerDropItem(PlayerDropItemEvent event) {
+    public void entityItemDrop(EntityDropItemEvent event) {
         Item item = event.getItemDrop();
         ItemStack itemStack = item.getItemStack();
         Chunk itemLocation = item.getLocation().getChunk();
@@ -41,7 +41,7 @@ public class PlayerDropItemListener implements Listener {
                     hopper.getSnapshotInventory().addItem(itemStack);
                     item.remove();
                     hopper.update();
-                    return;
+                    break;
                 }catch(ClassCastException exception) {
                     break;
                 }
@@ -55,7 +55,7 @@ public class PlayerDropItemListener implements Listener {
                                 hopper.getSnapshotInventory().addItem(itemStack);
                                 item.remove();
                                 hopper.update();
-                                return;
+                                break;
                             } catch (ClassCastException exception) {
                                 break;
                             }
@@ -67,7 +67,7 @@ public class PlayerDropItemListener implements Listener {
                         hopper.getSnapshotInventory().addItem(itemStack);
                         item.remove();
                         hopper.update();
-                        return;
+                        break;
                     } catch (ClassCastException exception) {
                         break;
                     }

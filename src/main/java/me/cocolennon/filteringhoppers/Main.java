@@ -48,6 +48,9 @@ public class Main extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new InventoryClickListener(), instance);
         getServer().getPluginManager().registerEvents(new PlayerDropItemListener(), instance);
         getServer().getPluginManager().registerEvents(new BlockPlaceListener(), instance);
+        getServer().getPluginManager().registerEvents(new BlockDropItemListener(), instance);
+        getServer().getPluginManager().registerEvents(new EntityItemDropListener(), instance);
+        getServer().getPluginManager().registerEvents(new EntityDeathListener(), instance);
     }
 
     public String getVersion() { return instance.version; }

@@ -9,7 +9,6 @@ import org.bukkit.inventory.meta.ItemMeta;
 
 public class MenuCreator {
     private static final MenuCreator instance = new MenuCreator();
-    private final ItemStack filler = getItem();
 
     public void createFilterMenu(ItemStack[] filter, Player player) {
         Inventory inv = Bukkit.createInventory(null, 27, "§5Filtering Hoppers§f: §dFilter Menu");
@@ -20,7 +19,7 @@ public class MenuCreator {
             }
         }
 
-        fillEmpty(inv, filler);
+        fillEmpty(inv, getItem());
 
         player.openInventory(inv);
         player.sendMessage("§d[§5Filtering Hoppers§d] Successfully opened the filter menu.");
@@ -37,6 +36,8 @@ public class MenuCreator {
         ItemStack it = new ItemStack(Material.BLACK_STAINED_GLASS_PANE, 1);
         ItemMeta itM = it.getItemMeta();
         assert itM != null;
+        itM.setDisplayName(" ");
+        itM.setLocalizedName("filler");
         it.setItemMeta(itM);
         return it;
     }

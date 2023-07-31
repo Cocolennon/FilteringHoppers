@@ -24,7 +24,7 @@ public class InventoryCloseListener implements Listener {
         Inventory inventory = event.getInventory();
         if(!event.getView().getTitle().equals("§5Filtering Hoppers§f: §dFilter Menu")) return;
         Block block = player.getTargetBlockExact(6);
-        assert block != null;
+        if(block == null) return;
         BlockState blockState = block.getState();
         if(!(blockState instanceof TileState)) return;
         TileState tileState = (TileState) blockState;
