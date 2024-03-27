@@ -31,7 +31,7 @@ public class EntityItemDropListener implements Listener {
             TileState currentTileState = (TileState) current;
             tileStates.add(currentTileState);
         }
-        if(tileStates.size() == 0) return;
+        if(tileStates.isEmpty()) return;
         for(TileState current : tileStates) {
             PersistentDataContainer container = current.getPersistentDataContainer();
             NamespacedKey key = new NamespacedKey(Main.getInstance(), "hopperFilter");

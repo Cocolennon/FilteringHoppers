@@ -6,8 +6,6 @@ import me.cocolennon.filteringhoppers.utils.UpdateChecker;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import java.util.List;
-
 public class Main extends JavaPlugin {
     private String version;
     private boolean usingOldVersion = false;
