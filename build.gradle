@@ -21,7 +21,7 @@ dependencies {
 }
 
 shadowJar {
-    relocate 'com.jeff_media.morepersistentdatatypes', 'YOUR.PACKAGE.morepersistentdatatypes'
+    relocate 'com.jeff_media.morepersistentdatatypes', 'me.cocolennon.morepersistentdatatypes'
     archiveFileName = "FilteringHoppers-${version}.jar"
 }
 
