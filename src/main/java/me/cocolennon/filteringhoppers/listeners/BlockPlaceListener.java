@@ -32,7 +32,7 @@ public class BlockPlaceListener implements Listener {
             TileState currentTileState = (TileState) current;
             tileStates.add(currentTileState);
         }
-        if(tileStates.size() == 0) return;
+        if(tileStates.isEmpty()) return;
 
         int hopperCount = 0;
         for(TileState current : tileStates) {

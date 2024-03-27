@@ -44,6 +44,7 @@ public class BlockDropItemListener implements Listener {
                     }
                 }
             }
+            if(!Main.getInstance().getConfig().getBoolean("chunk-collection-enabled")) return;
             Chunk itemLocation = item.getLocation().getChunk();
             for(BlockState current : itemLocation.getTileEntities()) {
                 if(!(current instanceof TileState)) return;
@@ -52,7 +53,7 @@ public class BlockDropItemListener implements Listener {
                 tileStates.add(currentTileState);
             }
         }
-        if(tileStates.size() == 0) return;
+        if(tileStates.isEmpty()) return;
         for(TileState current : tileStates) {
             PersistentDataContainer container = current.getPersistentDataContainer();
             NamespacedKey key = new NamespacedKey(Main.getInstance(), "hopperFilter");

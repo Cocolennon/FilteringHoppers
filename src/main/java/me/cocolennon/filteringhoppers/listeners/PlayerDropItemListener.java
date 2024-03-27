@@ -20,6 +20,7 @@ import java.util.List;
 public class PlayerDropItemListener implements Listener {
     @EventHandler
     public void playerDropItem(PlayerDropItemEvent event) {
+        if(!Main.getInstance().getConfig().getBoolean("chunk-collection-enabled")) return;
         Item item = event.getItemDrop();
         ItemStack itemStack = item.getItemStack();
         Chunk itemLocation = item.getLocation().getChunk();
@@ -30,7 +31,7 @@ public class PlayerDropItemListener implements Listener {
             TileState currentTileState = (TileState) current;
             tileStates.add(currentTileState);
         }
-        if(tileStates.size() == 0) return;
+        if(tileStates.isEmpty()) return;
         for(TileState current : tileStates) {
             PersistentDataContainer container = current.getPersistentDataContainer();
             NamespacedKey key = new NamespacedKey(Main.getInstance(), "hopperFilter");

@@ -35,7 +35,7 @@ public class Main extends JavaPlugin {
 
     private void setUpConfig(){
         config.addDefault("max-hopper-per-chunk", 5);
-        config.options().setHeader(List.of("This is the maximum amount of Hoppers you can have in a chunk. (Default: 5)"));
+        config.addDefault("chunk-collection-enabled", true);
         config.options().copyDefaults(true);
         saveConfig();
     }

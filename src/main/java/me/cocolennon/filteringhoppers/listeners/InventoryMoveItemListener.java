@@ -25,7 +25,7 @@ public class InventoryMoveItemListener implements Listener {
         if(dest.getType() != InventoryType.HOPPER) return;
         Block block = dest.getLocation().getBlock();
         BlockState blockState = block.getState();
-        if((!(blockState instanceof TileState))) return;
+        if(!(blockState instanceof TileState)) return;
         TileState tileState = (TileState) blockState;
         PersistentDataContainer container = tileState.getPersistentDataContainer();
         ItemStack[] filter = container.get(key, DataType.ITEM_STACK_ARRAY);
@@ -47,7 +47,7 @@ public class InventoryMoveItemListener implements Listener {
         if(dest.getType() != InventoryType.HOPPER) return;
         Block block = dest.getLocation().getBlock();
         BlockState blockState = block.getState();
-        if((!(blockState instanceof TileState))) return;
+        if(!(blockState instanceof TileState)) return;
         TileState tileState = (TileState) blockState;
         PersistentDataContainer container = tileState.getPersistentDataContainer();
         ItemStack[] filter = container.get(key, DataType.ITEM_STACK_ARRAY);

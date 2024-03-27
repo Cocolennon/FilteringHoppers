@@ -20,6 +20,7 @@ import java.util.List;
 public class EntityItemDropListener implements Listener {
     @EventHandler
     public void entityItemDrop(EntityDropItemEvent event) {
+        if(!Main.getInstance().getConfig().getBoolean("chunk-collection-enabled")) return;
         Item item = event.getItemDrop();
         ItemStack itemStack = item.getItemStack();
         Chunk itemLocation = item.getLocation().getChunk();

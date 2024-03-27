@@ -20,6 +20,7 @@ import java.util.List;
 public class EntityDeathListener implements Listener {
     @EventHandler
     public void entityDeath(EntityDeathEvent event) {
+        if(!Main.getInstance().getConfig().getBoolean("chunk-collection-enabled")) return;
         List<ItemStack> items = event.getDrops();
         LivingEntity entity = event.getEntity();
         Chunk itemLocation = entity.getLocation().getChunk();
