@@ -42,5 +42,16 @@ public class MenuCreator {
         return it;
     }
 
+    public int getFirstFreeSlot(Inventory inv) {
+        int result = 2001;
+        for(int i = 0; i < inv.getSize(); i++) {
+            if(inv.getItem(i) == null) {
+                result = i;
+                break;
+            }
+        }
+        return result;
+    }
+
     public static MenuCreator getInstance() { return instance; }
 }
