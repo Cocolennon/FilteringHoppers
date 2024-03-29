@@ -27,6 +27,7 @@ public class InventoryClickListener implements Listener {
             int slot = MenuCreator.getInstance().getFirstFreeSlot(inv);
             if(getClickedInv.equals(inv)) {
                 inv.setItem(event.getSlot(), new ItemStack(Material.AIR));
+                return;
             }
             if(slot == 2001) {
                 player.sendMessage("§d[§5Filtering Hoppers§d] §cThe filter is full!");
