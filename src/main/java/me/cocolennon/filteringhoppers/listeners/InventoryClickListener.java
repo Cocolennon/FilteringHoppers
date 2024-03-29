@@ -36,7 +36,9 @@ public class InventoryClickListener implements Listener {
                     player.sendMessage("§d[§5Filtering Hoppers§d] §cThis item is already in the filter!");
                     return;
                 }
-                inv.setItem(slot, current);
+                ItemStack newItem = current.clone();
+                newItem.setAmount(1);
+                inv.setItem(slot, newItem);
             }else if(click.isRightClick()) {
                 if(!getClickedInv.equals(inv)) return;
                 inv.setItem(event.getSlot(), new ItemStack(Material.AIR));
