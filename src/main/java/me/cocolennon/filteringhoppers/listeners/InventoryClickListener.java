@@ -1,6 +1,5 @@
 package me.cocolennon.filteringhoppers.listeners;
 
-import me.cocolennon.filteringhoppers.Main;
 import me.cocolennon.filteringhoppers.utils.MenuCreator;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
