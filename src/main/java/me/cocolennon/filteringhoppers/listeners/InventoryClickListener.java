@@ -25,24 +25,21 @@ public class InventoryClickListener implements Listener {
         if(current.hasItemMeta() && current.getItemMeta().hasLocalizedName() && current.getItemMeta().getLocalizedName().equals("filler")) event.setCancelled(true);
         else {
             event.setCancelled(true);
-            if(click.isLeftClick()) {
-                int slot = MenuCreator.getInstance().getFirstFreeSlot(inv);
-                if(getClickedInv.equals(inv)) return;
-                if(slot == 2001) {
-                    player.sendMessage("§d[§5Filtering Hoppers§d] §cThe filter is full!");
-                    return;
-                }
-                if(Arrays.stream(inv.getContents()).toList().contains(current)) {
-                    player.sendMessage("§d[§5Filtering Hoppers§d] §cThis item is already in the filter!");
-                    return;
-                }
-                ItemStack newItem = current.clone();
-                newItem.setAmount(1);
-                inv.setItem(slot, newItem);
-            }else if(click.isRightClick()) {
-                if(!getClickedInv.equals(inv)) return;
+            int slot = MenuCreator.getInstance().getFirstFreeSlot(inv);
+            if(getClickedInv.equals(inv)) {
                 inv.setItem(event.getSlot(), new ItemStack(Material.AIR));
             }
+            if(slot == 2001) {
+                player.sendMessage("§d[§5Filtering Hoppers§d] §cThe filter is full!");
+                return;
+            }
+            if(Arrays.stream(inv.getContents()).toList().contains(current)) {
+                player.sendMessage("§d[§5Filtering Hoppers§d] §cThis item is already in the filter!");
+                return;
+            }
+            ItemStack newItem = current.clone();
+            newItem.setAmount(1);
+            inv.setItem(slot, newItem);
         }
     }
 }
