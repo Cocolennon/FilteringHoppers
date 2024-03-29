@@ -4,6 +4,7 @@ main: me.cocolennon.filteringhoppers.Main
 version: 1.0.4
 author: Cocolennon
 api-version: '1.20'
+folia-supported: true
 commands:
   filteringhoppers:
     description: Check out information about the plugin!
