@@ -20,7 +20,6 @@ public class InventoryClickListener implements Listener {
         ItemStack current = event.getCurrentItem();
         Inventory inv = event.getInventory();
         Inventory getClickedInv = event.getClickedInventory();
-        ClickType click = event.getClick();
         if(current == null) return;
         if(current.hasItemMeta() && current.getItemMeta().hasLocalizedName() && current.getItemMeta().getLocalizedName().equals("filler")) event.setCancelled(true);
         else {
