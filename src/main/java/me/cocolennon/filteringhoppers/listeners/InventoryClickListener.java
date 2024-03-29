@@ -33,12 +33,12 @@ public class InventoryClickListener implements Listener {
                 player.sendMessage("§d[§5Filtering Hoppers§d] §cThe filter is full!");
                 return;
             }
-            if(Arrays.stream(inv.getContents()).toList().contains(current)) {
+            ItemStack newItem = current.clone();
+            newItem.setAmount(1);
+            if(Arrays.stream(inv.getContents()).toList().contains(newItem)) {
                 player.sendMessage("§d[§5Filtering Hoppers§d] §cThis item is already in the filter!");
                 return;
             }
-            ItemStack newItem = current.clone();
-            newItem.setAmount(1);
             inv.setItem(slot, newItem);
         }
     }
