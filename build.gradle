@@ -25,6 +25,6 @@ shadowJar {
     archiveFileName = "FilteringHoppers-${version}.jar"
 }
 
-sourceCompatibility = targetCompatibility = 17
+sourceCompatibility = targetCompatibility = 21
 compileJava.options.encoding = 'UTF-8'
 setLibsDirName('../builds')
