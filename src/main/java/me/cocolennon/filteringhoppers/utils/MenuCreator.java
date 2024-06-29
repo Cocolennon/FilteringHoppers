@@ -1,11 +1,15 @@
 package me.cocolennon.filteringhoppers.utils;
 
+import me.cocolennon.filteringhoppers.Main;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
+import org.bukkit.NamespacedKey;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.persistence.PersistentDataContainer;
+import org.bukkit.persistence.PersistentDataType;
 
 public class MenuCreator {
     private static final MenuCreator instance = new MenuCreator();
@@ -37,7 +41,9 @@ public class MenuCreator {
         ItemMeta itM = it.getItemMeta();
         assert itM != null;
         itM.setDisplayName(" ");
-        itM.setLocalizedName("filler");
+        NamespacedKey buttonAction = new NamespacedKey(Main.getInstance(), "buttonAction");
+        PersistentDataContainer pdc = itM.getPersistentDataContainer();
+        pdc.set(buttonAction, PersistentDataType.STRING, "filler");
         it.setItemMeta(itM);
         return it;
     }
