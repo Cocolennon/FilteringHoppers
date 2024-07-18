@@ -33,7 +33,7 @@ public class InventoryMoveItemListener implements Listener {
         TileState tileState = (TileState) blockState;
         PersistentDataContainer container = tileState.getPersistentDataContainer();
         List<ItemStack> filter = Arrays.asList(container.get(key, DataType.ITEM_STACK_ARRAY));
-        if(filter == null || filter.size() == 0) return;
+        if(filter == null || filter.isEmpty()) return;
         if(!filter.contains(item)) event.setCancelled(true);
     }
 

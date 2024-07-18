@@ -58,7 +58,7 @@ public class BlockDropItemListener implements Listener {
             NamespacedKey key = new NamespacedKey(Main.getInstance(), "hopperFilter");
             List<ItemStack> filter = Arrays.asList(container.get(key, DataType.ITEM_STACK_ARRAY));
             for(Item currentItemInDrops : items) {
-                if(filter == null || filter.size() == 0 || filter.contains(currentItemInDrops)) {
+                if(filter == null || filter.isEmpty() || filter.contains(currentItemInDrops)) {
                     try {
                         ItemStack itemStack = currentItemInDrops.getItemStack();
                         Hopper hopper = (Hopper) current.getLocation().getBlock().getState();

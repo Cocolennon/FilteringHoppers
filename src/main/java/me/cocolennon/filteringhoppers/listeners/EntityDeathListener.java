@@ -39,7 +39,7 @@ public class EntityDeathListener implements Listener {
             NamespacedKey key = new NamespacedKey(Main.getInstance(), "hopperFilter");
             List<ItemStack> filter = Arrays.asList(container.get(key, DataType.ITEM_STACK_ARRAY));
             for(ItemStack currentItemInDrops : items) {
-                if(filter == null || filter.size() == 0 || filter.contains(currentItemInDrops)) {
+                if(filter == null || filter.isEmpty() || filter.contains(currentItemInDrops)) {
                     try {
                         Hopper hopper = (Hopper) current.getLocation().getBlock().getState();
                         hopper.getSnapshotInventory().addItem(currentItemInDrops);

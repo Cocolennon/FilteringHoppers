@@ -37,7 +37,7 @@ public class PlayerDropItemListener implements Listener {
             PersistentDataContainer container = current.getPersistentDataContainer();
             NamespacedKey key = new NamespacedKey(Main.getInstance(), "hopperFilter");
             List<ItemStack> filter = Arrays.asList(container.get(key, DataType.ITEM_STACK_ARRAY));
-            if(filter == null || filter.size() == 0 || filter.contains(itemStack)) {
+            if(filter == null || filter.isEmpty() || filter.contains(itemStack)) {
                 try {
                     Hopper hopper = (Hopper) current.getLocation().getBlock().getState();
                     hopper.getSnapshotInventory().addItem(itemStack);
