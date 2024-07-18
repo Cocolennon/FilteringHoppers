@@ -24,7 +24,6 @@ public class BlockDropItemListener implements Listener {
     @EventHandler
     public void blockDropItem(BlockDropItemEvent event) {
         List<Item> items = event.getItems();
-
         List<TileState> tileStates = new ArrayList<>();
         for(Item item : items) {
             ItemStack itemStack = item.getItemStack();
@@ -57,9 +56,9 @@ public class BlockDropItemListener implements Listener {
         for(TileState current : tileStates) {
             PersistentDataContainer container = current.getPersistentDataContainer();
             NamespacedKey key = new NamespacedKey(Main.getInstance(), "hopperFilter");
-            ItemStack[] filter = container.get(key, DataType.ITEM_STACK_ARRAY);
-            if(filter == null || filter.length == 0) {
-                for(Item currentItemInDrops : items) {
+            List<ItemStack> filter = Arrays.asList(container.get(key, DataType.ITEM_STACK_ARRAY));
+            for(Item currentItemInDrops : items) {
+                if(filter == null || filter.size() == 0 || filter.contains(currentItemInDrops)) {
                     try {
                         ItemStack itemStack = currentItemInDrops.getItemStack();
                         Hopper hopper = (Hopper) current.getLocation().getBlock().getState();
@@ -69,36 +68,6 @@ public class BlockDropItemListener implements Listener {
                         return;
                     } catch (ClassCastException exception) {
                         break;
-                    }
-                }
-            }
-            for (ItemStack currentItem : filter) {
-                for (Item currentItemInDrops : items) {
-                    ItemStack itemStack = currentItemInDrops.getItemStack();
-                    if (currentItem.hasItemMeta() && itemStack.hasItemMeta()) {
-                        if (currentItem.getItemMeta().hasDisplayName() && itemStack.getItemMeta().hasDisplayName()) {
-                            if (currentItem.getItemMeta().getDisplayName().equals(itemStack.getItemMeta().getDisplayName()) && currentItem.getType().equals(itemStack.getType())) {
-                                try {
-                                    Hopper hopper = (Hopper) current.getLocation().getBlock().getState();
-                                    hopper.getSnapshotInventory().addItem(itemStack);
-                                    currentItemInDrops.remove();
-                                    hopper.update();
-                                    return;
-                                } catch (ClassCastException exception) {
-                                    break;
-                                }
-                            }
-                        }
-                    } else if (currentItem.getType().equals(itemStack.getType())) {
-                        try {
-                            Hopper hopper = (Hopper) current.getLocation().getBlock().getState();
-                            hopper.getSnapshotInventory().addItem(itemStack);
-                            currentItemInDrops.remove();
-                            hopper.update();
-                            return;
-                        } catch (ClassCastException exception) {
-                            break;
-                        }
                     }
                 }
             }

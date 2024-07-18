@@ -15,6 +15,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.persistence.PersistentDataContainer;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class PlayerDropItemListener implements Listener {
@@ -35,43 +36,16 @@ public class PlayerDropItemListener implements Listener {
         for(TileState current : tileStates) {
             PersistentDataContainer container = current.getPersistentDataContainer();
             NamespacedKey key = new NamespacedKey(Main.getInstance(), "hopperFilter");
-            ItemStack[] filter = container.get(key, DataType.ITEM_STACK_ARRAY);
-            if(filter == null || filter.length == 0) {
+            List<ItemStack> filter = Arrays.asList(container.get(key, DataType.ITEM_STACK_ARRAY));
+            if(filter == null || filter.size() == 0 || filter.contains(itemStack)) {
                 try {
                     Hopper hopper = (Hopper) current.getLocation().getBlock().getState();
                     hopper.getSnapshotInventory().addItem(itemStack);
                     item.remove();
                     hopper.update();
                     return;
-                }catch(ClassCastException exception) {
+                } catch (ClassCastException exception) {
                     break;
-                }
-            }
-            for (ItemStack currentItem : filter) {
-                if (currentItem.hasItemMeta() && itemStack.hasItemMeta()) {
-                    if (currentItem.getItemMeta().hasDisplayName() && itemStack.getItemMeta().hasDisplayName()) {
-                        if (currentItem.getItemMeta().getDisplayName().equals(itemStack.getItemMeta().getDisplayName()) && currentItem.getType().equals(itemStack.getType())) {
-                            try {
-                                Hopper hopper = (Hopper) current.getLocation().getBlock().getState();
-                                hopper.getSnapshotInventory().addItem(itemStack);
-                                item.remove();
-                                hopper.update();
-                                return;
-                            } catch (ClassCastException exception) {
-                                break;
-                            }
-                        }
-                    }
-                } else if (currentItem.getType().equals(itemStack.getType())) {
-                    try {
-                        Hopper hopper = (Hopper) current.getLocation().getBlock().getState();
-                        hopper.getSnapshotInventory().addItem(itemStack);
-                        item.remove();
-                        hopper.update();
-                        return;
-                    } catch (ClassCastException exception) {
-                        break;
-                    }
                 }
             }
         }
