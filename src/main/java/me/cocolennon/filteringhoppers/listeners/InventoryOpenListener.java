@@ -3,6 +3,7 @@ package me.cocolennon.filteringhoppers.listeners;
 import com.jeff_media.morepersistentdatatypes.DataType;
 import me.cocolennon.filteringhoppers.Main;
 import me.cocolennon.filteringhoppers.utils.MenuCreator;
+import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockState;
@@ -23,14 +24,15 @@ public class InventoryOpenListener implements Listener {
         Inventory inventory = event.getInventory();
         if(inventory.getType() != InventoryType.HOPPER) return;
         if(!player.isSneaking()) return;
-        Block block = player.getTargetBlockExact(6);
+        Block block = inventory.getLocation().getBlock();
+        if(block.getType() != Material.HOPPER) return;
         BlockState blockState = block.getState();
         if(!(blockState instanceof TileState)) return;
         TileState tileState = (TileState) blockState;
         PersistentDataContainer container = tileState.getPersistentDataContainer();
         NamespacedKey key = new NamespacedKey(Main.getInstance(), "hopperFilter");
         ItemStack[] filter = container.get(key, DataType.ITEM_STACK_ARRAY);
-        MenuCreator.getInstance().createFilterMenu(filter, player);
+        MenuCreator.getInstance().createFilterMenu(filter, player, block);
         event.setCancelled(true);
     }
 }
