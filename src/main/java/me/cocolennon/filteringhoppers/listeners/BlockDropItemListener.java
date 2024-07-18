@@ -27,28 +27,26 @@ public class BlockDropItemListener implements Listener {
         List<TileState> tileStates = new ArrayList<>();
         for(Item item : items) {
             ItemStack itemStack = item.getItemStack();
-            if(itemStack.getType().equals(Material.HOPPER)) {
-                BlockState blockState = event.getBlockState();
-                if(blockState instanceof TileState) {
-                    TileState tileState = (TileState) blockState;
-                    if(tileState instanceof Hopper) {
-                        PersistentDataContainer container = tileState.getPersistentDataContainer();
-                        NamespacedKey key = new NamespacedKey(Main.getInstance(), "lore");
-                        if(container.has(key, DataType.STRING_ARRAY)) {
-                            String[] lore = container.get(key, DataType.STRING_ARRAY);
-                            ItemMeta itemMeta = itemStack.getItemMeta();
-                            itemMeta.setLore(Arrays.stream(lore).toList());
-                            itemStack.setItemMeta(itemMeta);
-                        }
-                    }
-                }
+            if(!itemStack.getType().equals(Material.HOPPER)) continue;
+            BlockState blockState = event.getBlockState();
+            if(!(blockState instanceof TileState)) continue;
+            TileState tileState = (TileState) blockState;
+            if (!(tileState instanceof Hopper)) continue;
+            PersistentDataContainer container = tileState.getPersistentDataContainer();
+            NamespacedKey key = new NamespacedKey(Main.getInstance(), "lore");
+            if (container.has(key, DataType.STRING_ARRAY)) {
+                String[] lore = container.get(key, DataType.STRING_ARRAY);
+                ItemMeta itemMeta = itemStack.getItemMeta();
+                itemMeta.setLore(Arrays.stream(lore).toList());
+                itemStack.setItemMeta(itemMeta);
             }
             if(!Main.getInstance().getConfig().getBoolean("chunk-collection-enabled")) return;
             Chunk itemLocation = item.getLocation().getChunk();
             for(BlockState current : itemLocation.getTileEntities()) {
-                if(!(current instanceof TileState)) return;
+                if(!(current instanceof TileState)) continue;
+                if(!(current instanceof Hopper)) continue;
                 TileState currentTileState = (TileState) current;
-                if(tileStates.contains(currentTileState)) return;
+                if(tileStates.contains(currentTileState)) continue;
                 tileStates.add(currentTileState);
             }
         }
@@ -65,10 +63,7 @@ public class BlockDropItemListener implements Listener {
                         hopper.getSnapshotInventory().addItem(itemStack);
                         currentItemInDrops.remove();
                         hopper.update();
-                        return;
-                    } catch (ClassCastException exception) {
-                        break;
-                    }
+                    } catch (ClassCastException ignored) {}
                 }
             }
         }
