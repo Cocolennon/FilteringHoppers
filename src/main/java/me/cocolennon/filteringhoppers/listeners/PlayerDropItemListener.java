@@ -2,7 +2,9 @@ package me.cocolennon.filteringhoppers.listeners;
 
 import com.jeff_media.morepersistentdatatypes.DataType;
 import me.cocolennon.filteringhoppers.Main;
+import org.bukkit.Bukkit;
 import org.bukkit.Chunk;
+import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.block.BlockState;
 import org.bukkit.block.Hopper;
@@ -28,8 +30,10 @@ public class PlayerDropItemListener implements Listener {
 
         List<TileState> tileStates = new ArrayList<>();
         for(BlockState current : itemLocation.getTileEntities()) {
-            if(!(current instanceof TileState)) return;
+            if(!(current instanceof TileState)) continue;
+            if(current.getBlock().getType() != Material.HOPPER) continue;
             TileState currentTileState = (TileState) current;
+            if(tileStates.contains(currentTileState)) continue;
             tileStates.add(currentTileState);
         }
         if(tileStates.isEmpty()) return;
