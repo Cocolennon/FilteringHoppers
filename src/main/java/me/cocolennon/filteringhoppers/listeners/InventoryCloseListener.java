@@ -2,9 +2,12 @@ package me.cocolennon.filteringhoppers.listeners;
 
 import com.jeff_media.morepersistentdatatypes.DataType;
 import me.cocolennon.filteringhoppers.Main;
+import org.bukkit.Bukkit;
+import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockState;
+import org.bukkit.block.Hopper;
 import org.bukkit.block.TileState;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -23,8 +26,9 @@ public class InventoryCloseListener implements Listener {
         Player player = (Player) event.getPlayer();
         Inventory inventory = event.getInventory();
         if(!event.getView().getTitle().equals("§5Filtering Hoppers§f: §dFilter Menu")) return;
-        Block block = player.getTargetBlockExact(6);
+        Block block = inventory.getLocation().getBlock();
         if(block == null) return;
+        if(block.getType() != Material.HOPPER) return;
         BlockState blockState = block.getState();
         if(!(blockState instanceof TileState)) return;
         TileState tileState = (TileState) blockState;
@@ -33,9 +37,8 @@ public class InventoryCloseListener implements Listener {
         List<ItemStack> filter = new LinkedList<>();
         for (int i = 0; i < 18; i++) {
             ItemStack item = inventory.getItem(i);
-            if (item != null) {
-                filter.add(item);
-            }
+            if (item == null) continue;
+            filter.add(item);
         }
         ItemStack[] arrayFilter = filter.toArray(new ItemStack[0]);
         container.set(key, DataType.ITEM_STACK_ARRAY, arrayFilter);
