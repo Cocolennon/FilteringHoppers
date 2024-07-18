@@ -26,6 +26,9 @@ public class InventoryOpenListener implements Listener {
         if(!player.isSneaking()) return;
         Block block = inventory.getLocation().getBlock();
         if(block.getType() != Material.HOPPER) return;
+        PersistentDataContainer pdc = player.getPersistentDataContainer();
+        NamespacedKey currentInvLoc = new NamespacedKey(Main.getInstance(), "currentInvLoc");
+        pdc.set(currentInvLoc, DataType.LOCATION, inventory.getLocation());
         BlockState blockState = block.getState();
         if(!(blockState instanceof TileState)) return;
         TileState tileState = (TileState) blockState;
