@@ -28,9 +28,10 @@ public class EntityDeathListener implements Listener {
 
         List<TileState> tileStates = new ArrayList<>();
         for(BlockState current : itemLocation.getTileEntities()) {
-            if(!(current instanceof TileState)) return;
+            if(!(current instanceof TileState)) continue;
+            if(!(current.getBlock() instanceof Hopper)) continue;
             TileState currentTileState = (TileState) current;
-            if(tileStates.contains(currentTileState)) return;
+            if(tileStates.contains(currentTileState)) continue;
             tileStates.add(currentTileState);
         }
         if(tileStates.isEmpty()) return;
@@ -45,10 +46,7 @@ public class EntityDeathListener implements Listener {
                         hopper.getSnapshotInventory().addItem(currentItemInDrops);
                         items.remove(currentItemInDrops);
                         hopper.update();
-                        return;
-                    } catch (ClassCastException exception) {
-                        break;
-                    }
+                    } catch (ClassCastException ignored) {}
                 }
             }
         }
