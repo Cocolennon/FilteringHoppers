@@ -39,7 +39,6 @@ public class InventoryMoveItemListener implements Listener {
 
     @EventHandler
     public void inventoryPickupItem(InventoryPickupItemEvent event) {
-        Bukkit.broadcastMessage("1");
         Inventory dest = event.getInventory();
         ItemStack item = event.getItem().getItemStack();
         if(dest.getType() != InventoryType.HOPPER) return;
