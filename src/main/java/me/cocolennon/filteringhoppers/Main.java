@@ -3,6 +3,7 @@ package me.cocolennon.filteringhoppers;
 import me.cocolennon.filteringhoppers.commands.FilteringHoppersCommand;
 import me.cocolennon.filteringhoppers.listeners.*;
 import me.cocolennon.filteringhoppers.utils.UpdateChecker;
+import me.cocolennon.filteringhoppers.utils.Updater;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -29,11 +30,16 @@ public class Main extends JavaPlugin {
                 usingOldVersion = true;
             }
         });
+        if(getConfig().getBoolean("auto-updater-enabled")) {
+            Updater updater = new Updater(this, 111606, getFile(), Updater.UpdateType.VERSION_CHECK, true);
+            if(updater.getResult().equals(Updater.Result.SUCCESS)) getLogger().info("Update will be applied after next restart!");
+        }
     }
 
     private void setUpConfig(){
         config.addDefault("max-hopper-per-chunk", 5);
         config.addDefault("chunk-collection-enabled", true);
+        config.addDefault("auto-updater-enabled", true);
         config.options().copyDefaults(true);
         saveConfig();
     }
@@ -52,8 +58,6 @@ public class Main extends JavaPlugin {
     }
 
     public String getVersion() { return instance.version; }
-
     public boolean getUsingOldVersion() { return instance.usingOldVersion; }
-
     public static Main getInstance() { return instance; }
 }
