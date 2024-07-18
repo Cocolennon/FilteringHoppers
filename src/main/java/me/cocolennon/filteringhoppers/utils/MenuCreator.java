@@ -4,6 +4,8 @@ import me.cocolennon.filteringhoppers.Main;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
+import org.bukkit.block.Block;
+import org.bukkit.block.Hopper;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
@@ -14,8 +16,9 @@ import org.bukkit.persistence.PersistentDataType;
 public class MenuCreator {
     private static final MenuCreator instance = new MenuCreator();
 
-    public void createFilterMenu(ItemStack[] filter, Player player) {
-        Inventory inv = Bukkit.createInventory(null, 27, "§5Filtering Hoppers§f: §dFilter Menu");
+    public void createFilterMenu(ItemStack[] filter, Player player, Block block) {
+        Hopper hopper = (Hopper) block.getState();
+        Inventory inv = Bukkit.createInventory(hopper, 27, "§5Filtering Hoppers§f: §dFilter Menu");
 
         if(filter != null) {
             for (ItemStack itemStack : filter) {
