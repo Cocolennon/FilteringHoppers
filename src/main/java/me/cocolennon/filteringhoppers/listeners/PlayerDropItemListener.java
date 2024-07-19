@@ -44,7 +44,6 @@ public class PlayerDropItemListener implements Listener {
                 try {
                     Hopper hopper = (Hopper) current.getLocation().getBlock().getState();
                     hopper.getSnapshotInventory().addItem(itemStack);
-                    item.remove();
                     hopper.update();
                     return;
                 } catch (ClassCastException exception) {
@@ -52,5 +51,6 @@ public class PlayerDropItemListener implements Listener {
                 }
             }
         }
+        item.remove();
     }
 }
