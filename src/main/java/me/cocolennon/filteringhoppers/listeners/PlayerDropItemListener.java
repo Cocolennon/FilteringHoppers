@@ -45,10 +45,7 @@ public class PlayerDropItemListener implements Listener {
                     Hopper hopper = (Hopper) current.getLocation().getBlock().getState();
                     hopper.getSnapshotInventory().addItem(itemStack);
                     hopper.update();
-                    return;
-                } catch (ClassCastException exception) {
-                    break;
-                }
+                } catch (ClassCastException ignored) {}
             }
         }
         item.remove();
