@@ -17,6 +17,7 @@ import org.bukkit.persistence.PersistentDataContainer;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.ConcurrentModificationException;
 import java.util.List;
 
 public class BlockDropItemListener implements Listener {
@@ -41,16 +42,16 @@ public class BlockDropItemListener implements Listener {
             NamespacedKey key = new NamespacedKey(Main.getInstance(), "hopperFilter");
             List<ItemStack> filter = Arrays.asList(container.get(key, DataType.ITEM_STACK_ARRAY));
             for(Item currentItemInDrops : items) {
-                if(filter == null || filter.isEmpty() || filter.contains(currentItemInDrops)) {
+                if(filter == null || filter.isEmpty() || filter.contains(currentItemInDrops.getItemStack())) {
                     try {
                         ItemStack itemStack = currentItemInDrops.getItemStack();
                         Hopper hopper = (Hopper) current.getLocation().getBlock().getState();
                         hopper.getSnapshotInventory().addItem(itemStack);
+                        items.remove(currentItemInDrops);
                         hopper.update();
-                    } catch (ClassCastException ignored) {}
+                    } catch (ClassCastException|ConcurrentModificationException ignored) {}
                 }
             }
         }
-        items.clear();
     }
 }
