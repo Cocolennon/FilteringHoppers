@@ -31,7 +31,7 @@ public class BlockDropItemListener implements Listener {
             Chunk itemLocation = item.getLocation().getChunk();
             for(BlockState current : itemLocation.getTileEntities()) {
                 if(!(current instanceof TileState)) continue;
-                if(!(current instanceof Hopper)) continue;
+                if(current.getBlock().getType() != Material.HOPPER) continue;
                 TileState currentTileState = (TileState) current;
                 if(tileStates.contains(currentTileState)) continue;
                 tileStates.add(currentTileState);
