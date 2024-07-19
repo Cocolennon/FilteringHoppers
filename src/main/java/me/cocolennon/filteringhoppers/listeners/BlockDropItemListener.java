@@ -27,20 +27,6 @@ public class BlockDropItemListener implements Listener {
         List<Item> items = event.getItems();
         List<TileState> tileStates = new ArrayList<>();
         for(Item item : items) {
-            /*ItemStack itemStack = item.getItemStack();
-            if(!itemStack.getType().equals(Material.HOPPER)) continue;
-            BlockState blockState = event.getBlockState();
-            if(!(blockState instanceof TileState)) continue;
-            if (!(blockState instanceof Hopper)) continue;
-            TileState tileState = (TileState) blockState;
-            PersistentDataContainer container = tileState.getPersistentDataContainer();
-            NamespacedKey key = new NamespacedKey(Main.getInstance(), "lore");
-            if (container.has(key, DataType.STRING_ARRAY)) {
-                String[] lore = container.get(key, DataType.STRING_ARRAY);
-                ItemMeta itemMeta = itemStack.getItemMeta();
-                itemMeta.setLore(Arrays.stream(lore).toList());
-                itemStack.setItemMeta(itemMeta);
-            }*/
             if(!Main.getInstance().getConfig().getBoolean("chunk-collection-enabled")) continue;
             Chunk itemLocation = item.getLocation().getChunk();
             for(BlockState current : itemLocation.getTileEntities()) {
