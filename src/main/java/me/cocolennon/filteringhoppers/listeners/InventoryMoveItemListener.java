@@ -2,6 +2,7 @@ package me.cocolennon.filteringhoppers.listeners;
 
 import com.jeff_media.morepersistentdatatypes.DataType;
 import me.cocolennon.filteringhoppers.Main;
+import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockState;
@@ -30,10 +31,13 @@ public class InventoryMoveItemListener implements Listener {
         if(dest.getType() != InventoryType.HOPPER) return;
         Block block = dest.getLocation().getBlock();
         BlockState blockState = block.getState();
+        if(blockState.getBlock().getType() != Material.HOPPER) return;
         if(!(blockState instanceof TileState)) return;
         TileState tileState = (TileState) blockState;
         PersistentDataContainer container = tileState.getPersistentDataContainer();
-        List<ItemStack> filter = Arrays.asList(container.get(key, DataType.ITEM_STACK_ARRAY));
+        ItemStack[] arrayFilter = container.get(key, DataType.ITEM_STACK_ARRAY);
+        if(arrayFilter == null) return;
+        List<ItemStack> filter = Arrays.asList(arrayFilter);
         if(filter == null || filter.isEmpty() || filter.contains(item)) return;
         for(ItemStack filterItem : filter) {
             if(!src.contains(filterItem.getType())) continue;
@@ -53,10 +57,13 @@ public class InventoryMoveItemListener implements Listener {
         if(dest.getType() != InventoryType.HOPPER) return;
         Block block = dest.getLocation().getBlock();
         BlockState blockState = block.getState();
+        if(blockState.getBlock().getType() != Material.HOPPER) return;
         if(!(blockState instanceof TileState)) return;
         TileState tileState = (TileState) blockState;
         PersistentDataContainer container = tileState.getPersistentDataContainer();
-        List<ItemStack> filter = Arrays.asList(container.get(key, DataType.ITEM_STACK_ARRAY));
+        ItemStack[] arrayFilter = container.get(key, DataType.ITEM_STACK_ARRAY);
+        if(arrayFilter == null) return;
+        List<ItemStack> filter = Arrays.asList(arrayFilter);
         if(filter == null || filter.isEmpty()) return;
         if(!filter.contains(item)) event.setCancelled(true);
     }

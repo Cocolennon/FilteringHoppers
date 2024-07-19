@@ -17,6 +17,9 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.persistence.PersistentDataContainer;
 
+import java.util.Arrays;
+import java.util.List;
+
 public class InventoryOpenListener implements Listener {
     @EventHandler
     public void inventoryOpen(InventoryOpenEvent event) {
@@ -34,7 +37,9 @@ public class InventoryOpenListener implements Listener {
         TileState tileState = (TileState) blockState;
         PersistentDataContainer container = tileState.getPersistentDataContainer();
         NamespacedKey key = new NamespacedKey(Main.getInstance(), "hopperFilter");
-        ItemStack[] filter = container.get(key, DataType.ITEM_STACK_ARRAY);
+        ItemStack[] arrayFilter = container.get(key, DataType.ITEM_STACK_ARRAY);
+        if(arrayFilter == null) return;
+        List<ItemStack> filter = Arrays.asList(arrayFilter);
         MenuCreator.getInstance().createFilterMenu(filter, player, block);
         event.setCancelled(true);
     }

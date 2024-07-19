@@ -40,7 +40,9 @@ public class EntityItemDropListener implements Listener {
         for(TileState current : tileStates) {
             PersistentDataContainer container = current.getPersistentDataContainer();
             NamespacedKey key = new NamespacedKey(Main.getInstance(), "hopperFilter");
-            List<ItemStack> filter = Arrays.asList(container.get(key, DataType.ITEM_STACK_ARRAY));
+            ItemStack[] arrayFilter = container.get(key, DataType.ITEM_STACK_ARRAY);
+            if(arrayFilter == null) return;
+            List<ItemStack> filter = Arrays.asList(arrayFilter);
             if(filter == null || filter.isEmpty() || filter.contains(itemStack)) {
                 try {
                     Hopper hopper = (Hopper) current.getLocation().getBlock().getState();

@@ -13,10 +13,12 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
 
+import java.util.List;
+
 public class MenuCreator {
     private static final MenuCreator instance = new MenuCreator();
 
-    public void createFilterMenu(ItemStack[] filter, Player player, Block block) {
+    public void createFilterMenu(List<ItemStack> filter, Player player, Block block) {
         Hopper hopper = (Hopper) block.getState();
         Inventory inv = Bukkit.createInventory(hopper, 27, "§5Filtering Hoppers§f: §dFilter Menu");
 
