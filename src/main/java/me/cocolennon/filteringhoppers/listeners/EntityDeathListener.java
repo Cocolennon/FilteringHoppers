@@ -17,6 +17,7 @@ import org.bukkit.persistence.PersistentDataContainer;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.ConcurrentModificationException;
 import java.util.List;
 
 public class EntityDeathListener implements Listener {
@@ -45,11 +46,11 @@ public class EntityDeathListener implements Listener {
                     try {
                         Hopper hopper = (Hopper) current.getLocation().getBlock().getState();
                         hopper.getSnapshotInventory().addItem(currentItemInDrops);
+                        items.remove(currentItemInDrops);
                         hopper.update();
-                    } catch (ClassCastException ignored) {}
+                    } catch (ClassCastException | ConcurrentModificationException ignored) {}
                 }
             }
-            items.clear();
         }
     }
 }

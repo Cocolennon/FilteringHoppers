@@ -17,6 +17,7 @@ import org.bukkit.persistence.PersistentDataContainer;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.ConcurrentModificationException;
 import java.util.List;
 
 public class PlayerDropItemListener implements Listener {
@@ -44,10 +45,10 @@ public class PlayerDropItemListener implements Listener {
                 try {
                     Hopper hopper = (Hopper) current.getLocation().getBlock().getState();
                     hopper.getSnapshotInventory().addItem(itemStack);
+                    item.remove();
                     hopper.update();
-                } catch (ClassCastException ignored) {}
+                } catch (ClassCastException|ConcurrentModificationException ignored) {}
             }
         }
-        item.remove();
     }
 }
