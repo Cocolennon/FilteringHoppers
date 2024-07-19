@@ -24,6 +24,8 @@ public class InventoryMoveItemListener implements Listener {
     @EventHandler
     public void inventoryMoveItem(InventoryMoveItemEvent event) {
         Inventory dest = event.getDestination();
+        Inventory init = event.getInitiator();
+        Inventory src = event.getSource();
         ItemStack item = event.getItem();
         if(dest.getType() != InventoryType.HOPPER) return;
         Block block = dest.getLocation().getBlock();
@@ -32,8 +34,16 @@ public class InventoryMoveItemListener implements Listener {
         TileState tileState = (TileState) blockState;
         PersistentDataContainer container = tileState.getPersistentDataContainer();
         List<ItemStack> filter = Arrays.asList(container.get(key, DataType.ITEM_STACK_ARRAY));
-        if(filter == null || filter.isEmpty()) return;
-        if(!filter.contains(item)) event.setCancelled(true);
+        if(filter == null || filter.isEmpty() || filter.contains(item)) return;
+        for(ItemStack filterItem : filter) {
+            if(!src.contains(filterItem.getType())) continue;
+            int slot = src.first(filterItem.getType());
+            src.getItem(slot).setAmount(src.getItem(slot).getAmount()-1);
+            init.addItem(new ItemStack(filterItem.getType(), 1));
+            event.setCancelled(true);
+            return;
+        }
+        event.setCancelled(true);
     }
 
     @EventHandler
