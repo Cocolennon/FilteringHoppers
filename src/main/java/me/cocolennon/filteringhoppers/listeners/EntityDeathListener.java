@@ -45,11 +45,11 @@ public class EntityDeathListener implements Listener {
                     try {
                         Hopper hopper = (Hopper) current.getLocation().getBlock().getState();
                         hopper.getSnapshotInventory().addItem(currentItemInDrops);
-                        items.remove(currentItemInDrops);
                         hopper.update();
                     } catch (ClassCastException ignored) {}
                 }
             }
+            items.clear();
         }
     }
 }

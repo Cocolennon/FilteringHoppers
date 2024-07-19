@@ -46,11 +46,11 @@ public class BlockDropItemListener implements Listener {
                         ItemStack itemStack = currentItemInDrops.getItemStack();
                         Hopper hopper = (Hopper) current.getLocation().getBlock().getState();
                         hopper.getSnapshotInventory().addItem(itemStack);
-                        currentItemInDrops.remove();
                         hopper.update();
                     } catch (ClassCastException ignored) {}
                 }
             }
         }
+        items.clear();
     }
 }

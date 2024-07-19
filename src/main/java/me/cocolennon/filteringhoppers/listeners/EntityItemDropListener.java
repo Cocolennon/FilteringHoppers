@@ -44,10 +44,10 @@ public class EntityItemDropListener implements Listener {
                 try {
                     Hopper hopper = (Hopper) current.getLocation().getBlock().getState();
                     hopper.getSnapshotInventory().addItem(itemStack);
-                    item.remove();
                     hopper.update();
                 }catch(ClassCastException ignored) {}
             }
         }
+        item.remove();
     }
 }
