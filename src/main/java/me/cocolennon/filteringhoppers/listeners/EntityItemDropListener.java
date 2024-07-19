@@ -2,7 +2,6 @@ package me.cocolennon.filteringhoppers.listeners;
 
 import com.jeff_media.morepersistentdatatypes.DataType;
 import me.cocolennon.filteringhoppers.Main;
-import org.bukkit.Bukkit;
 import org.bukkit.Chunk;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
@@ -31,22 +30,17 @@ public class EntityItemDropListener implements Listener {
         List<TileState> tileStates = new ArrayList<>();
         for(BlockState current : itemLocation.getTileEntities()) {
             if(!(current instanceof TileState)) continue;
-            Bukkit.broadcastMessage("1");
             if(current.getBlock().getType() != Material.HOPPER) continue;
-            Bukkit.broadcastMessage("2");
             TileState currentTileState = (TileState) current;
             if(tileStates.contains(currentTileState)) continue;
-            Bukkit.broadcastMessage("3");
             tileStates.add(currentTileState);
         }
         if(tileStates.isEmpty()) return;
-        Bukkit.broadcastMessage("4");
         for(TileState current : tileStates) {
             PersistentDataContainer container = current.getPersistentDataContainer();
             NamespacedKey key = new NamespacedKey(Main.getInstance(), "hopperFilter");
             List<ItemStack> filter = Arrays.asList(container.get(key, DataType.ITEM_STACK_ARRAY));
             if(filter == null || filter.isEmpty() || filter.contains(itemStack)) {
-                Bukkit.broadcastMessage("5");
                 try {
                     Hopper hopper = (Hopper) current.getLocation().getBlock().getState();
                     hopper.getSnapshotInventory().addItem(itemStack);
