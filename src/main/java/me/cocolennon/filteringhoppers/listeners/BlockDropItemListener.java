@@ -2,6 +2,7 @@ package me.cocolennon.filteringhoppers.listeners;
 
 import com.jeff_media.morepersistentdatatypes.DataType;
 import me.cocolennon.filteringhoppers.Main;
+import org.bukkit.Bukkit;
 import org.bukkit.Chunk;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
@@ -26,12 +27,12 @@ public class BlockDropItemListener implements Listener {
         List<Item> items = event.getItems();
         List<TileState> tileStates = new ArrayList<>();
         for(Item item : items) {
-            ItemStack itemStack = item.getItemStack();
+            /*ItemStack itemStack = item.getItemStack();
             if(!itemStack.getType().equals(Material.HOPPER)) continue;
             BlockState blockState = event.getBlockState();
             if(!(blockState instanceof TileState)) continue;
+            if (!(blockState instanceof Hopper)) continue;
             TileState tileState = (TileState) blockState;
-            if (!(tileState instanceof Hopper)) continue;
             PersistentDataContainer container = tileState.getPersistentDataContainer();
             NamespacedKey key = new NamespacedKey(Main.getInstance(), "lore");
             if (container.has(key, DataType.STRING_ARRAY)) {
@@ -39,8 +40,8 @@ public class BlockDropItemListener implements Listener {
                 ItemMeta itemMeta = itemStack.getItemMeta();
                 itemMeta.setLore(Arrays.stream(lore).toList());
                 itemStack.setItemMeta(itemMeta);
-            }
-            if(!Main.getInstance().getConfig().getBoolean("chunk-collection-enabled")) return;
+            }*/
+            if(!Main.getInstance().getConfig().getBoolean("chunk-collection-enabled")) continue;
             Chunk itemLocation = item.getLocation().getChunk();
             for(BlockState current : itemLocation.getTileEntities()) {
                 if(!(current instanceof TileState)) continue;
