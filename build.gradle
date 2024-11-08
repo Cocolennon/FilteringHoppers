@@ -17,11 +17,11 @@ repositories {
 
 dependencies {
     compileOnly("org.spigotmc:spigot:1.21-R0.1-SNAPSHOT")
-    implementation 'com.jeff_media:MorePersistentDataTypes:2.4.0'
+    implementation 'com.jeff-media:MorePersistentDataTypes:2.4.0'
 }
 
 shadowJar {
-    relocate 'com.jeff_media.morepersistentdatatypes', 'me.cocolennon.morepersistentdatatypes'
+    relocate 'com.jeff-media.morepersistentdatatypes', 'me.cocolennon.morepersistentdatatypes'
     archiveFileName = "FilteringHoppers-${version}.jar"
 }
 
