@@ -43,14 +43,18 @@ public class EntityDeathListener implements Listener {
             ItemStack[] arrayFilter = container.get(key, DataType.ITEM_STACK_ARRAY);
             if(arrayFilter == null) return;
             List<ItemStack> filter = Arrays.asList(arrayFilter);
+            boolean filterEmpty = false;
+            if(filter == null || filter.isEmpty()) filterEmpty = true;
             for(ItemStack currentItemInDrops : items) {
-                if(filter == null || filter.isEmpty() || filter.contains(currentItemInDrops)) {
-                    try {
-                        Hopper hopper = (Hopper) current.getLocation().getBlock().getState();
-                        hopper.getSnapshotInventory().addItem(currentItemInDrops);
-                        items.remove(currentItemInDrops);
-                        hopper.update();
-                    } catch (ClassCastException | ConcurrentModificationException ignored) {}
+                for(ItemStack filterItem : filter) {
+                    if(filterEmpty || filterItem.isSimilar(currentItemInDrops)) {
+                        try {
+                            Hopper hopper = (Hopper) current.getLocation().getBlock().getState();
+                            hopper.getSnapshotInventory().addItem(currentItemInDrops);
+                            items.remove(currentItemInDrops);
+                            hopper.update();
+                        } catch (ClassCastException | ConcurrentModificationException ignored) {}
+                    }
                 }
             }
         }

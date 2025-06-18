@@ -43,15 +43,19 @@ public class BlockDropItemListener implements Listener {
             ItemStack[] arrayFilter = container.get(key, DataType.ITEM_STACK_ARRAY);
             if(arrayFilter == null) return;
             List<ItemStack> filter = Arrays.asList(arrayFilter);
+            boolean filterEmpty = false;
+            if(filter == null || filter.isEmpty()) filterEmpty = true;
             for(Item currentItemInDrops : items) {
-                if(filter == null || filter.isEmpty() || filter.contains(currentItemInDrops.getItemStack())) {
-                    try {
-                        ItemStack itemStack = currentItemInDrops.getItemStack();
-                        Hopper hopper = (Hopper) current.getLocation().getBlock().getState();
-                        hopper.getSnapshotInventory().addItem(itemStack);
-                        items.remove(currentItemInDrops);
-                        hopper.update();
-                    } catch (ClassCastException|ConcurrentModificationException ignored) {}
+                for(ItemStack filterItem : filter) {
+                    if(filterEmpty || filterItem.isSimilar(currentItemInDrops.getItemStack())) {
+                        try {
+                            ItemStack itemStack = currentItemInDrops.getItemStack();
+                            Hopper hopper = (Hopper) current.getLocation().getBlock().getState();
+                            hopper.getSnapshotInventory().addItem(itemStack);
+                            items.remove(currentItemInDrops);
+                            hopper.update();
+                        } catch (ClassCastException|ConcurrentModificationException ignored) {}
+                    }
                 }
             }
         }
