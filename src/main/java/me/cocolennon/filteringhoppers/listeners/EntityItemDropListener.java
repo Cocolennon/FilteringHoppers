@@ -46,7 +46,7 @@ public class EntityItemDropListener implements Listener {
             boolean filterEmpty = false;
             if(filter == null || filter.isEmpty()) filterEmpty = true;
             for(ItemStack filterItem : filter) {
-                if(filterItem.isSimilar(itemStack)) {
+                if(filterEmpty || filterItem.isSimilar(itemStack)) {
                     try {
                         Hopper hopper = (Hopper) current.getLocation().getBlock().getState();
                         hopper.getSnapshotInventory().addItem(itemStack);
