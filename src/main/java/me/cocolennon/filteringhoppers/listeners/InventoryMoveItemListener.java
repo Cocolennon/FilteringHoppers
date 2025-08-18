@@ -39,15 +39,7 @@ public class InventoryMoveItemListener implements Listener {
         if(arrayFilter == null) return;
         List<ItemStack> filter = Arrays.asList(arrayFilter);
         if(filter == null || filter.isEmpty()) return;
-        for(ItemStack filterItem : filter) {
-            if(filterItem.isSimilar(item)) return;
-            /*if(!src.contains(filterItem.getType())) continue;
-            int slot = src.first(filterItem.getType());
-            src.getItem(slot).setAmount(src.getItem(slot).getAmount()-1);
-            init.addItem(new ItemStack(filterItem.getType(), 1));
-            event.setCancelled(true);
-            return;*/
-        }
+        for(ItemStack filterItem : filter) if(filterItem.isSimilar(item)) return;
         event.setCancelled(true);
     }
 
