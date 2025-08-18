@@ -14,6 +14,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.persistence.PersistentDataContainer;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -25,17 +26,7 @@ public class EntityDeathListener implements Listener {
     public void entityDeath(EntityDeathEvent event) {
         if(!Main.getInstance().getConfig().getBoolean("chunk-collection-enabled")) return;
         List<ItemStack> items = event.getDrops();
-        LivingEntity entity = event.getEntity();
-        Chunk itemLocation = entity.getLocation().getChunk();
-
-        List<TileState> tileStates = new ArrayList<>();
-        for(BlockState current : itemLocation.getTileEntities()) {
-            if(!(current instanceof TileState)) continue;
-            if(current.getBlock().getType() != Material.HOPPER) continue;
-            TileState currentTileState = (TileState) current;
-            if(tileStates.contains(currentTileState)) continue;
-            tileStates.add(currentTileState);
-        }
+        List<TileState> tileStates = getTileStates(event);
         if(tileStates.isEmpty()) return;
         for(TileState current : tileStates) {
             PersistentDataContainer container = current.getPersistentDataContainer();
@@ -58,5 +49,21 @@ public class EntityDeathListener implements Listener {
                 }
             }
         }
+    }
+
+    @NotNull
+    private static List<TileState> getTileStates(EntityDeathEvent event) {
+        LivingEntity entity = event.getEntity();
+        Chunk itemLocation = entity.getLocation().getChunk();
+
+        List<TileState> tileStates = new ArrayList<>();
+        for(BlockState current : itemLocation.getTileEntities()) {
+            if(!(current instanceof TileState)) continue;
+            if(current.getBlock().getType() != Material.HOPPER) continue;
+            TileState currentTileState = (TileState) current;
+            if(tileStates.contains(currentTileState)) continue;
+            tileStates.add(currentTileState);
+        }
+        return tileStates;
     }
 }
