@@ -45,16 +45,19 @@ public class PlayerDropItemListener implements Listener {
             List<ItemStack> filter = Arrays.asList(arrayFilter);
             boolean filterEmpty = false;
             if(filter == null || filter.isEmpty()) filterEmpty = true;
+            boolean match = false;
             for(ItemStack filterItem : filter) {
                 if(filterEmpty || filterItem.isSimilar(itemStack)) {
-                    try {
-                        Hopper hopper = (Hopper) current.getLocation().getBlock().getState();
-                        hopper.getSnapshotInventory().addItem(itemStack);
-                        item.remove();
-                        hopper.update();
-                    } catch (ClassCastException | ConcurrentModificationException ignored) {}
+                    match = true;
+                    break;
                 }
             }
+            if(match) try {
+                Hopper hopper = (Hopper) current.getLocation().getBlock().getState();
+                hopper.getSnapshotInventory().addItem(itemStack);
+                item.remove();
+                hopper.update();
+            } catch (ClassCastException | ConcurrentModificationException ignored) {}
         }
     }
 }

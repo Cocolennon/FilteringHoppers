@@ -8,6 +8,7 @@ import org.bukkit.NamespacedKey;
 import org.bukkit.block.BlockState;
 import org.bukkit.block.Hopper;
 import org.bukkit.block.TileState;
+import org.bukkit.entity.Item;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -16,10 +17,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.ConcurrentModificationException;
-import java.util.List;
+import java.util.*;
 
 public class EntityDeathListener implements Listener {
     @EventHandler
@@ -36,16 +34,17 @@ public class EntityDeathListener implements Listener {
             List<ItemStack> filter = Arrays.asList(arrayFilter);
             boolean filterEmpty = false;
             if(filter == null || filter.isEmpty()) filterEmpty = true;
-            for(ItemStack currentItemInDrops : items) {
-                for(ItemStack filterItem : filter) {
-                    if(filterEmpty || filterItem.isSimilar(currentItemInDrops)) {
-                        try {
-                            Hopper hopper = (Hopper) current.getLocation().getBlock().getState();
-                            hopper.getSnapshotInventory().addItem(currentItemInDrops);
-                            items.remove(currentItemInDrops);
-                            hopper.update();
-                        } catch (ClassCastException | ConcurrentModificationException ignored) {}
-                    }
+            Iterator<ItemStack> dropIterator = items.iterator();
+            while(dropIterator.hasNext()) {
+                ItemStack itemStack = dropIterator.next();
+                boolean match = filterEmpty || filter.stream().anyMatch(f -> f.isSimilar(itemStack));
+                if(match) {
+                    try {
+                        Hopper hopper = (Hopper) current.getLocation().getBlock().getState();
+                        hopper.getSnapshotInventory().addItem(itemStack);
+                        dropIterator.remove();
+                        hopper.update();
+                    } catch (ClassCastException|ConcurrentModificationException ignored) {}
                 }
             }
         }

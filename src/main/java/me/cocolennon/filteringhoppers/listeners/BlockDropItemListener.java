@@ -15,10 +15,7 @@ import org.bukkit.event.block.BlockDropItemEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.persistence.PersistentDataContainer;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.ConcurrentModificationException;
-import java.util.List;
+import java.util.*;
 
 public class BlockDropItemListener implements Listener {
     @EventHandler
@@ -45,17 +42,18 @@ public class BlockDropItemListener implements Listener {
             List<ItemStack> filter = Arrays.asList(arrayFilter);
             boolean filterEmpty = false;
             if(filter == null || filter.isEmpty()) filterEmpty = true;
-            for(Item currentItemInDrops : items) {
-                for(ItemStack filterItem : filter) {
-                    if(filterEmpty || filterItem.isSimilar(currentItemInDrops.getItemStack())) {
-                        try {
-                            ItemStack itemStack = currentItemInDrops.getItemStack();
-                            Hopper hopper = (Hopper) current.getLocation().getBlock().getState();
-                            hopper.getSnapshotInventory().addItem(itemStack);
-                            items.remove(currentItemInDrops);
-                            hopper.update();
-                        } catch (ClassCastException|ConcurrentModificationException ignored) {}
-                    }
+            Iterator<Item> dropIterator = items.iterator();
+            while(dropIterator.hasNext()) {
+                Item currentInDrops = dropIterator.next();
+                ItemStack itemStack = currentInDrops.getItemStack();
+                boolean match = filterEmpty || filter.stream().anyMatch(f -> f.isSimilar(itemStack));
+                if(match) {
+                    try {
+                        Hopper hopper = (Hopper) current.getLocation().getBlock().getState();
+                        hopper.getSnapshotInventory().addItem(itemStack);
+                        dropIterator.remove();
+                        hopper.update();
+                    } catch (ClassCastException|ConcurrentModificationException ignored) {}
                 }
             }
         }

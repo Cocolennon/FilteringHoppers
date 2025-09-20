@@ -2,6 +2,7 @@ package me.cocolennon.filteringhoppers.listeners;
 
 import com.jeff_media.morepersistentdatatypes.DataType;
 import me.cocolennon.filteringhoppers.Main;
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.block.Block;
@@ -58,9 +59,11 @@ public class InventoryMoveItemListener implements Listener {
         if(arrayFilter == null) return;
         List<ItemStack> filter = Arrays.asList(arrayFilter);
         if(filter == null || filter.isEmpty()) return;
-        for(ItemStack filterItem : filter) if(!filterItem.isSimilar(item)) {
-            event.setCancelled(true);
+        boolean match = false;
+        for(ItemStack filterItem : filter) if(filterItem.isSimilar(item)) {
+            match = true;
             break;
         }
+        if(!match) event.setCancelled(true);
     }
 }
