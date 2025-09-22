@@ -41,6 +41,13 @@ public class MenuCreator {
         }
     }
 
+    public boolean isItemFiller(Inventory inv, int slot) {
+        ItemStack item = inv.getItem(slot);
+        NamespacedKey buttonAction = new NamespacedKey(Main.getInstance(), "buttonAction");
+        PersistentDataContainer pdc = item.getItemMeta().getPersistentDataContainer();
+        return pdc.get(buttonAction, PersistentDataType.STRING).equals("filler");
+    }
+
     private ItemStack getItem(){
         ItemStack it = new ItemStack(Material.BLACK_STAINED_GLASS_PANE, 1);
         ItemMeta itM = it.getItemMeta();
