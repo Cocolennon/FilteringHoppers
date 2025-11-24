@@ -1,6 +1,8 @@
 package me.cocolennon.filteringhoppers.utils;
 
 import me.cocolennon.filteringhoppers.Main;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
@@ -17,10 +19,11 @@ import java.util.List;
 
 public class MenuCreator {
     private static final MenuCreator instance = new MenuCreator();
+    private MiniMessage miniMessage = Main.getMiniMessage();
 
     public void createFilterMenu(List<ItemStack> filter, Player player, Block block) {
         Hopper hopper = (Hopper) block.getState();
-        Inventory inv = Bukkit.createInventory(hopper, 27, "§5Filtering Hoppers§f: §dFilter Menu");
+        Inventory inv = Bukkit.createInventory(hopper, 27, miniMessage.deserialize("<#AA00AA>Filtering Hoppers<#FFFFFF>: <#FF55FF>Filter Menu"));
 
         if(filter != null) {
             for (ItemStack itemStack : filter) {
@@ -31,7 +34,7 @@ public class MenuCreator {
         fillEmpty(inv, getItem());
 
         player.openInventory(inv);
-        player.sendMessage("§d[§5Filtering Hoppers§d] Successfully opened the filter menu.");
+        player.sendMessage(miniMessage.deserialize("<#FF55FF>[<#AA00AA>Filtering Hoppers<#FF55FF>] <#AA00AA>Successfully opened the filter menu."));
     }
 
     private void fillEmpty(Inventory inv, ItemStack item){
@@ -52,10 +55,11 @@ public class MenuCreator {
         ItemStack it = new ItemStack(Material.BLACK_STAINED_GLASS_PANE, 1);
         ItemMeta itM = it.getItemMeta();
         assert itM != null;
-        itM.setDisplayName(" ");
+        itM.displayName(Component.text(" "));
         NamespacedKey buttonAction = new NamespacedKey(Main.getInstance(), "buttonAction");
         PersistentDataContainer pdc = itM.getPersistentDataContainer();
         pdc.set(buttonAction, PersistentDataType.STRING, "filler");
+        itM.setHideTooltip(true);
         it.setItemMeta(itM);
         return it;
     }

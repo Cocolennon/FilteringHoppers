@@ -1,6 +1,8 @@
 package me.cocolennon.filteringhoppers.commands;
 
 import me.cocolennon.filteringhoppers.Main;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.apache.commons.lang3.StringUtils;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -16,12 +18,13 @@ import static org.bukkit.plugin.java.JavaPlugin.getPlugin;
 
 public class FilteringHoppersCommand implements TabExecutor {
     private final List<String> autoComplete = Arrays.asList("info", "reload", "set-max-hopper");
+    private MiniMessage miniMessage = Main.getMiniMessage();
 
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         if(!(sender instanceof Player)) return false;
         if(args.length == 0) {
-            sender.sendMessage("§d[§5Filtering Hoppers§d] §cUsage: /" + label + " </info/reload/set-max-hopper>\n§c<> = Required.");
+            sender.sendMessage(miniMessage.deserialize("<#FF55FF>[<#AA00AA>Filtering Hoppers<#FF55FF>] <#FF5555>Usage: /" + label + " </info/reload/set-max-hopper>\n<#FF5555><> = Required."));
             return false;
         }
 
@@ -32,20 +35,20 @@ public class FilteringHoppersCommand implements TabExecutor {
             }
             case "reload" -> {
                 if(!sender.hasPermission("filteringhoppers.reload")) {
-                    sender.sendMessage("§d[§5Filtering Hoppers§d] §cYou don't have the permission to do that!");
+                    sender.sendMessage(miniMessage.deserialize("<#FF55FF>[<#AA00AA>Filtering Hoppers<#FF55FF>] <#FF5555>You don't have the permission to do that!"));
                     return false;
                 }
                 Main.getInstance().reloadConfig();
-                sender.sendMessage("§d[§5Filtering Hoppers§d] Configuration reloaded!");
+                sender.sendMessage(miniMessage.deserialize("<#FF55FF>[<#AA00AA>Filtering Hoppers<#FF55FF>] Configuration reloaded!"));
                 return true;
             }
             case "set-max-hopper" -> {
                 if(!sender.hasPermission("filteringhoppers.set-max-hopper")) {
-                    sender.sendMessage("§d[§5Filtering Hoppers§d] §cYou don't have the permission to do that!");
+                    sender.sendMessage(miniMessage.deserialize("<#FF55FF>[<#AA00AA>Filtering Hoppers<#FF55FF>] <#FF5555>You don't have the permission to do that!"));
                     return false;
                 }
                 if(!StringUtils.isNumeric(args[1])) {
-                    sender.sendMessage("§d[§5Filtering Hoppers§d] §cYou must provide a valid number!");
+                    sender.sendMessage(miniMessage.deserialize("<#FF55FF>[<#AA00AA>Filtering Hoppers<#FF55FF>] <#FF5555>You must provide a valid number!"));
                     return false;
                 }
                 Main.getInstance().getConfig().set("max-hopper-per-chunk", Integer.parseInt(args[1]));
@@ -53,7 +56,7 @@ public class FilteringHoppersCommand implements TabExecutor {
                 return true;
             }
             default -> {
-                sender.sendMessage("§d[§5Filtering Hoppers§d] §cUsage: /" + label + " </info/reload/set-max-hopper>\n§c<> = Required.");
+                sender.sendMessage(miniMessage.deserialize("<#FF55FF>[<#AA00AA>Filtering Hoppers<#FF55FF>] <#FF5555>Usage: /" + label + " </info/reload/set-max-hopper>\n<#FF5555><> = Required."));
                 return false;
             }
         }
@@ -72,16 +75,16 @@ public class FilteringHoppersCommand implements TabExecutor {
     }
 
     private void sendInfo(CommandSender sender){
-        List<String> info = new LinkedList<>();
-        info.add("§d§l=========================");
-        info.add("§5§lFiltering Hoppers §5" + getPlugin(Main.class).getDescription().getVersion());
+        List<Component> info = new LinkedList<>();
+        info.add(miniMessage.deserialize("<#FF55FF>§l========================="));
+        info.add(miniMessage.deserialize("<#AA00AA>§lFiltering Hoppers <#AA00AA>" + getPlugin(Main.class).getPluginMeta().getVersion()));
         if(Main.getInstance().getUsingOldVersion()){
-            info.add("§dAn update is available!");
+            info.add(miniMessage.deserialize("<#FF55FF>An update is available!"));
         }else{
-            info.add("§5You're using the latest version");
+            info.add(miniMessage.deserialize("<#AA00AA>You're using the latest version"));
         }
-        info.add("§5Made with §c❤ §5by Cocolennon");
-        info.add("§d§l=========================");
+        info.add(miniMessage.deserialize("<#AA00AA>Made with <#FF5555>❤ <#AA00AA>by Cocolennon"));
+        info.add(miniMessage.deserialize("<#FF55FF>§l========================="));
 
         info.forEach(sender::sendMessage);
     }

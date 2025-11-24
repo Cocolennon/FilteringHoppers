@@ -4,6 +4,7 @@ import me.cocolennon.filteringhoppers.commands.FilteringHoppersCommand;
 import me.cocolennon.filteringhoppers.listeners.*;
 import me.cocolennon.filteringhoppers.utils.UpdateChecker;
 import me.cocolennon.filteringhoppers.utils.Updater;
+import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -11,11 +12,13 @@ public class Main extends JavaPlugin {
     private String version;
     private boolean usingOldVersion = false;
     private static Main instance;
+    private static MiniMessage miniMessage;
     FileConfiguration config = getConfig();
 
     @Override
     public void onEnable() {
         instance = this;
+        miniMessage = MiniMessage.miniMessage();
         checkVersion();
         setUpConfig();
         registerCommandsAndListeners();
@@ -24,7 +27,7 @@ public class Main extends JavaPlugin {
 
     private void checkVersion() {
         new UpdateChecker(this, 111606).getVersion(cVersion -> {
-            version = this.getDescription().getVersion();
+            version = this.getPluginMeta().getVersion();
             if (!getVersion().equals(cVersion)) {
                 getLogger().info("You are using an older version of Filtering Hoppers, please update to version " + cVersion);
                 usingOldVersion = true;
@@ -59,5 +62,6 @@ public class Main extends JavaPlugin {
 
     public String getVersion() { return instance.version; }
     public boolean getUsingOldVersion() { return instance.usingOldVersion; }
+    public static MiniMessage getMiniMessage() { return miniMessage; }
     public static Main getInstance() { return instance; }
 }

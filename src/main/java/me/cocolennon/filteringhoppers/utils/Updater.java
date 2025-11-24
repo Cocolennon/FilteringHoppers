@@ -8,6 +8,7 @@ import org.bukkit.plugin.Plugin;
 
 import java.io.*;
 import java.net.HttpURLConnection;
+import java.net.URI;
 import java.net.URL;
 import java.util.logging.Level;
 
@@ -70,7 +71,7 @@ public class Updater {
 
     private boolean checkResource(String link) {
         try {
-            URL url = new URL(link);
+            URL url = URI.create(link).toURL();
             HttpURLConnection connection = (HttpURLConnection) url.openConnection();
             connection.addRequestProperty("User-Agent", USER_AGENT);
             int code = connection.getResponseCode();
@@ -89,12 +90,12 @@ public class Updater {
     private void checkUpdate() {
         try {
             String page = Integer.toString(this.page);
-            URL url = new URL(API_RESOURCE+id+VERSIONS+PAGE+page);
+            URL url = URI.create(API_RESOURCE+id+VERSIONS+PAGE+page).toURL();
             HttpURLConnection connection = (HttpURLConnection) url.openConnection();
             connection.addRequestProperty("User-Agent", USER_AGENT);
             InputStream inputStream = connection.getInputStream();
             InputStreamReader reader = new InputStreamReader(inputStream);
-            JsonElement element = new JsonParser().parse(reader);
+            JsonElement element = JsonParser.parseReader(reader);
             JsonArray jsonArray = element.getAsJsonArray();
             if(jsonArray.size() == 10 && !emptyPage) {
                 connection.disconnect();
@@ -110,7 +111,7 @@ public class Updater {
                 element = object.get("name");
                 version = element.toString().replaceAll("\"", "").replace("v","");
                 if(logger) plugin.getLogger().info("Checking for update...");
-                if(shouldUpdate(version, plugin.getDescription().getVersion()) && updateType == UpdateType.VERSION_CHECK) {
+                if(shouldUpdate(version, plugin.getPluginMeta().getVersion()) && updateType == UpdateType.VERSION_CHECK) {
                     result = Result.UPDATE_FOUND;
                     if(logger)
                         plugin.getLogger().info("Update found!");
@@ -118,7 +119,7 @@ public class Updater {
                     if(logger) plugin.getLogger().info("Downloading update... version not checked");
                     download();
                 } else if(updateType == UpdateType.CHECK_DOWNLOAD) {
-                    if(shouldUpdate(version, plugin.getDescription().getVersion())) {
+                    if(shouldUpdate(version, plugin.getPluginMeta().getVersion())) {
                         if(logger) plugin.getLogger().info("Update found, downloading now...");
                         download();
                     } else {
@@ -143,7 +144,7 @@ public class Updater {
         BufferedInputStream in = null;
         FileOutputStream fout = null;
         try {
-            URL url = new URL(downloadLink);
+            URL url = URI.create(downloadLink).toURL();
             in = new BufferedInputStream(url.openStream());
             fout = new FileOutputStream(new File(updateFolder, file.getName()));
             final byte[] data = new byte[4096];

@@ -2,6 +2,7 @@ package me.cocolennon.filteringhoppers.listeners;
 
 import me.cocolennon.filteringhoppers.Main;
 import me.cocolennon.filteringhoppers.utils.MenuCreator;
+import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.entity.Player;
@@ -17,7 +18,7 @@ import java.util.Arrays;
 public class InventoryClickListener implements Listener {
     @EventHandler
     public void inventoryClick(InventoryClickEvent event) {
-        if(!event.getView().getTitle().equals("§5Filtering Hoppers§f: §dFilter Menu")) return;
+        if(!event.getView().title().toString().contains("Filter Menu")) return;
         Player player = (Player) event.getWhoClicked();
         ItemStack current = event.getCurrentItem();
         Inventory inv = event.getInventory();
@@ -26,6 +27,7 @@ public class InventoryClickListener implements Listener {
         NamespacedKey buttonAction = new NamespacedKey(Main.getInstance(), "buttonAction");
         if(current.hasItemMeta() && current.getItemMeta().getPersistentDataContainer().has(buttonAction) && current.getItemMeta().getPersistentDataContainer().get(buttonAction, PersistentDataType.STRING).equals("filler")) event.setCancelled(true);
         else {
+            MiniMessage miniMessage = Main.getMiniMessage();
             event.setCancelled(true);
             int slot = MenuCreator.getInstance().getFirstFreeSlot(inv);
             if(getClickedInv.equals(inv)) {
@@ -33,13 +35,13 @@ public class InventoryClickListener implements Listener {
                 return;
             }
             if(slot == 2001) {
-                player.sendMessage("§d[§5Filtering Hoppers§d] §cThe filter is full!");
+                player.sendMessage(miniMessage.deserialize("<#FF55FF>[<#AA00AA>Filtering Hoppers<#FF55FF>] <#FF5555>The filter is full!"));
                 return;
             }
             ItemStack newItem = current.clone();
             newItem.setAmount(1);
             if(Arrays.stream(inv.getContents()).toList().contains(newItem)) {
-                player.sendMessage("§d[§5Filtering Hoppers§d] §cThis item is already in the filter!");
+                player.sendMessage(miniMessage.deserialize("<#FF55FF>[<#AA00AA>Filtering Hoppers<#FF55FF>] <#FF5555>This item is already in the filter!"));
                 return;
             }
             inv.setItem(slot, newItem);
