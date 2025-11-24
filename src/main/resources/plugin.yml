@@ -1,7 +1,7 @@
 name: FilteringHoppers
 description: Allows you to add a filter to your hoppers for more efficient storage!
 main: me.cocolennon.filteringhoppers.Main
-version: 1.1.0
+version: 1.2.0
 author: Cocolennon
 api-version: '1.20'
 folia-supported: true
