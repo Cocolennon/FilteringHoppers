@@ -3,8 +3,6 @@ package me.cocolennon.filteringhoppers.listeners;
 import com.jeff_media.morepersistentdatatypes.DataType;
 import me.cocolennon.filteringhoppers.Main;
 import me.cocolennon.filteringhoppers.utils.FilterInventoryHolder;
-import me.cocolennon.filteringhoppers.utils.MenuCreator;
-import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.block.Block;
