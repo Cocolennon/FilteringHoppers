@@ -23,29 +23,24 @@ public class MenuCreator {
 
     public void createFilterMenu(List<ItemStack> filter, Player player, Block block) {
         Hopper hopper = (Hopper) block.getState();
-        Inventory inv = Bukkit.createInventory(hopper, 27, miniMessage.deserialize("<#AA00AA>Filtering Hoppers<#FFFFFF>: <#FF55FF>Filter Menu"));
+        FilterInventoryHolder invHolder = new FilterInventoryHolder(Main.getInstance(), 27, "<#AA00AA>Filtering Hoppers<#FFFFFF>: <#FF55FF>Filter Menu", block);
+        Inventory inv = invHolder.getInventory();
 
         if(filter != null) {
             for (ItemStack itemStack : filter) {
-                inv.addItem(itemStack);
+                invHolder.addItem(itemStack);
             }
         }
 
-        fillEmpty(inv, getItem());
+        invHolder.fillEmpty(18, getItem());
 
         player.openInventory(inv);
         player.sendMessage(miniMessage.deserialize("<#FF55FF>[<#AA00AA>Filtering Hoppers<#FF55FF>] <#AA00AA>Successfully opened the filter menu."));
     }
 
-    private void fillEmpty(Inventory inv, ItemStack item){
-        for(int i = 18; i < inv.getSize(); i++){
-            if(inv.getItem(i) != null) break;
-            inv.setItem(i, item);
-        }
-    }
-
     public boolean isItemFiller(Inventory inv, int slot) {
         ItemStack item = inv.getItem(slot);
+        if(item == null || !item.hasItemMeta()) return false;
         NamespacedKey buttonAction = new NamespacedKey(Main.getInstance(), "buttonAction");
         PersistentDataContainer pdc = item.getItemMeta().getPersistentDataContainer();
         return pdc.get(buttonAction, PersistentDataType.STRING).equals("filler");

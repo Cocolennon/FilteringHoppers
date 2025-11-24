@@ -29,9 +29,7 @@ public class InventoryOpenListener implements Listener {
         if(!player.isSneaking()) return;
         Block block = inventory.getLocation().getBlock();
         if(block.getType() != Material.HOPPER) return;
-        PersistentDataContainer pdc = player.getPersistentDataContainer();
-        NamespacedKey currentInvLoc = new NamespacedKey(Main.getInstance(), "currentInvLoc");
-        pdc.set(currentInvLoc, DataType.LOCATION, inventory.getLocation());
+        event.setCancelled(true);
         BlockState blockState = block.getState();
         TileState tileState = (TileState) blockState;
         PersistentDataContainer container = tileState.getPersistentDataContainer();
@@ -40,6 +38,5 @@ public class InventoryOpenListener implements Listener {
         List<ItemStack> filter = null;
         try { filter = Arrays.asList(arrayFilter); }catch(NullPointerException ignored){}
         MenuCreator.getInstance().createFilterMenu(filter, player, block);
-        event.setCancelled(true);
     }
 }

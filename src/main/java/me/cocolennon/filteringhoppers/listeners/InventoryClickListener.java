@@ -1,6 +1,7 @@
 package me.cocolennon.filteringhoppers.listeners;
 
 import me.cocolennon.filteringhoppers.Main;
+import me.cocolennon.filteringhoppers.utils.FilterInventoryHolder;
 import me.cocolennon.filteringhoppers.utils.MenuCreator;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.Material;
@@ -18,10 +19,10 @@ import java.util.Arrays;
 public class InventoryClickListener implements Listener {
     @EventHandler
     public void inventoryClick(InventoryClickEvent event) {
-        if(!event.getView().title().toString().contains("Filter Menu")) return;
+        Inventory inv = event.getInventory();
+        if(!(inv.getHolder() instanceof FilterInventoryHolder)) return;
         Player player = (Player) event.getWhoClicked();
         ItemStack current = event.getCurrentItem();
-        Inventory inv = event.getInventory();
         Inventory getClickedInv = event.getClickedInventory();
         if(current == null) return;
         NamespacedKey buttonAction = new NamespacedKey(Main.getInstance(), "buttonAction");

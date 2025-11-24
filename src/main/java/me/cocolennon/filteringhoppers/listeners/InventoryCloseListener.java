@@ -2,6 +2,7 @@ package me.cocolennon.filteringhoppers.listeners;
 
 import com.jeff_media.morepersistentdatatypes.DataType;
 import me.cocolennon.filteringhoppers.Main;
+import me.cocolennon.filteringhoppers.utils.FilterInventoryHolder;
 import me.cocolennon.filteringhoppers.utils.MenuCreator;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -25,11 +26,8 @@ public class InventoryCloseListener implements Listener {
     public void inventoryClose(InventoryCloseEvent event) {
         Player player = (Player) event.getPlayer();
         Inventory inventory = event.getInventory();
-        if(event.getInventory().getSize() == 27 && MenuCreator.getInstance().isItemFiller(inventory, 20)) return;
-        PersistentDataContainer pdc = player.getPersistentDataContainer();
-        NamespacedKey currentInvLoc = new NamespacedKey(Main.getInstance(), "currentInvLoc");
-        Location currentLoc = pdc.get(currentInvLoc, DataType.LOCATION);
-        Block block = currentLoc.getBlock();
+        if(!(inventory.getHolder() instanceof FilterInventoryHolder inventoryHolder)) return;
+        Block block = inventoryHolder.getBlock();
         if(block == null) return;
         if(block.getType() != Material.HOPPER) return;
         BlockState blockState = block.getState();
