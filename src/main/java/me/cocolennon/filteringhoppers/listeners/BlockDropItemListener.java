@@ -1,59 +1,34 @@
 package me.cocolennon.filteringhoppers.listeners;
 
-import com.jeff_media.morepersistentdatatypes.DataType;
 import me.cocolennon.filteringhoppers.Main;
-import org.bukkit.Chunk;
-import org.bukkit.Material;
-import org.bukkit.NamespacedKey;
-import org.bukkit.block.BlockState;
-import org.bukkit.block.Hopper;
+import me.cocolennon.filteringhoppers.utils.Helper;
 import org.bukkit.block.TileState;
 import org.bukkit.entity.Item;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockDropItemEvent;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.persistence.PersistentDataContainer;
 
 import java.util.*;
 
 public class BlockDropItemListener implements Listener {
     @EventHandler
     public void blockDropItem(BlockDropItemEvent event) {
+        if(!Main.getInstance().getConfig().getBoolean("chunk-collection-enabled")) return;
         List<Item> items = event.getItems();
-        List<TileState> tileStates = new ArrayList<>();
-        for(Item item : items) {
-            if(!Main.getInstance().getConfig().getBoolean("chunk-collection-enabled")) continue;
-            Chunk itemLocation = item.getLocation().getChunk();
-            for(BlockState current : itemLocation.getTileEntities()) {
-                if(!(current instanceof TileState)) continue;
-                if(current.getBlock().getType() != Material.HOPPER) continue;
-                TileState currentTileState = (TileState) current;
-                if(tileStates.contains(currentTileState)) continue;
-                tileStates.add(currentTileState);
-            }
-        }
+        List<TileState> tileStates = Helper.getHopperStates(event.getBlock().getChunk());
         if(tileStates.isEmpty()) return;
-        for(TileState current : tileStates) {
-            PersistentDataContainer container = current.getPersistentDataContainer();
-            NamespacedKey key = new NamespacedKey(Main.getInstance(), "hopperFilter");
-            ItemStack[] arrayFilter = container.get(key, DataType.ITEM_STACK_ARRAY);
-            if(arrayFilter == null) return;
-            List<ItemStack> filter = Arrays.asList(arrayFilter);
-            boolean filterEmpty = false;
-            if(filter == null || filter.isEmpty()) filterEmpty = true;
+        hopperLoop:for(TileState current : tileStates) {
+            List<ItemStack> filter = Helper.getHopperFilter(current);
             Iterator<Item> dropIterator = items.iterator();
             while(dropIterator.hasNext()) {
                 Item currentInDrops = dropIterator.next();
                 ItemStack itemStack = currentInDrops.getItemStack();
-                boolean match = filterEmpty || filter.stream().anyMatch(f -> f.isSimilar(itemStack));
-                if(match) {
-                    try {
-                        Hopper hopper = (Hopper) current.getLocation().getBlock().getState();
-                        hopper.getSnapshotInventory().addItem(itemStack);
-                        dropIterator.remove();
-                        hopper.update();
-                    } catch (ClassCastException|ConcurrentModificationException ignored) {}
+                if(filter == null || filter.isEmpty() || filter.stream().anyMatch(f -> f.isSimilar(itemStack))) {
+                    if(Helper.hopperIsFull(current.getLocation(), itemStack)) continue hopperLoop;
+                    HashMap<Integer, ItemStack> remainder = Helper.addItemToHopper(itemStack, current.getLocation());
+                    if(!remainder.isEmpty()) itemStack.setAmount(remainder.get(0).getAmount());
+                    else dropIterator.remove();
                 }
             }
         }

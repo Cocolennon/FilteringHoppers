@@ -1,7 +1,7 @@
 package me.cocolennon.filteringhoppers.listeners;
 
-import com.jeff_media.morepersistentdatatypes.DataType;
 import me.cocolennon.filteringhoppers.Main;
+import me.cocolennon.filteringhoppers.utils.Helper;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.block.Block;
@@ -14,9 +14,7 @@ import org.bukkit.event.inventory.InventoryPickupItemEvent;
 import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.persistence.PersistentDataContainer;
 
-import java.util.Arrays;
 import java.util.List;
 
 public class InventoryMoveItemListener implements Listener {
@@ -24,45 +22,23 @@ public class InventoryMoveItemListener implements Listener {
 
     @EventHandler
     public void inventoryMoveItem(InventoryMoveItemEvent event) {
-        Inventory dest = event.getDestination();
-        Inventory init = event.getInitiator();
-        Inventory src = event.getSource();
-        ItemStack item = event.getItem();
-        if(dest.getType() != InventoryType.HOPPER) return;
-        Block block = dest.getLocation().getBlock();
-        BlockState blockState = block.getState();
-        if(blockState.getBlock().getType() != Material.HOPPER) return;
-        if(!(blockState instanceof TileState)) return;
-        TileState tileState = (TileState) blockState;
-        PersistentDataContainer container = tileState.getPersistentDataContainer();
-        ItemStack[] arrayFilter = container.get(key, DataType.ITEM_STACK_ARRAY);
-        if(arrayFilter == null) return;
-        List<ItemStack> filter = Arrays.asList(arrayFilter);
-        if(filter == null || filter.isEmpty()) return;
-        for(ItemStack filterItem : filter) if(filterItem.isSimilar(item)) return;
-        event.setCancelled(true);
+        if(itemMove(event.getDestination(), event.getItem())) event.setCancelled(true);
     }
 
     @EventHandler
     public void inventoryPickupItem(InventoryPickupItemEvent event) {
-        Inventory dest = event.getInventory();
-        ItemStack item = event.getItem().getItemStack();
-        if(dest.getType() != InventoryType.HOPPER) return;
+        if(itemMove(event.getInventory(), event.getItem().getItemStack())) event.setCancelled(true);
+    }
+
+    private boolean itemMove(Inventory dest, ItemStack item) {
+        if(dest.getType() != InventoryType.HOPPER) return false;
         Block block = dest.getLocation().getBlock();
         BlockState blockState = block.getState();
-        if(blockState.getBlock().getType() != Material.HOPPER) return;
-        if(!(blockState instanceof TileState)) return;
-        TileState tileState = (TileState) blockState;
-        PersistentDataContainer container = tileState.getPersistentDataContainer();
-        ItemStack[] arrayFilter = container.get(key, DataType.ITEM_STACK_ARRAY);
-        if(arrayFilter == null) return;
-        List<ItemStack> filter = Arrays.asList(arrayFilter);
-        if(filter == null || filter.isEmpty()) return;
-        boolean match = false;
-        for(ItemStack filterItem : filter) if(filterItem.isSimilar(item)) {
-            match = true;
-            break;
-        }
-        if(!match) event.setCancelled(true);
+        if(blockState.getBlock().getType() != Material.HOPPER) return false;
+        if(!(blockState instanceof TileState)) return false;
+        List<ItemStack> filter = Helper.getHopperFilter((TileState) blockState);
+        if(filter == null || filter.isEmpty()) return false;
+        if(filter.stream().noneMatch(f -> f.isSimilar(item))) return true;
+        return false;
     }
 }
