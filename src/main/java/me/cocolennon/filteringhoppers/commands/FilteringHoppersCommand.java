@@ -22,7 +22,6 @@ public class FilteringHoppersCommand implements TabExecutor {
 
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-        if(!(sender instanceof Player)) return false;
         if(args.length == 0) {
             sender.sendMessage(miniMessage.deserialize("<#FF55FF>[<#AA00AA>Filtering Hoppers<#FF55FF>] <#FF5555>Usage: /" + label + " </info/reload/set-max-hopper>\n<#FF5555><> = Required."));
             return false;
