@@ -2,19 +2,19 @@ package me.cocolennon.filteringhoppers.utils;
 
 import com.jeff_media.morepersistentdatatypes.DataType;
 import me.cocolennon.filteringhoppers.Main;
-import org.bukkit.Chunk;
-import org.bukkit.Location;
-import org.bukkit.Material;
-import org.bukkit.NamespacedKey;
+import net.kyori.adventure.text.minimessage.MiniMessage;
+import org.bukkit.*;
 import org.bukkit.block.BlockState;
 import org.bukkit.block.Hopper;
 import org.bukkit.block.TileState;
+import org.bukkit.command.CommandSender;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.persistence.PersistentDataContainer;
 
 import java.util.*;
 
 public class Helper {
+    private static MiniMessage miniMessage = Main.getMiniMessage();
     private static NamespacedKey filterKey = new NamespacedKey(Main.getInstance(), "hopperFilter");
 
     public static List<ItemStack> getHopperFilter(TileState hopper) {
@@ -47,11 +47,52 @@ public class Helper {
     public static List<TileState> getHopperStates(Chunk chunk) {
         List<TileState> tileStates = new ArrayList<>();
         for(BlockState current : chunk.getTileEntities()) {
-            if(!(current instanceof TileState)) continue;
+            if(!(current instanceof TileState tileState)) continue;
             if(current.getBlock().getType() != Material.HOPPER) continue;
-            TileState currentTileState = (TileState) current;
-            tileStates.add(currentTileState);
+            tileStates.add(tileState);
         }
         return tileStates;
+    }
+
+    public static List<TileState> getHopperStates(Location center, int radius) {
+        List<TileState> tileStates = new ArrayList<>();
+        World world = center.getWorld();
+        if(world == null) return tileStates;
+        int minChunkX = (center.getBlockX() - radius) >> 4;
+        int maxChunkX = (center.getBlockX() + radius) >> 4;
+        int minChunkZ = (center.getBlockZ() - radius) >> 4;
+        int maxChunkZ = (center.getBlockZ() + radius) >> 4;
+        double radiusSquared =  radius * radius;
+        for(int cx = minChunkX; cx <= maxChunkX; cx++) {
+            for(int cz = minChunkZ; cz <= maxChunkZ; cz++) {
+                if(!world.isChunkLoaded(cx, cz)) continue;
+                Chunk chunk = world.getChunkAt(cx, cz);
+                for(BlockState current : chunk.getTileEntities()) {
+                    if(!(current instanceof TileState tileState)) continue;
+                    if(current.getBlock().getType() != Material.HOPPER) continue;
+                    if(current.getLocation().distanceSquared(center) <= radiusSquared) tileStates.add(tileState);
+                }
+            }
+        }
+        return tileStates;
+    }
+
+    public static boolean isBoolean(String s) {
+        return "true".equalsIgnoreCase(s) || "false".equalsIgnoreCase(s);
+    }
+
+    public static void sendMessage(CommandSender sender, String message) {
+        sender.sendMessage(miniMessage.deserialize("<#FF55FF>[<#AA00AA>Filtering Hoppers<#FF55FF>] " + message));
+    }
+
+    public static boolean sendMessage(CommandSender sender, String message, boolean returned) {
+        sender.sendMessage(miniMessage.deserialize("<#FF55FF>[<#AA00AA>Filtering Hoppers<#FF55FF>] " + message));
+        return returned;
+    }
+
+    public static boolean hasPermission(CommandSender sender, String permission) {
+        boolean allowed = sender.hasPermission(permission);
+        if(!allowed) sendMessage(sender, "<#FF5555>You don't have the permission to do that!");
+        return allowed;
     }
 }
