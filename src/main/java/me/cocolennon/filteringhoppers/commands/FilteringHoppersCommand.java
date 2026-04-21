@@ -31,6 +31,9 @@ public class FilteringHoppersCommand implements TabExecutor {
             case "max-hoppers-per-chunk" -> {
                 return setMaxHoppers(sender, args[1]);
             }
+            case "item-collection" -> {
+                return ItemCollectionCommand.execute(sender, args);
+            }
             default -> {
                 return Helper.sendMessage(sender, "<#FF5555>Usage: /" + label + " </info/reload/set-max-hopper>\n<#FF5555><> = Required.", false);
             }
