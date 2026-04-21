@@ -13,5 +13,11 @@ commands:
 permissions:
   filteringhoppers.reload:
     description: Allows user to reload the configuration
-  filteringhoppers.set-max-hopper:
+  filteringhoppers.set.max-hoppers-per-chunk:
     description: Allows user to set the maximum amount of hoppers per chunk
+  filteringhoppers.set.item-collection.enabled:
+    description: Allows user to toggle item collection
+  filteringhoppers.set.item-collection.mode:
+    description: Allows user to set item collection mode
+  filteringhoppers.set.item-collection.radius:
+    description: Allows user to set item collection radius
