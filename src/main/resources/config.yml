@@ -1,0 +1,11 @@
+# Downloads updates from Spigot automatically
+auto-updater-enabled: true
+# Maximum amount of hoppers per chunk
+max-hoppers-per-chunk: 5
+item-collection:
+  enabled: true
+  # Chunk: Collects items in the same chunk as a hopper
+  # Radius: Collects items in a radius around a hopper
+  mode: Chunk
+  # Radius in which items are collected around a hopper. Only works in radius mode
+  radius: 16
