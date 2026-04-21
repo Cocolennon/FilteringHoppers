@@ -1,6 +1,7 @@
 package me.cocolennon.filteringhoppers.commands;
 
 import me.cocolennon.filteringhoppers.Main;
+import me.cocolennon.filteringhoppers.utils.Helper;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.apache.commons.lang3.StringUtils;
@@ -14,49 +15,24 @@ import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
-import static org.bukkit.plugin.java.JavaPlugin.getPlugin;
-
 public class FilteringHoppersCommand implements TabExecutor {
     private final List<String> autoComplete = Arrays.asList("info", "reload", "set-max-hopper");
-    private MiniMessage miniMessage = Main.getMiniMessage();
 
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-        if(args.length == 0) {
-            sender.sendMessage(miniMessage.deserialize("<#FF55FF>[<#AA00AA>Filtering Hoppers<#FF55FF>] <#FF5555>Usage: /" + label + " </info/reload/set-max-hopper>\n<#FF5555><> = Required."));
-            return false;
-        }
-
+        if(args.length == 0) return Helper.sendMessage(sender, "<#FF5555>Usage: /" + label + " </info/reload/set-max-hopper>\n<#FF5555><> = Required.", false);
         switch (args[0]) {
             case "info" -> {
-                sendInfo(sender);
-                return true;
+                return sendInfo(sender);
             }
             case "reload" -> {
-                if(!sender.hasPermission("filteringhoppers.reload")) {
-                    sender.sendMessage(miniMessage.deserialize("<#FF55FF>[<#AA00AA>Filtering Hoppers<#FF55FF>] <#FF5555>You don't have the permission to do that!"));
-                    return false;
-                }
-                Main.getInstance().reloadConfig();
-                sender.sendMessage(miniMessage.deserialize("<#FF55FF>[<#AA00AA>Filtering Hoppers<#FF55FF>] Configuration reloaded!"));
-                return true;
+                return reloadConfig(sender);
             }
-            case "set-max-hopper" -> {
-                if(!sender.hasPermission("filteringhoppers.set-max-hopper")) {
-                    sender.sendMessage(miniMessage.deserialize("<#FF55FF>[<#AA00AA>Filtering Hoppers<#FF55FF>] <#FF5555>You don't have the permission to do that!"));
-                    return false;
-                }
-                if(!StringUtils.isNumeric(args[1])) {
-                    sender.sendMessage(miniMessage.deserialize("<#FF55FF>[<#AA00AA>Filtering Hoppers<#FF55FF>] <#FF5555>You must provide a valid number!"));
-                    return false;
-                }
-                Main.getInstance().getConfig().set("max-hopper-per-chunk", Integer.parseInt(args[1]));
-                Main.getInstance().saveConfig();
-                return true;
+            case "max-hoppers-per-chunk" -> {
+                return setMaxHoppers(sender, args[1]);
             }
             default -> {
-                sender.sendMessage(miniMessage.deserialize("<#FF55FF>[<#AA00AA>Filtering Hoppers<#FF55FF>] <#FF5555>Usage: /" + label + " </info/reload/set-max-hopper>\n<#FF5555><> = Required."));
-                return false;
+                return Helper.sendMessage(sender, "<#FF5555>Usage: /" + label + " </info/reload/set-max-hopper>\n<#FF5555><> = Required.", false);
             }
         }
     }
@@ -73,10 +49,11 @@ public class FilteringHoppersCommand implements TabExecutor {
         return null;
     }
 
-    private void sendInfo(CommandSender sender){
+    private boolean sendInfo(CommandSender sender){
+        MiniMessage miniMessage = Main.getMiniMessage();
         List<Component> info = new LinkedList<>();
         info.add(miniMessage.deserialize("<#FF55FF><bold>========================="));
-        info.add(miniMessage.deserialize("<#AA00AA><bold>Filtering Hoppers <#AA00AA>" + getPlugin(Main.class).getPluginMeta().getVersion()));
+        info.add(miniMessage.deserialize("<#AA00AA><bold>Filtering Hoppers <#AA00AA>" + Main.getInstance().getVersion()));
         if(Main.getInstance().getUsingOldVersion()){
             info.add(miniMessage.deserialize("<#FF55FF>An update is available!"));
         }else{
@@ -84,7 +61,21 @@ public class FilteringHoppersCommand implements TabExecutor {
         }
         info.add(miniMessage.deserialize("<#AA00AA>Made with <#FF5555>❤ <#AA00AA>by Cocolennon"));
         info.add(miniMessage.deserialize("<#FF55FF><bold>========================="));
-
         info.forEach(sender::sendMessage);
+        return true;
+    }
+
+    private boolean reloadConfig(CommandSender sender) {
+        if(!Helper.hasPermission(sender, "filteringhoppers.reload")) return false;
+        Main.getInstance().reloadConfig();
+        return Helper.sendMessage(sender, "Configuration reloaded!", true);
+    }
+
+    private boolean setMaxHoppers(CommandSender sender, String arg) {
+        if(!Helper.hasPermission(sender, "filteringhoppers.set.max-hoppers-per-chunk")) return false;
+        if(!StringUtils.isNumeric(arg)) Helper.sendMessage(sender, "<#FF5555>You must provide a valid number!", false);
+        Main.getInstance().getConfig().set("max-hopper-per-chunk", Integer.parseInt(arg));
+        Main.getInstance().saveConfig();
+        return Helper.sendMessage(sender, "Maximum hoppers per chunk is now " + arg + "!", true);
     }
 }
