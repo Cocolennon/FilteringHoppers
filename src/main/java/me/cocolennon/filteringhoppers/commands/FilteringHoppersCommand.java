@@ -11,7 +11,6 @@ import org.bukkit.command.TabExecutor;
 import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -27,7 +26,7 @@ public class FilteringHoppersCommand implements TabExecutor {
                 return reloadConfig(sender);
             }
             case "max-hoppers-per-chunk" -> {
-                return setMaxHoppers(sender, args[1]);
+                return setMaxHoppers(sender, args);
             }
             case "item-collection" -> {
                 return ItemCollectionCommand.execute(sender, args);
@@ -94,11 +93,12 @@ public class FilteringHoppersCommand implements TabExecutor {
         return Helper.sendMessage(sender, "Configuration reloaded!", true);
     }
 
-    private boolean setMaxHoppers(CommandSender sender, String arg) {
+    private boolean setMaxHoppers(CommandSender sender, String[] args) {
         if(!Helper.hasPermission(sender, "filteringhoppers.set.max-hoppers-per-chunk")) return false;
-        if(!StringUtils.isNumeric(arg)) Helper.sendMessage(sender, "<#FF5555>You must provide a valid number!", false);
-        Main.getInstance().getConfig().set("max-hopper-per-chunk", Integer.parseInt(arg));
+        if(args.length < 2) return Helper.sendMessage(sender, "<#FF5555>You must provide a number!", false);
+        if(!StringUtils.isNumeric(args[1])) Helper.sendMessage(sender, "<#FF5555>You must provide a valid number!", false);
+        Main.getInstance().getConfig().set("max-hopper-per-chunk", Integer.parseInt(args[1]));
         Main.getInstance().saveConfig();
-        return Helper.sendMessage(sender, "Maximum hoppers per chunk is now " + arg + "!", true);
+        return Helper.sendMessage(sender, "Maximum hoppers per chunk is now " + args[1] + "!", true);
     }
 }

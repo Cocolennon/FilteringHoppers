@@ -12,7 +12,8 @@ public class ItemCollectionCommand {
         switch(args[1]) {
             case "enabled" -> {
                 if(!Helper.hasPermission(sender, "filteringhoppers.set.item-collection.enabled")) return false;
-                if(!Helper.isBoolean(args[3])) Helper.sendMessage(sender, "<#FF5555>You must provide a valid boolean!", false);
+                if(args.length < 3) return Helper.sendMessage(sender, "<#FF5555>You must provide a boolean to toggle this feature!", false);
+                if(!Helper.isBoolean(args[2])) Helper.sendMessage(sender, "<#FF5555>You must provide a valid boolean!", false);
                 boolean toggle = BooleanUtils.toBoolean(args[2]);
                 Main.getInstance().getConfig().set("item-collection.enabled", toggle);
                 Main.getInstance().saveConfig();
@@ -20,13 +21,16 @@ public class ItemCollectionCommand {
             }
             case "mode" -> {
                 if(!Helper.hasPermission(sender, "filteringhoppers.set.item-collection.mode")) return false;
-                if(!args[2].equals("chunk") || !args[2].equals("radius")) return Helper.sendMessage(sender, "<#FF5555>You must provide a valid mode!", false);
-                Main.getInstance().getConfig().set("item-collection.mode", args[2].toLowerCase());
+                if(args.length < 3) return Helper.sendMessage(sender, "<#FF5555>You must provide a mode!", false);
+                String arg = args[2].toLowerCase();
+                if(!arg.equals("chunk") && !arg.equals("radius")) return Helper.sendMessage(sender, "<#FF5555>You must provide a valid mode!", false);
+                Main.getInstance().getConfig().set("item-collection.mode", arg);
                 Main.getInstance().saveConfig();
-                return Helper.sendMessage(sender, "Item collection is now in " + args[2].toLowerCase() + " mode!", true);
+                return Helper.sendMessage(sender, "Item collection is now in " + arg + " mode!", true);
             }
             case "radius" -> {
                 if(!Helper.hasPermission(sender, "filteringhoppers.set.item-collection.radius")) return false;
+                if(args.length < 3) return Helper.sendMessage(sender, "<#FF5555>You must provide a radius!", false);
                 if(!StringUtils.isNumeric(args[2])) return Helper.sendMessage(sender, "<#FF5555>You must provide a valid radius!", false);
                 Main.getInstance().getConfig().set("item-collection.radius", args[2]);
                 Main.getInstance().saveConfig();
