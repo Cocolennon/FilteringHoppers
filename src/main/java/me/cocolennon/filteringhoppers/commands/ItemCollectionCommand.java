@@ -32,7 +32,7 @@ public class ItemCollectionCommand {
                 if(!Helper.hasPermission(sender, "filteringhoppers.set.item-collection.radius")) return false;
                 if(args.length < 3) return Helper.sendMessage(sender, "<#FF5555>You must provide a radius!", false);
                 if(!StringUtils.isNumeric(args[2])) return Helper.sendMessage(sender, "<#FF5555>You must provide a valid radius!", false);
-                Main.getInstance().getConfig().set("item-collection.radius", args[2]);
+                Main.getInstance().getConfig().set("item-collection.radius", Integer.parseInt(args[2]));
                 Main.getInstance().saveConfig();
                 return Helper.sendMessage(sender, "Item collection radius for radius mode is now " + args[2] + " blocks!", true);
             }
