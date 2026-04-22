@@ -97,7 +97,7 @@ public class FilteringHoppersCommand implements TabExecutor {
         if(!Helper.hasPermission(sender, "filteringhoppers.set.max-hoppers-per-chunk")) return false;
         if(args.length < 2) return Helper.sendMessage(sender, "<#FF5555>You must provide a number!", false);
         if(!StringUtils.isNumeric(args[1])) Helper.sendMessage(sender, "<#FF5555>You must provide a valid number!", false);
-        Main.getInstance().getConfig().set("max-hopper-per-chunk", Integer.parseInt(args[1]));
+        Main.getInstance().getConfig().set("max-hoppers-per-chunk", Integer.parseInt(args[1]));
         Main.getInstance().saveConfig();
         return Helper.sendMessage(sender, "Maximum hoppers per chunk is now " + args[1] + "!", true);
     }
