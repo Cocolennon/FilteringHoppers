@@ -14,7 +14,7 @@ import java.util.*;
 public class BlockDropItemListener implements Listener {
     @EventHandler
     public void blockDropItem(BlockDropItemEvent event) {
-        if(!Main.getInstance().getConfig().getBoolean("chunk-collection-enabled")) return;
+        if(!Main.getInstance().getConfig().getBoolean("item-collection.enabled")) return;
         List<Item> items = event.getItems();
         List<TileState> tileStates = Helper.getHopperStates(event.getBlock().getLocation());
         if(tileStates.isEmpty()) return;

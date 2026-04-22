@@ -13,7 +13,7 @@ import java.util.*;
 public class EntityDeathListener implements Listener {
     @EventHandler
     public void entityDeath(EntityDeathEvent event) {
-        if(!Main.getInstance().getConfig().getBoolean("chunk-collection-enabled")) return;
+        if(!Main.getInstance().getConfig().getBoolean("item-collection.enabled")) return;
         List<ItemStack> items = event.getDrops();
         List<TileState> tileStates = Helper.getHopperStates(event.getEntity().getLocation());
         if(tileStates.isEmpty()) return;
