@@ -46,11 +46,11 @@ public class Main extends JavaPlugin {
         config.addDefault("item-collection.enabled", true);
         config.addDefault("item-collection.mode", "Chunk");
         config.addDefault("item-collection.radius", 16);
-        config.addDefault("max-hopper-per-chunk", 5);
+        config.addDefault("max-hoppers-per-chunk", 5);
         config.setComments("auto-updater-enabled", List.of("Downloads updates from Spigot automatically"));
         config.setComments("item-collection.mode", List.of("Chunk: Collects items in the same chunk as a hopper", "Radius: Collects items in a radius around a hopper"));
         config.setComments("item-collection.radius", List.of("Radius in which items are collected around a hopper. Only works in radius mode"));
-        config.setComments("max-hopper-per-chunk", List.of("Maximum amount of hoppers per chunk"));
+        config.setComments("max-hoppers-per-chunk", List.of("Maximum amount of hoppers per chunk"));
         config.options().copyDefaults(true);
         saveConfig();
     }
