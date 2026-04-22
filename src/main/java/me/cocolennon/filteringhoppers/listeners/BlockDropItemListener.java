@@ -16,7 +16,7 @@ public class BlockDropItemListener implements Listener {
     public void blockDropItem(BlockDropItemEvent event) {
         if(!Main.getInstance().getConfig().getBoolean("chunk-collection-enabled")) return;
         List<Item> items = event.getItems();
-        List<TileState> tileStates = Helper.getHopperStates(event.getBlock().getChunk());
+        List<TileState> tileStates = Helper.getHopperStates(event.getBlock().getLocation());
         if(tileStates.isEmpty()) return;
         hopperLoop:for(TileState current : tileStates) {
             List<ItemStack> filter = Helper.getHopperFilter(current);

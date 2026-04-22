@@ -27,7 +27,7 @@ public class ItemDropListener implements Listener {
     private void itemDrop(Item item) {
         if(!Main.getInstance().getConfig().getBoolean("chunk-collection-enabled")) return;
         ItemStack itemStack = item.getItemStack();
-        List<TileState> tileStates = Helper.getHopperStates(item.getLocation().getChunk());
+        List<TileState> tileStates = Helper.getHopperStates(item.getLocation());
         if(tileStates.isEmpty()) return;
         for(TileState current : tileStates) {
             List<ItemStack> filter = Helper.getHopperFilter(current);

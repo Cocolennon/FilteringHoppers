@@ -8,12 +8,14 @@ import org.bukkit.block.BlockState;
 import org.bukkit.block.Hopper;
 import org.bukkit.block.TileState;
 import org.bukkit.command.CommandSender;
+import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.persistence.PersistentDataContainer;
 
 import java.util.*;
 
 public class Helper {
+    private static FileConfiguration config = Main.getInstance().getConfig();
     private static MiniMessage miniMessage = Main.getMiniMessage();
     private static NamespacedKey filterKey = new NamespacedKey(Main.getInstance(), "hopperFilter");
 
@@ -44,7 +46,15 @@ public class Helper {
         return true;
     }
 
-    public static List<TileState> getHopperStates(Chunk chunk) {
+    public static List<TileState> getHopperStates(Location location) {
+        return switch (config.getString("item-collection.mode").toLowerCase()) {
+            case "chunk" -> getHopperStates(location.getChunk());
+            case "radius" -> getHopperStates(location, config.getInt("item-collection.radius"));
+            default -> null;
+        };
+    }
+
+    private static List<TileState> getHopperStates(Chunk chunk) {
         List<TileState> tileStates = new ArrayList<>();
         for(BlockState current : chunk.getTileEntities()) {
             if(!(current instanceof TileState tileState)) continue;
@@ -54,7 +64,7 @@ public class Helper {
         return tileStates;
     }
 
-    public static List<TileState> getHopperStates(Location center, int radius) {
+    private static List<TileState> getHopperStates(Location center, int radius) {
         List<TileState> tileStates = new ArrayList<>();
         World world = center.getWorld();
         if(world == null) return tileStates;

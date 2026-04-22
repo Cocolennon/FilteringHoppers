@@ -15,7 +15,7 @@ public class EntityDeathListener implements Listener {
     public void entityDeath(EntityDeathEvent event) {
         if(!Main.getInstance().getConfig().getBoolean("chunk-collection-enabled")) return;
         List<ItemStack> items = event.getDrops();
-        List<TileState> tileStates = Helper.getHopperStates(event.getEntity().getChunk());
+        List<TileState> tileStates = Helper.getHopperStates(event.getEntity().getLocation());
         if(tileStates.isEmpty()) return;
         hopperLoop:for(TileState current : tileStates) {
             List<ItemStack> filter = Helper.getHopperFilter(current);
