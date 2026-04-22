@@ -2,6 +2,7 @@ package me.cocolennon.filteringhoppers.utils;
 
 import com.jeff_media.morepersistentdatatypes.DataType;
 import me.cocolennon.filteringhoppers.Main;
+import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.*;
 import org.bukkit.block.BlockState;
@@ -73,6 +74,8 @@ public class Helper {
         int minChunkZ = (center.getBlockZ() - radius) >> 4;
         int maxChunkZ = (center.getBlockZ() + radius) >> 4;
         double radiusSquared =  radius * radius;
+        Location centerLoc = center.clone();
+        centerLoc.setY(0);
         for(int cx = minChunkX; cx <= maxChunkX; cx++) {
             for(int cz = minChunkZ; cz <= maxChunkZ; cz++) {
                 if(!world.isChunkLoaded(cx, cz)) continue;
@@ -80,7 +83,9 @@ public class Helper {
                 for(BlockState current : chunk.getTileEntities()) {
                     if(!(current instanceof TileState tileState)) continue;
                     if(current.getBlock().getType() != Material.HOPPER) continue;
-                    if(current.getLocation().distanceSquared(center) <= radiusSquared) tileStates.add(tileState);
+                    Location currentLoc = current.getLocation().clone();
+                    currentLoc.setY(0);
+                    if(currentLoc.distanceSquared(centerLoc) <= radiusSquared) tileStates.add(tileState);
                 }
             }
         }
