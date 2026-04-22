@@ -16,11 +16,9 @@ import java.util.LinkedList;
 import java.util.List;
 
 public class FilteringHoppersCommand implements TabExecutor {
-    private final List<String> autoComplete = Arrays.asList("info", "reload", "set-max-hopper");
-
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-        if(args.length == 0) return Helper.sendMessage(sender, "<#FF5555>Usage: /" + label + " </info/reload/set-max-hopper>\n<#FF5555><> = Required.", false);
+        if(args.length == 0) return Helper.sendMessage(sender, "<#FF5555>Usage: /" + label + " <info/reload/max-hoppers-per-chunk/item-collection>\n<#FF5555><> = Required.", false);
         switch (args[0]) {
             case "info" -> {
                 return sendInfo(sender);
@@ -35,7 +33,7 @@ public class FilteringHoppersCommand implements TabExecutor {
                 return ItemCollectionCommand.execute(sender, args);
             }
             default -> {
-                return Helper.sendMessage(sender, "<#FF5555>Usage: /" + label + " </info/reload/set-max-hopper>\n<#FF5555><> = Required.", false);
+                return Helper.sendMessage(sender, "<#FF5555>Usage: /" + label + " <info/reload/max-hoppers-per-chunk/item-collection>\n<#FF5555><> = Required.", false);
             }
         }
     }
@@ -43,12 +41,34 @@ public class FilteringHoppersCommand implements TabExecutor {
     @Override
     public List<String> onTabComplete(CommandSender sender, Command command, String label, String[] args) {
         if(!(sender instanceof Player)) return null;
-        if(args.length == 1) return autoComplete;
-        List<String> hundred = new ArrayList<>();
-        for(int i = 0; i < 100; i++) {
-            hundred.add(String.valueOf(i));
+        if(args.length == 1) return List.of("info", "reload", "max-hoppers-per-chunk", "item-collection");
+        if(args.length == 2) {
+            return switch(args[0]) {
+                case "max-hoppers-per-chunk" -> {
+                    List<String> hundred = new ArrayList<>();
+                    for(int i = 0; i < 100; i++) {
+                        hundred.add(String.valueOf(i));
+                    }
+                    yield hundred;
+                }
+                case "item-collection" -> List.of("enabled", "mode", "radius");
+                default -> List.of();
+            };
         }
-        if(args.length == 2) return hundred;
+        if(args.length == 3) {
+            return switch(args[1]) {
+                case "enabled" -> List.of("true", "false");
+                case "mode" -> List.of("Chunk", "Radius");
+                case "radius" -> {
+                    List<String> hundred = new ArrayList<>();
+                    for(int i = 0; i < 100; i++) {
+                        hundred.add(String.valueOf(i));
+                    }
+                    yield hundred;
+                }
+                default -> List.of();
+            };
+        }
         return null;
     }
 
