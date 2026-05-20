@@ -9,3 +9,5 @@ item-collection:
   mode: Chunk
   # Radius in which items are collected around a hopper. Only works in radius mode
   radius: 16
+  # Determines if radius ignores Y axis distance or not
+  ignore-y: false
