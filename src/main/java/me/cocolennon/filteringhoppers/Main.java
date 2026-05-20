@@ -4,20 +4,17 @@ import me.cocolennon.filteringhoppers.commands.FilteringHoppersCommand;
 import me.cocolennon.filteringhoppers.listeners.*;
 import me.cocolennon.filteringhoppers.utils.UpdateChecker;
 import me.cocolennon.filteringhoppers.utils.Updater;
-import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public class Main extends JavaPlugin {
     private String version;
     private boolean usingOldVersion = false;
     private static Main instance;
-    private static MiniMessage miniMessage;
     private Config config;
 
     @Override
     public void onEnable() {
         instance = this;
-        miniMessage = MiniMessage.miniMessage();
         loadConfig();
         registerCommands();
         registerListeners();
@@ -63,6 +60,5 @@ public class Main extends JavaPlugin {
     public Config config() { return config; }
     public String getVersion() { return instance.version; }
     public boolean getUsingOldVersion() { return instance.usingOldVersion; }
-    public static MiniMessage getMiniMessage() { return miniMessage; }
     public static Main getInstance() { return instance; }
 }
