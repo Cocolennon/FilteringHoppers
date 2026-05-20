@@ -15,15 +15,16 @@ public class Main extends JavaPlugin {
     private boolean usingOldVersion = false;
     private static Main instance;
     private static MiniMessage miniMessage;
-    FileConfiguration config = getConfig();
+    private Config config;
 
     @Override
     public void onEnable() {
         instance = this;
         miniMessage = MiniMessage.miniMessage();
+        loadConfig();
+        registerCommands();
+        registerListeners();
         checkVersion();
-        setUpConfig();
-        registerCommandsAndListeners();
         getLogger().info("Plugin enabled!");
     }
 
@@ -35,28 +36,23 @@ public class Main extends JavaPlugin {
                 usingOldVersion = true;
             }
         });
-        if(getConfig().getBoolean("auto-updater-enabled")) {
+        if(config.autoUpdaterEnabled) {
             Updater updater = new Updater(this, 111606, getFile(), Updater.UpdateType.VERSION_CHECK, true);
             if(updater.getResult().equals(Updater.Result.SUCCESS)) getLogger().info("Update will be applied after next restart!");
         }
     }
 
-    private void setUpConfig(){
-        config.addDefault("auto-updater-enabled", true);
-        config.addDefault("item-collection.enabled", true);
-        config.addDefault("item-collection.mode", "Chunk");
-        config.addDefault("item-collection.radius", 16);
-        config.addDefault("max-hoppers-per-chunk", 5);
-        config.setComments("auto-updater-enabled", List.of("Downloads updates from Spigot automatically"));
-        config.setComments("item-collection.mode", List.of("Chunk: Collects items in the same chunk as a hopper", "Radius: Collects items in a radius around a hopper"));
-        config.setComments("item-collection.radius", List.of("Radius in which items are collected around a hopper. Only works in radius mode"));
-        config.setComments("max-hoppers-per-chunk", List.of("Maximum amount of hoppers per chunk"));
-        config.options().copyDefaults(true);
-        saveConfig();
+    private void loadConfig(){
+        saveDefaultConfig();
+        reloadConfig();
+        config = new Config(this);
     }
 
-    private void registerCommandsAndListeners() {
+    private void registerCommands() {
         getCommand("filteringhoppers").setExecutor(new FilteringHoppersCommand());
+    }
+
+    private void registerListeners() {
         getServer().getPluginManager().registerEvents(new InventoryMoveItemListener(), instance);
         getServer().getPluginManager().registerEvents(new InventoryOpenListener(), instance);
         getServer().getPluginManager().registerEvents(new InventoryCloseListener(), instance);
