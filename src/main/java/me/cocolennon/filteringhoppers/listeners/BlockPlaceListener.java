@@ -34,7 +34,7 @@ public class BlockPlaceListener implements Listener {
             if(current instanceof Hopper) hopperCount++;
         }
 
-        int maxHopper = (int) Main.getInstance().getConfig().get("max-hoppers-per-chunk");
+        int maxHopper = Main.getInstance().config().maxHoppersPerChunk;
         if(hopperCount > maxHopper) {
             player.sendMessage(Main.getMiniMessage().deserialize("<#FF55FF>[<#AA00AA>Filtering Hoppers<#FF55FF>] <#FF5555>You can only have a maximum of " + Main.getInstance().getConfig().get("max-hoppers-per-chunk") + " hoppers per chunk!"));
             event.setCancelled(true);

@@ -9,14 +9,14 @@ import org.bukkit.command.CommandSender;
 public class ItemCollectionCommand {
     public static boolean execute(CommandSender sender, String[] args) {
         if(args.length < 2) return Helper.sendMessage(sender, "<#FF5555>Please provide an option to set!", false);
+        Main main = Main.getInstance();
         switch(args[1]) {
             case "enabled" -> {
                 if(!Helper.hasPermission(sender, "filteringhoppers.set.item-collection.enabled")) return false;
                 if(args.length < 3) return Helper.sendMessage(sender, "<#FF5555>You must provide a boolean to toggle this feature!", false);
                 if(!Helper.isBoolean(args[2])) Helper.sendMessage(sender, "<#FF5555>You must provide a valid boolean!", false);
                 boolean toggle = BooleanUtils.toBoolean(args[2]);
-                Main.getInstance().getConfig().set("item-collection.enabled", toggle);
-                Main.getInstance().saveConfig();
+                configSet(main, "item-collection.enabled", toggle);
                 return Helper.sendMessage(sender, "Item collection is now " + (toggle ? "enabled!" : "disabled!"), true);
             }
             case "mode" -> {
@@ -24,21 +24,25 @@ public class ItemCollectionCommand {
                 if(args.length < 3) return Helper.sendMessage(sender, "<#FF5555>You must provide a mode!", false);
                 String arg = args[2].toLowerCase();
                 if(!arg.equals("chunk") && !arg.equals("radius")) return Helper.sendMessage(sender, "<#FF5555>You must provide a valid mode!", false);
-                Main.getInstance().getConfig().set("item-collection.mode", arg);
-                Main.getInstance().saveConfig();
+                configSet(main, "item-collection.mode", arg);
                 return Helper.sendMessage(sender, "Item collection is now in " + arg + " mode!", true);
             }
             case "radius" -> {
                 if(!Helper.hasPermission(sender, "filteringhoppers.set.item-collection.radius")) return false;
                 if(args.length < 3) return Helper.sendMessage(sender, "<#FF5555>You must provide a radius!", false);
                 if(!StringUtils.isNumeric(args[2])) return Helper.sendMessage(sender, "<#FF5555>You must provide a valid radius!", false);
-                Main.getInstance().getConfig().set("item-collection.radius", Integer.parseInt(args[2]));
-                Main.getInstance().saveConfig();
+                configSet(main, "item-collection.radius", Integer.parseInt(args[2]));
                 return Helper.sendMessage(sender, "Item collection radius for radius mode is now " + args[2] + " blocks!", true);
             }
             default -> {
                 return Helper.sendMessage(sender, "<#FF5555>Please provide a valid option to set!", false);
             }
         }
+    }
+
+    private static void configSet(Main main, String node, Object value) {
+        main.getConfig().set(node, value);
+        main.saveConfig();
+        main.loadConfig();
     }
 }
