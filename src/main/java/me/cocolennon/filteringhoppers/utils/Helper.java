@@ -3,7 +3,6 @@ package me.cocolennon.filteringhoppers.utils;
 import com.jeff_media.morepersistentdatatypes.DataType;
 import me.cocolennon.filteringhoppers.Config;
 import me.cocolennon.filteringhoppers.Main;
-import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.*;
 import org.bukkit.block.BlockState;
 import org.bukkit.block.Hopper;
@@ -16,7 +15,6 @@ import java.util.*;
 
 public class Helper {
     private static Config config = Main.getInstance().config();
-    private static MiniMessage miniMessage = Main.getMiniMessage();
     private static NamespacedKey filterKey = new NamespacedKey(Main.getInstance(), "hopperFilter");
 
     public static List<ItemStack> getHopperFilter(TileState hopper) {
@@ -94,15 +92,6 @@ public class Helper {
 
     public static boolean isBoolean(String s) {
         return "true".equalsIgnoreCase(s) || "false".equalsIgnoreCase(s);
-    }
-
-    public static void sendMessage(CommandSender sender, String message) {
-        sender.sendMessage(miniMessage.deserialize("<#FF55FF>[<#AA00AA>Filtering Hoppers<#FF55FF>] " + message));
-    }
-
-    public static boolean sendMessage(CommandSender sender, String message, boolean returned) {
-        sender.sendMessage(miniMessage.deserialize("<#FF55FF>[<#AA00AA>Filtering Hoppers<#FF55FF>] " + message));
-        return returned;
     }
 
     public static boolean hasPermission(CommandSender sender, String permission) {
