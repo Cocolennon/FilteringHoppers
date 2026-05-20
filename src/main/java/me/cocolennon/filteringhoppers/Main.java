@@ -39,7 +39,7 @@ public class Main extends JavaPlugin {
         }
     }
 
-    private void loadConfig(){
+    public void loadConfig(){
         saveDefaultConfig();
         reloadConfig();
         config = new Config(this);
@@ -60,6 +60,7 @@ public class Main extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new EntityDeathListener(), instance);
     }
 
+    public Config config() { return config; }
     public String getVersion() { return instance.version; }
     public boolean getUsingOldVersion() { return instance.usingOldVersion; }
     public static MiniMessage getMiniMessage() { return miniMessage; }
