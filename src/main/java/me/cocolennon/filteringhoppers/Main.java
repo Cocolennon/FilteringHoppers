@@ -5,10 +5,7 @@ import me.cocolennon.filteringhoppers.listeners.*;
 import me.cocolennon.filteringhoppers.utils.UpdateChecker;
 import me.cocolennon.filteringhoppers.utils.Updater;
 import net.kyori.adventure.text.minimessage.MiniMessage;
-import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
-
-import java.util.List;
 
 public class Main extends JavaPlugin {
     private String version;
