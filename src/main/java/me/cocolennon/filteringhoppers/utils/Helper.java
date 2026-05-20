@@ -65,6 +65,7 @@ public class Helper {
     }
 
     private static List<TileState> getHopperStates(Location center, int radius) {
+        Config config = Main.getInstance().config();
         List<TileState> tileStates = new ArrayList<>();
         World world = center.getWorld();
         if(world == null) return tileStates;
@@ -74,7 +75,7 @@ public class Helper {
         int maxChunkZ = (center.getBlockZ() + radius) >> 4;
         double radiusSquared =  radius * radius;
         Location centerLoc = center.clone();
-        centerLoc.setY(0);
+        if(config.itemCollection.ignoreY) centerLoc.setY(0);
         for(int cx = minChunkX; cx <= maxChunkX; cx++) {
             for(int cz = minChunkZ; cz <= maxChunkZ; cz++) {
                 if(!world.isChunkLoaded(cx, cz)) continue;
@@ -83,7 +84,7 @@ public class Helper {
                     if(!(current instanceof TileState tileState)) continue;
                     if(current.getBlock().getType() != Material.HOPPER) continue;
                     Location currentLoc = current.getLocation().clone();
-                    currentLoc.setY(0);
+                    if(config.itemCollection.ignoreY) currentLoc.setY(0);
                     if(currentLoc.distanceSquared(centerLoc) <= radiusSquared) tileStates.add(tileState);
                 }
             }
