@@ -15,6 +15,7 @@ error:
   hoppers: "<#FF5555>You can only have a maximum of %s hoppers per chunk!"
   usage: "<#FF5555>Usage: /%s <info/reload/max-hoppers-per-chunk/item-collection>\n<#FF5555><> = Required."
 success:
+  reload: "<#AA00AA>Configuration reloaded!"
   max-hoppers: "<#AA00AA>Maximum hoppers per chunk is now %s!"
   item-collection:
     toggle:

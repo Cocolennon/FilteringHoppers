@@ -15,10 +15,11 @@ error:
   hoppers: "<#FF5555>Vous pouvez avoir qu'un maximum de %s entonnoirs par chunk!"
   usage: "<#FF5555>Utilisation: /%s <info/reload/max-hoppers-per-chunk/item-collection>\n<#FF5555><> = Requis."
 success:
-  max-hoppers: "<#AA00AA>Le nombre d'entonnoirs par chunk est maintenant %s!"
+  reload: "<#AA00AA>Configuration rechargée !"
+  max-hoppers: "<#AA00AA>Le nombre d'entonnoirs par chunk est maintenant %s !"
   item-collection:
     toggle:
-      base: "<#AA00AA>La collection d'objets est maintenant §s!"
+      base: "<#AA00AA>La collection d'objets est maintenant §s !"
       enabled: "activée"
       disabled: "désactivée"
     mode:
