@@ -29,12 +29,6 @@ public class FilterInventoryHolder implements InventoryHolder {
         }
     }
 
-    public void fillEmpty(int start, int end, ItemStack item) {
-        for(int i = start; i <= end; i++){
-            if(inventory.getItem(i) == null) inventory.setItem(i, item);
-        }
-    }
-
     public Block getBlock() { return block; }
 
     @Override

@@ -1,10 +1,8 @@
 package me.cocolennon.filteringhoppers.listeners;
 
-import com.jeff_media.morepersistentdatatypes.DataType;
-import me.cocolennon.filteringhoppers.Main;
+import me.cocolennon.filteringhoppers.utils.Helper;
 import me.cocolennon.filteringhoppers.utils.MenuCreator;
 import org.bukkit.Material;
-import org.bukkit.NamespacedKey;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockState;
 import org.bukkit.block.TileState;
@@ -14,11 +12,6 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryOpenEvent;
 import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.inventory.Inventory;
-import org.bukkit.inventory.ItemStack;
-import org.bukkit.persistence.PersistentDataContainer;
-
-import java.util.Arrays;
-import java.util.List;
 
 public class InventoryOpenListener implements Listener {
     @EventHandler
@@ -31,12 +24,6 @@ public class InventoryOpenListener implements Listener {
         if(block.getType() != Material.HOPPER) return;
         event.setCancelled(true);
         BlockState blockState = block.getState();
-        TileState tileState = (TileState) blockState;
-        PersistentDataContainer container = tileState.getPersistentDataContainer();
-        NamespacedKey key = new NamespacedKey(Main.getInstance(), "hopperFilter");
-        ItemStack[] arrayFilter = container.get(key, DataType.ITEM_STACK_ARRAY);
-        List<ItemStack> filter = null;
-        try { filter = Arrays.asList(arrayFilter); }catch(NullPointerException ignored){}
-        MenuCreator.getInstance().createFilterMenu(filter, player, block);
+        MenuCreator.getInstance().createFilterMenu(Helper.getHopperFilter((TileState) blockState), player, block);
     }
 }
