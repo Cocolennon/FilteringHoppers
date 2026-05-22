@@ -1,6 +1,7 @@
 package me.cocolennon.filteringhoppers.listeners;
 
 import me.cocolennon.filteringhoppers.Main;
+import me.cocolennon.filteringhoppers.utils.Localization;
 import org.bukkit.Chunk;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockState;
@@ -20,7 +21,6 @@ public class BlockPlaceListener implements Listener {
         Player player = event.getPlayer();
         Block block = event.getBlockPlaced();
         Chunk chunk = block.getChunk();
-
         List<TileState> tileStates = new ArrayList<>();
         for(BlockState current : chunk.getTileEntities()) {
             if(!(current instanceof TileState)) return;
@@ -28,15 +28,13 @@ public class BlockPlaceListener implements Listener {
             tileStates.add(currentTileState);
         }
         if(tileStates.isEmpty()) return;
-
         int hopperCount = 0;
         for(TileState current : tileStates) {
             if(current instanceof Hopper) hopperCount++;
         }
-
         int maxHopper = Main.getInstance().config().maxHoppersPerChunk;
         if(hopperCount > maxHopper) {
-            player.sendMessage(Main.getMiniMessage().deserialize("<#FF55FF>[<#AA00AA>Filtering Hoppers<#FF55FF>] <#FF5555>You can only have a maximum of " + Main.getInstance().getConfig().get("max-hoppers-per-chunk") + " hoppers per chunk!"));
+            player.sendMessage(Localization.get(player, "error.hoppers", true, maxHopper));
             event.setCancelled(true);
         }
     }

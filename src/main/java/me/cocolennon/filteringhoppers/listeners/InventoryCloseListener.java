@@ -3,6 +3,7 @@ package me.cocolennon.filteringhoppers.listeners;
 import com.jeff_media.morepersistentdatatypes.DataType;
 import me.cocolennon.filteringhoppers.Main;
 import me.cocolennon.filteringhoppers.utils.FilterInventoryHolder;
+import me.cocolennon.filteringhoppers.utils.Localization;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.block.Block;
@@ -42,6 +43,6 @@ public class InventoryCloseListener implements Listener {
         ItemStack[] arrayFilter = filter.toArray(new ItemStack[0]);
         container.set(key, DataType.ITEM_STACK_ARRAY, arrayFilter);
         tileState.update();
-        player.sendMessage(Main.getMiniMessage().deserialize("<#FF55FF>[<#AA00AA>Filtering Hoppers<#FF55FF>] <#AA00AA>Successfully closed and saved the filter menu."));
+        player.sendMessage(Localization.get(player, "filter.save", true));
     }
 }

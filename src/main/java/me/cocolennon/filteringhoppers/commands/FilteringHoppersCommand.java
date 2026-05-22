@@ -2,6 +2,7 @@ package me.cocolennon.filteringhoppers.commands;
 
 import me.cocolennon.filteringhoppers.Main;
 import me.cocolennon.filteringhoppers.utils.Helper;
+import me.cocolennon.filteringhoppers.utils.Localization;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.apache.commons.lang3.StringUtils;
@@ -17,22 +18,27 @@ import java.util.List;
 public class FilteringHoppersCommand implements TabExecutor {
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-        if(args.length == 0) return Helper.sendMessage(sender, "<#FF5555>Usage: /" + label + " <info/reload/max-hoppers-per-chunk/item-collection>\n<#FF5555><> = Required.", false);
+        if(!(sender instanceof Player player)) return false;
+        if(args.length == 0) {
+            sender.sendMessage(Localization.get(player, "error.usage", true));
+            return false;
+        }
         switch (args[0]) {
             case "info" -> {
-                return sendInfo(sender);
+                return sendInfo(player);
             }
             case "reload" -> {
-                return reloadConfig(sender);
+                return reloadConfig(player);
             }
             case "max-hoppers-per-chunk" -> {
-                return setMaxHoppers(sender, args);
+                return setMaxHoppers(player, args);
             }
             case "item-collection" -> {
-                return ItemCollectionCommand.execute(sender, args);
+                return ItemCollectionCommand.execute(player, args);
             }
             default -> {
-                return Helper.sendMessage(sender, "<#FF5555>Usage: /" + label + " <info/reload/max-hoppers-per-chunk/item-collection>\n<#FF5555><> = Required.", false);
+                sender.sendMessage(Localization.get(player, "error.usage", true));
+                return false;
             }
         }
     }
@@ -71,8 +77,8 @@ public class FilteringHoppersCommand implements TabExecutor {
         return null;
     }
 
-    private boolean sendInfo(CommandSender sender){
-        MiniMessage miniMessage = Main.getMiniMessage();
+    private boolean sendInfo(Player player){
+        MiniMessage miniMessage = MiniMessage.miniMessage();
         List<Component> info = new LinkedList<>();
         info.add(miniMessage.deserialize("<#FF55FF><bold>========================="));
         info.add(miniMessage.deserialize("<#AA00AA><bold>Filtering Hoppers <#AA00AA>" + Main.getInstance().getVersion()));
@@ -83,24 +89,28 @@ public class FilteringHoppersCommand implements TabExecutor {
         }
         info.add(miniMessage.deserialize("<#AA00AA>Made with <#FF5555>❤ <#AA00AA>by Cocolennon"));
         info.add(miniMessage.deserialize("<#FF55FF><bold>========================="));
-        info.forEach(sender::sendMessage);
+        info.forEach(player::sendMessage);
         return true;
     }
 
-    private boolean reloadConfig(CommandSender sender) {
-        if(!Helper.hasPermission(sender, "filteringhoppers.reload")) return false;
+    private boolean reloadConfig(Player player) {
+        if(!Helper.hasPermission(player, "filteringhoppers.reload")) return false;
         Main.getInstance().loadConfig();
-        return Helper.sendMessage(sender, "Configuration reloaded!", true);
+        player.sendMessage(Localization.get(player, "success.reload", true));
+        return true;
     }
 
-    private boolean setMaxHoppers(CommandSender sender, String[] args) {
-        if(!Helper.hasPermission(sender, "filteringhoppers.set.max-hoppers-per-chunk")) return false;
-        if(args.length < 2) return Helper.sendMessage(sender, "<#FF5555>You must provide a number!", false);
-        if(!StringUtils.isNumeric(args[1])) Helper.sendMessage(sender, "<#FF5555>You must provide a valid number!", false);
+    private boolean setMaxHoppers(Player player, String[] args) {
+        if(!Helper.hasPermission(player, "filteringhoppers.set.max-hoppers-per-chunk")) return false;
+        if(args.length < 2 || !StringUtils.isNumeric(args[1])) {
+            player.sendMessage(Localization.get(player, "error.invalid.number", true));
+            return false;
+        }
         Main main = Main.getInstance();
         main.getConfig().set("max-hoppers-per-chunk", Integer.parseInt(args[1]));
         main.saveConfig();
         main.loadConfig();
-        return Helper.sendMessage(sender, "Maximum hoppers per chunk is now " + args[1] + "!", true);
+        player.sendMessage(Localization.get(player, "success.max-hoppers", true, args[1]));
+        return true;
     }
 }

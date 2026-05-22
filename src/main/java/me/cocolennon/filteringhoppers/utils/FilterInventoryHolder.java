@@ -1,6 +1,7 @@
 package me.cocolennon.filteringhoppers.utils;
 
 import me.cocolennon.filteringhoppers.Main;
+import net.kyori.adventure.text.Component;
 import org.bukkit.block.Block;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryHolder;
@@ -11,8 +12,8 @@ public class FilterInventoryHolder implements InventoryHolder {
     Inventory inventory;
     Block block;
 
-    public FilterInventoryHolder(Main main, int size, String title, Block block) {
-        this.inventory = main.getServer().createInventory(this, size, Main.getMiniMessage().deserialize(title));
+    public FilterInventoryHolder(Main main, int size, Component title, Block block) {
+        this.inventory = main.getServer().createInventory(this, size, title);
         this.block = block;
     }
 

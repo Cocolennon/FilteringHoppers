@@ -2,7 +2,6 @@ package me.cocolennon.filteringhoppers.utils;
 
 import me.cocolennon.filteringhoppers.Main;
 import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.block.Block;
@@ -18,11 +17,10 @@ import java.util.List;
 
 public class MenuCreator {
     private static final MenuCreator instance = new MenuCreator();
-    private MiniMessage miniMessage = Main.getMiniMessage();
 
     public void createFilterMenu(List<ItemStack> filter, Player player, Block block) {
         Hopper hopper = (Hopper) block.getState();
-        FilterInventoryHolder invHolder = new FilterInventoryHolder(Main.getInstance(), 27, "<#AA00AA>Filtering Hoppers<#FFFFFF>: <#FF55FF>Filter Menu", block);
+        FilterInventoryHolder invHolder = new FilterInventoryHolder(Main.getInstance(), 27, Localization.get(player, "menu-title", false), block);
         Inventory inv = invHolder.getInventory();
 
         if(filter != null) {
@@ -34,7 +32,7 @@ public class MenuCreator {
         invHolder.fillEmpty(18, getItem());
 
         player.openInventory(inv);
-        player.sendMessage(miniMessage.deserialize("<#FF55FF>[<#AA00AA>Filtering Hoppers<#FF55FF>] <#AA00AA>Successfully opened the filter menu."));
+        player.sendMessage(Localization.get(player, "filter.open", true));
     }
 
     public boolean isItemFiller(Inventory inv, int slot) {

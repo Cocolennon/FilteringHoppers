@@ -2,40 +2,54 @@ package me.cocolennon.filteringhoppers.commands;
 
 import me.cocolennon.filteringhoppers.Main;
 import me.cocolennon.filteringhoppers.utils.Helper;
+import me.cocolennon.filteringhoppers.utils.Localization;
 import org.apache.commons.lang3.BooleanUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 
 public class ItemCollectionCommand {
-    public static boolean execute(CommandSender sender, String[] args) {
-        if(args.length < 2) return Helper.sendMessage(sender, "<#FF5555>Please provide an option to set!", false);
+    public static boolean execute(Player player, String[] args) {
+        if(args.length < 2) {
+            player.sendMessage(Localization.get(player, "error.invalid.option", true));
+            return false;
+        }
         Main main = Main.getInstance();
         switch(args[1]) {
             case "enabled" -> {
-                if(!Helper.hasPermission(sender, "filteringhoppers.set.item-collection.enabled")) return false;
-                if(args.length < 3) return Helper.sendMessage(sender, "<#FF5555>You must provide a boolean to toggle this feature!", false);
-                if(!Helper.isBoolean(args[2])) Helper.sendMessage(sender, "<#FF5555>You must provide a valid boolean!", false);
+                if(!Helper.hasPermission(player, "filteringhoppers.set.item-collection.enabled")) return false;
+                if(args.length < 3 || !Helper.isBoolean(args[2])) {
+                    player.sendMessage(Localization.get(player, "error.invalid.boolean", true));
+                    return false;
+                }
                 boolean toggle = BooleanUtils.toBoolean(args[2]);
                 configSet(main, "item-collection.enabled", toggle);
-                return Helper.sendMessage(sender, "Item collection is now " + (toggle ? "enabled!" : "disabled!"), true);
+                player.sendMessage(Localization.get(player, "success.item-collection.toggle." + (toggle ? "enabled" : "disabled"), true));
+                return true;
             }
             case "mode" -> {
-                if(!Helper.hasPermission(sender, "filteringhoppers.set.item-collection.mode")) return false;
-                if(args.length < 3) return Helper.sendMessage(sender, "<#FF5555>You must provide a mode!", false);
-                String arg = args[2].toLowerCase();
-                if(!arg.equals("chunk") && !arg.equals("radius")) return Helper.sendMessage(sender, "<#FF5555>You must provide a valid mode!", false);
-                configSet(main, "item-collection.mode", arg);
-                return Helper.sendMessage(sender, "Item collection is now in " + arg + " mode!", true);
+                if(!Helper.hasPermission(player, "filteringhoppers.set.item-collection.mode")) return false;
+                if(args.length < 3 || (!args[2].equalsIgnoreCase("chunk") && !args[2].equalsIgnoreCase("radius"))) {
+                    player.sendMessage(Localization.get(player, "error.invalid.mode", true));
+                    return false;
+                }
+                configSet(main, "item-collection.mode", args[2]);
+                player.sendMessage(Localization.get(player, "success.item-collection.toggle." + args[2].toLowerCase(), true));
+                return true;
             }
             case "radius" -> {
-                if(!Helper.hasPermission(sender, "filteringhoppers.set.item-collection.radius")) return false;
-                if(args.length < 3) return Helper.sendMessage(sender, "<#FF5555>You must provide a radius!", false);
-                if(!StringUtils.isNumeric(args[2])) return Helper.sendMessage(sender, "<#FF5555>You must provide a valid radius!", false);
-                configSet(main, "item-collection.radius", Integer.parseInt(args[2]));
-                return Helper.sendMessage(sender, "Item collection radius for radius mode is now " + args[2] + " blocks!", true);
+                if(!Helper.hasPermission(player, "filteringhoppers.set.item-collection.radius")) return false;
+                if(args.length < 3 || !StringUtils.isNumeric(args[2])) {
+                    player.sendMessage(Localization.get(player, "error.invalid.radius", true));
+                    return false;
+                }
+                int radius = Integer.parseInt(args[2]);
+                configSet(main, "item-collection.radius", radius);
+                player.sendMessage(Localization.get(player, "success.item-collection.radius", true, radius));
+                return true;
             }
             default -> {
-                return Helper.sendMessage(sender, "<#FF5555>Please provide a valid option to set!", false);
+                player.sendMessage(Localization.get(player, "error.invalid.option", true));
+                return false;
             }
         }
     }

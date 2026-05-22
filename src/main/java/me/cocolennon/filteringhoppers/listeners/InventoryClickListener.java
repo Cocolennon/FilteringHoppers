@@ -2,8 +2,8 @@ package me.cocolennon.filteringhoppers.listeners;
 
 import me.cocolennon.filteringhoppers.Main;
 import me.cocolennon.filteringhoppers.utils.FilterInventoryHolder;
+import me.cocolennon.filteringhoppers.utils.Localization;
 import me.cocolennon.filteringhoppers.utils.MenuCreator;
-import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.entity.Player;
@@ -28,7 +28,6 @@ public class InventoryClickListener implements Listener {
         NamespacedKey buttonAction = new NamespacedKey(Main.getInstance(), "buttonAction");
         if(current.hasItemMeta() && current.getItemMeta().getPersistentDataContainer().has(buttonAction) && current.getItemMeta().getPersistentDataContainer().get(buttonAction, PersistentDataType.STRING).equals("filler")) event.setCancelled(true);
         else {
-            MiniMessage miniMessage = Main.getMiniMessage();
             event.setCancelled(true);
             int slot = MenuCreator.getInstance().getFirstFreeSlot(inv);
             if(getClickedInv.equals(inv)) {
@@ -36,13 +35,13 @@ public class InventoryClickListener implements Listener {
                 return;
             }
             if(slot == 2001) {
-                player.sendMessage(miniMessage.deserialize("<#FF55FF>[<#AA00AA>Filtering Hoppers<#FF55FF>] <#FF5555>The filter is full!"));
+                player.sendMessage(Localization.get(player, "filter.full", true));
                 return;
             }
             ItemStack newItem = current.clone();
             newItem.setAmount(1);
             if(Arrays.stream(inv.getContents()).toList().contains(newItem)) {
-                player.sendMessage(miniMessage.deserialize("<#FF55FF>[<#AA00AA>Filtering Hoppers<#FF55FF>] <#FF5555>This item is already in the filter!"));
+                player.sendMessage(Localization.get(player, "filter.duplicate", true));
                 return;
             }
             inv.setItem(slot, newItem);
