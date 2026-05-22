@@ -18,19 +18,12 @@ import java.util.List;
 public class MenuCreator {
     private static final MenuCreator instance = new MenuCreator();
 
-    public void createFilterMenu(List<ItemStack> filter, Player player, Block block) {
+    public void createFilterMenu(List<ItemStack> filter, Player player, Block block, boolean whitelist) {
         Hopper hopper = (Hopper) block.getState();
         FilterInventoryHolder invHolder = new FilterInventoryHolder(Main.getInstance(), 27, Localization.get(player, "menu-title", false), block);
         Inventory inv = invHolder.getInventory();
-
-        if(filter != null) {
-            for (ItemStack itemStack : filter) {
-                invHolder.addItem(itemStack);
-            }
-        }
-
-        invHolder.fillEmpty(18, getItem());
-
+        if(filter != null) for(ItemStack itemStack : filter) invHolder.addItem(itemStack);
+        invHolder.fillEmpty(18, getFillerItem());
         player.openInventory(inv);
         player.sendMessage(Localization.get(player, "filter.open", true));
     }
@@ -43,8 +36,8 @@ public class MenuCreator {
         return pdc.get(buttonAction, PersistentDataType.STRING).equals("filler");
     }
 
-    private ItemStack getItem(){
-        ItemStack it = new ItemStack(Material.BLACK_STAINED_GLASS_PANE, 1);
+    private ItemStack getFillerItem(){
+        ItemStack it = new ItemStack(Material.LIGHT_GRAY_STAINED_GLASS_PANE, 1);
         ItemMeta itM = it.getItemMeta();
         assert itM != null;
         itM.displayName(Component.text(" "));
