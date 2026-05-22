@@ -4,6 +4,7 @@ import com.jeff_media.morepersistentdatatypes.DataType;
 import me.cocolennon.filteringhoppers.Config;
 import me.cocolennon.filteringhoppers.Main;
 import org.bukkit.*;
+import org.bukkit.block.Block;
 import org.bukkit.block.BlockState;
 import org.bukkit.block.Hopper;
 import org.bukkit.block.TileState;
@@ -48,6 +49,14 @@ public class Helper {
             }
         }catch(ClassCastException | ConcurrentModificationException ignored) {}
         return true;
+    }
+
+    public static TileState getHopperState(Location location) {
+        Block block = location.getBlock();
+        if(block == null || block.getType() != Material.HOPPER) return null;
+        BlockState blockState = block.getState();
+        if(!(blockState instanceof TileState tileState)) return null;
+        return tileState;
     }
 
     public static List<TileState> getHopperStates(Location location) {
@@ -114,7 +123,12 @@ public class Helper {
 
     public static boolean isWhitelist(TileState hopper) {
         PersistentDataContainer container = hopper.getPersistentDataContainer();
-        return container.get(modeKey, DataType.BOOLEAN);
+        return container.has(modeKey) ? container.get(modeKey, DataType.BOOLEAN) : true;
+    }
+
+    public static void setWhitelistMode(TileState hopper) {
+        PersistentDataContainer pdc = hopper.getPersistentDataContainer();
+        pdc.set(modeKey, DataType.BOOLEAN, !isWhitelist(hopper));
     }
 
     public static void setButtonAction(ItemMeta meta, String action) {
