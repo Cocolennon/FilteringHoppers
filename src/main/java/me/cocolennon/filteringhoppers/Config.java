@@ -1,14 +1,18 @@
 package me.cocolennon.filteringhoppers;
 
+import me.cocolennon.filteringhoppers.utils.Localization;
 import org.bukkit.configuration.file.FileConfiguration;
 
 public final class Config {
+    public final String defaultLocale;
     public final boolean autoUpdaterEnabled;
     public final int maxHoppersPerChunk;
     public final ItemCollection itemCollection;
 
     public Config(Main plugin) {
         FileConfiguration config = plugin.getConfig();
+        this.defaultLocale = config.getString("default-locale");
+        Localization.init(plugin, defaultLocale);
         this.autoUpdaterEnabled = config.getBoolean("auto-updater-enabled");
         this.maxHoppersPerChunk = config.getInt("max-hoppers-per-chunk");
         boolean enabled = config.getBoolean("item-collection.enabled");

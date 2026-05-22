@@ -1,3 +1,5 @@
+# This will be used for errors in the console and as a fallback when a user's language isn't on the server.
+default-locale: "en-US"
 # Downloads updates from Spigot automatically
 auto-updater-enabled: true
 # Maximum amount of hoppers per chunk
