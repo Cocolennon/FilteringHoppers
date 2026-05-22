@@ -3,15 +3,12 @@ package me.cocolennon.filteringhoppers.utils;
 import me.cocolennon.filteringhoppers.Main;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Material;
-import org.bukkit.NamespacedKey;
 import org.bukkit.block.Block;
 import org.bukkit.block.Hopper;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
-import org.bukkit.persistence.PersistentDataContainer;
-import org.bukkit.persistence.PersistentDataType;
 
 import java.util.List;
 
@@ -23,30 +20,32 @@ public class MenuCreator {
         FilterInventoryHolder invHolder = new FilterInventoryHolder(Main.getInstance(), 27, Localization.get(player, "menu-title", false), block);
         Inventory inv = invHolder.getInventory();
         if(filter != null) for(ItemStack itemStack : filter) invHolder.addItem(itemStack);
+        invHolder.setItem(25, getModeItem(player, whitelist));
         invHolder.fillEmpty(18, getFillerItem());
         player.openInventory(inv);
         player.sendMessage(Localization.get(player, "filter.open", true));
     }
 
-    public boolean isItemFiller(Inventory inv, int slot) {
-        ItemStack item = inv.getItem(slot);
-        if(item == null || !item.hasItemMeta()) return false;
-        NamespacedKey buttonAction = new NamespacedKey(Main.getInstance(), "buttonAction");
-        PersistentDataContainer pdc = item.getItemMeta().getPersistentDataContainer();
-        return pdc.get(buttonAction, PersistentDataType.STRING).equals("filler");
+    private ItemStack getModeItem(Player player, boolean isWhitelist) {
+        ItemStack item = new ItemStack(isWhitelist ? Material.WHITE_STAINED_GLASS_PANE : Material.BLACK_STAINED_GLASS_PANE, 1);
+        ItemMeta meta = item.getItemMeta();
+        assert meta != null;
+        meta.displayName(Localization.get(player, "filter.mode-item." + (isWhitelist ? "whitelist" : "blacklist") + ".name", false));
+        meta.lore(List.of(Localization.get(player, "filter.mode-item." + (isWhitelist ? "whitelist" : "blacklist") + ".hint", false)));
+        Helper.setButtonAction(meta, "toggleMode");
+        item.setItemMeta(meta);
+        return item;
     }
 
     private ItemStack getFillerItem(){
-        ItemStack it = new ItemStack(Material.LIGHT_GRAY_STAINED_GLASS_PANE, 1);
-        ItemMeta itM = it.getItemMeta();
-        assert itM != null;
-        itM.displayName(Component.text(" "));
-        NamespacedKey buttonAction = new NamespacedKey(Main.getInstance(), "buttonAction");
-        PersistentDataContainer pdc = itM.getPersistentDataContainer();
-        pdc.set(buttonAction, PersistentDataType.STRING, "filler");
-        itM.setHideTooltip(true);
-        it.setItemMeta(itM);
-        return it;
+        ItemStack item = new ItemStack(Material.LIGHT_GRAY_STAINED_GLASS_PANE, 1);
+        ItemMeta meta = item.getItemMeta();
+        assert meta != null;
+        meta.displayName(Component.text(" "));
+        Helper.setButtonAction(meta, "filler");
+        meta.setHideTooltip(true);
+        item.setItemMeta(meta);
+        return item;
     }
 
     public int getFirstFreeSlot(Inventory inv) {

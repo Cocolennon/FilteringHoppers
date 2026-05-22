@@ -10,7 +10,9 @@ import org.bukkit.block.TileState;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataContainer;
+import org.bukkit.persistence.PersistentDataType;
 
 import java.io.File;
 import java.util.*;
@@ -18,6 +20,8 @@ import java.util.*;
 public class Helper {
     private static Config config = Main.getInstance().config();
     private static NamespacedKey filterKey = new NamespacedKey(Main.getInstance(), "hopperFilter");
+    private static NamespacedKey modeKey = new NamespacedKey(Main.getInstance(), "hopperMode");
+    private static NamespacedKey buttonAction = new NamespacedKey(Main.getInstance(), "buttonAction");
 
     public static List<ItemStack> getHopperFilter(TileState hopper) {
         PersistentDataContainer container = hopper.getPersistentDataContainer();
@@ -106,5 +110,15 @@ public class Helper {
         File spigotFile = new File(Bukkit.getServer().getWorldContainer().getParentFile(), "spigot.yml");
         YamlConfiguration spigotConfig = YamlConfiguration.loadConfiguration(spigotFile);
         return spigotConfig.getInt("world-settings.default.hopper-amount", 1);
+    }
+
+    public static boolean isWhitelist(TileState hopper) {
+        PersistentDataContainer container = hopper.getPersistentDataContainer();
+        return container.get(modeKey, DataType.BOOLEAN);
+    }
+
+    public static void setButtonAction(ItemMeta meta, String action) {
+        PersistentDataContainer pdc = meta.getPersistentDataContainer();
+        pdc.set(buttonAction, PersistentDataType.STRING, action);
     }
 }
