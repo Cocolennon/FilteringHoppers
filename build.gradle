@@ -27,6 +27,7 @@ repositories {
 
 dependencies {
     compileOnly 'io.papermc.paper:paper-api:26.1.2.build.15-alpha'
+    implementation 'org.bstats:bstats-bukkit:3.2.1'
     implementation 'com.jeff-media:MorePersistentDataTypes:2.4.0'
 }
 
@@ -36,6 +37,7 @@ tasks.withType(JavaCompile).configureEach {
 }
 
 shadowJar {
+    relocate 'org.bstats', 'me.cocolennon.bstats'
     relocate 'com.jeff-media.morepersistentdatatypes', 'me.cocolennon.morepersistentdatatypes'
     archiveFileName = "FilteringHoppers-${version}.jar"
     destinationDirectory = file('./builds')
