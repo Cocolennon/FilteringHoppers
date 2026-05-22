@@ -7,10 +7,12 @@ import org.bukkit.*;
 import org.bukkit.block.BlockState;
 import org.bukkit.block.Hopper;
 import org.bukkit.block.TileState;
+import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.persistence.PersistentDataContainer;
 
+import java.io.File;
 import java.util.*;
 
 public class Helper {
@@ -98,5 +100,11 @@ public class Helper {
         boolean allowed = player.hasPermission(permission);
         if(!allowed) player.sendMessage(Localization.get(player, "error.permission", true));
         return allowed;
+    }
+
+    public static int getHopperRate() {
+        File spigotFile = new File(Bukkit.getServer().getWorldContainer().getParentFile(), "spigot.yml");
+        YamlConfiguration spigotConfig = YamlConfiguration.loadConfiguration(spigotFile);
+        return spigotConfig.getInt("world-settings.default.hopper-amount", 1);
     }
 }
