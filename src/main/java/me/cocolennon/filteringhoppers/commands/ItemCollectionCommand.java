@@ -57,6 +57,6 @@ public class ItemCollectionCommand {
     private static void configSet(Main main, String node, Object value) {
         main.getConfig().set(node, value);
         main.saveConfig();
-        main.loadConfig();
+        main.loadConfig(true);
     }
 }

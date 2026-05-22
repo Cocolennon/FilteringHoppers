@@ -95,7 +95,7 @@ public class FilteringHoppersCommand implements TabExecutor {
 
     private boolean reloadConfig(Player player) {
         if(!Helper.hasPermission(player, "filteringhoppers.reload")) return false;
-        Main.getInstance().loadConfig();
+        Main.getInstance().loadConfig(true);
         player.sendMessage(Localization.get(player, "success.reload", true));
         return true;
     }
@@ -109,7 +109,7 @@ public class FilteringHoppersCommand implements TabExecutor {
         Main main = Main.getInstance();
         main.getConfig().set("max-hoppers-per-chunk", Integer.parseInt(args[1]));
         main.saveConfig();
-        main.loadConfig();
+        main.loadConfig(true);
         player.sendMessage(Localization.get(player, "success.max-hoppers", true, args[1]));
         return true;
     }
