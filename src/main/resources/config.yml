@@ -2,6 +2,7 @@
 auto-updater-enabled: true
 # Maximum amount of hoppers per chunk
 max-hoppers-per-chunk: 5
+# Item collection allows hoppers to pick items up from a distance, reducing the amount of hoppers your players need, and in turn, reduces lag
 item-collection:
   enabled: true
   # Chunk: Collects items in the same chunk as a hopper
