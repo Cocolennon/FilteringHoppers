@@ -19,13 +19,11 @@ success:
   max-hoppers: "<#AA00AA>Le nombre d'entonnoirs par chunk est maintenant %s !"
   item-collection:
     toggle:
-      base: "<#AA00AA>La collection d'objets est maintenant §s !"
-      enabled: "activée"
-      disabled: "désactivée"
+      enabled: "<#AA00AA>La collection d'objets est maintenant activée !"
+      disabled: "<#AA00AA>La collection d'objets est maintenant désactivée !"
     mode:
-      base: "<#AA00AA>La collection d'objets est maintenant en mode %s !"
-      chunk: "chunk"
-      radius: "rayon"
+      chunk: "<#AA00AA>La collection d'objets est maintenant en mode chunk !"
+      radius: "<#AA00AA>La collection d'objets est maintenant en mode rayon !"
     radius: "<#AA00AA>Le rayon de la collection d'objets est maintenant de %s blocs !"
 filter:
   open: "<#AA00AA>Menu de filtre ouvert avec succès."

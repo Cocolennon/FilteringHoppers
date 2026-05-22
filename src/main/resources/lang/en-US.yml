@@ -19,13 +19,11 @@ success:
   max-hoppers: "<#AA00AA>Maximum hoppers per chunk is now %s!"
   item-collection:
     toggle:
-      base: "<#AA00AA>Item collection is now §s!"
-      enabled: "enabled"
-      disabled: "disabled"
+      enabled: "<#AA00AA>Item collection is now enabled!"
+      disabled: "<#AA00AA>Item collection is now disabled!"
     mode:
-      base: "<#AA00AA>Item collection is now in %s mode!"
-      chunk: "chunk"
-      radius: "radius"
+      chunk: "<#AA00AA>Item collection is now in chunk mode!"
+      radius: "<#AA00AA>Item collection is now in radius mode!"
     radius: "<#AA00AA>Item collection radius is now %s blocks!"
 filter:
   open: "<#AA00AA>Successfully opened the filter menu."
