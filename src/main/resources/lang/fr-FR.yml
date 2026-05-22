@@ -30,3 +30,10 @@ filter:
   full: "<#FF5555>Le filtre est plein !"
   duplicate: "<#FF5555>Cet objet est déjà dans le filtre !"
   save: "<#AA00AA>Menu de filtre fermé et sauvegardé avec succès."
+  mode-item:
+    whitelist:
+      name: "<#AA00AA>Mode actuel: <#FF55FF>Liste blanche"
+      hint: "<#AA00AA>Cliquez pour changer en <#FF55FF>Liste noire"
+    blacklist:
+      name: "<#AA00AA>Mode actuel: <#FF55FF>Liste noire"
+      hint: "<#AA00AA>Cliquez pour changer en <#FF55FF>Liste blanche"
