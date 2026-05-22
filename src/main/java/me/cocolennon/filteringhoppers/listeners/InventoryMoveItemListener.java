@@ -15,6 +15,7 @@ import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
+import java.util.HashMap;
 import java.util.List;
 
 public class InventoryMoveItemListener implements Listener {
@@ -22,7 +23,7 @@ public class InventoryMoveItemListener implements Listener {
 
     @EventHandler
     public void inventoryMoveItem(InventoryMoveItemEvent event) {
-        if(itemMove(event.getDestination(), event.getItem())) event.setCancelled(true);
+        if(itemMove(event.getSource(), event.getDestination())) event.setCancelled(true);
     }
 
     @EventHandler
@@ -30,13 +31,33 @@ public class InventoryMoveItemListener implements Listener {
         if(itemMove(event.getInventory(), event.getItem().getItemStack())) event.setCancelled(true);
     }
 
+    private boolean itemMove(Inventory source, Inventory dest) {
+        if(dest.getType() != InventoryType.HOPPER) return false;
+        Block block = dest.getLocation().getBlock();
+        BlockState blockState = block.getState();
+        if(block.getType() != Material.HOPPER || !(blockState instanceof TileState tileState)) return false;
+        List<ItemStack> filter = Helper.getHopperFilter(tileState);
+        if(filter == null || filter.isEmpty()) return false;
+        for(ItemStack itemStack : source.getContents()) {
+            if(filter.stream().noneMatch(f -> f.isSimilar(itemStack))) continue;
+            int slot = source.first(itemStack);
+            ItemStack cloned = itemStack.clone();
+            int amount = Helper.getHopperRate();
+            cloned.setAmount(amount);
+            HashMap<Integer, ItemStack> remainder = dest.addItem(cloned);
+            if(!remainder.isEmpty()) amount -= remainder.values().iterator().next().getAmount();
+            itemStack.setAmount(itemStack.getAmount() - amount);
+            source.setItem(slot, itemStack);
+        }
+        return true;
+    }
+
     private boolean itemMove(Inventory dest, ItemStack item) {
         if(dest.getType() != InventoryType.HOPPER) return false;
         Block block = dest.getLocation().getBlock();
         BlockState blockState = block.getState();
-        if(blockState.getBlock().getType() != Material.HOPPER) return false;
-        if(!(blockState instanceof TileState)) return false;
-        List<ItemStack> filter = Helper.getHopperFilter((TileState) blockState);
+        if(block.getType() != Material.HOPPER || !(blockState instanceof TileState tileState)) return false;
+        List<ItemStack> filter = Helper.getHopperFilter(tileState);
         if(filter == null || filter.isEmpty()) return false;
         if(filter.stream().noneMatch(f -> f.isSimilar(item))) return true;
         return false;
