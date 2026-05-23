@@ -24,6 +24,7 @@ public class InventoryClickListener implements Listener {
     public void inventoryClick(InventoryClickEvent event) {
         Inventory inv = event.getInventory();
         if(!(inv.getHolder() instanceof FilterInventoryHolder invHolder)) return;
+        event.setCancelled(true);
         Player player = (Player) event.getWhoClicked();
         ItemStack current = event.getCurrentItem();
         Inventory inventory = event.getClickedInventory();
@@ -58,6 +59,5 @@ public class InventoryClickListener implements Listener {
             inv.setItem(slot, newItem);
             player.playSound(player.getLocation(), Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 1.0f, 1.0f);
         }
-        event.setCancelled(true);
     }
 }
