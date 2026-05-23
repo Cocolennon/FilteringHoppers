@@ -33,7 +33,7 @@ public class Main extends JavaPlugin {
             }
         });
         if(config.autoUpdaterEnabled) {
-            Updater updater = new Updater(this, 111606, getFile(), Updater.UpdateType.VERSION_CHECK, true);
+            Updater updater = new Updater(this, 111606, getFile(), Updater.UpdateType.CHECK_DOWNLOAD, true);
             if(updater.getResult().equals(Updater.Result.SUCCESS)) getLogger().info("Update will be applied after next restart!");
         }
     }
