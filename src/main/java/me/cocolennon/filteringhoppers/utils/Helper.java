@@ -33,6 +33,13 @@ public class Helper {
         return shouldMove;
     }
 
+    public static int getFirstOccupiedSlot(Inventory inventory) {
+        for(int i = 0; i < inventory.getSize(); i++) {
+            if(inventory.getItem(i) != null) return i;
+        }
+        return 0;
+    }
+
     public static List<ItemStack> getHopperFilter(TileState hopper) {
         PersistentDataContainer container = hopper.getPersistentDataContainer();
         ItemStack[] rawFilter = container.get(filterKey, DataType.ITEM_STACK_ARRAY);
