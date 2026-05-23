@@ -8,6 +8,8 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 
 import java.io.File;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -29,7 +31,27 @@ public final class Localization {
 
     private static void saveLangFile(String fileName) {
         File file = new File(main.getDataFolder(), "lang/" + fileName);
-        if(!file.exists()) main.saveResource("lang/" + fileName, false);
+        if(!file.exists()) {
+            main.saveResource("lang/" + fileName, false);
+            return;
+        }
+        InputStream stream = main.getResource("lang/" + fileName);
+        YamlConfiguration currentLocale =  YamlConfiguration.loadConfiguration(new InputStreamReader(stream));
+        YamlConfiguration oldLocale = YamlConfiguration.loadConfiguration(file);
+        boolean changed = false;
+        for(String key : currentLocale.getKeys(true)) {
+            if(!oldLocale.contains(key)) {
+                oldLocale.set(key, currentLocale.getString(key));
+                changed = true;
+            }
+        }
+        if(changed) {
+            try {
+                oldLocale.save(file);
+            }catch(Exception e){
+                e.printStackTrace();
+            }
+        }
     }
 
     private static void loadLocales(File folder) {
