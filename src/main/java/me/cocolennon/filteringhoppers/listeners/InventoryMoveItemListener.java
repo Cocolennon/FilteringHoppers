@@ -39,7 +39,7 @@ public class InventoryMoveItemListener implements Listener {
         List<ItemStack> filter = Helper.getHopperFilter(tileState);
         if(filter == null || filter.isEmpty()) return false;
         for(ItemStack itemStack : source.getContents()) {
-            if(filter.stream().noneMatch(f -> f.isSimilar(itemStack))) continue;
+            if(!Helper.shouldMoveItem(itemStack, filter, tileState)) continue;
             int slot = source.first(itemStack);
             ItemStack cloned = itemStack.clone();
             int amount = Helper.getHopperRate();

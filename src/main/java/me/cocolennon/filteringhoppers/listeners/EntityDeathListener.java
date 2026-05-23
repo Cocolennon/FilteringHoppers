@@ -22,7 +22,7 @@ public class EntityDeathListener implements Listener {
             Iterator<ItemStack> dropIterator = items.iterator();
             while(dropIterator.hasNext()) {
                 ItemStack itemStack = dropIterator.next();
-                if(filter == null || filter.isEmpty() || filter.stream().anyMatch(f -> f.isSimilar(itemStack))) {
+                if(filter == null || filter.isEmpty() || Helper.shouldMoveItem(itemStack, filter, current)) {
                     if(Helper.hopperIsFull(current.getLocation(), itemStack)) continue hopperLoop;
                     HashMap<Integer, ItemStack> remainder = Helper.addItemToHopper(itemStack, current.getLocation());
                     if(!remainder.isEmpty()) itemStack.setAmount(remainder.get(0).getAmount());

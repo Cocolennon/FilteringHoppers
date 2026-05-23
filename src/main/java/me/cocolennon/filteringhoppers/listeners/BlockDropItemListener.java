@@ -24,7 +24,7 @@ public class BlockDropItemListener implements Listener {
             while(dropIterator.hasNext()) {
                 Item currentInDrops = dropIterator.next();
                 ItemStack itemStack = currentInDrops.getItemStack();
-                if(filter == null || filter.isEmpty() || filter.stream().anyMatch(f -> f.isSimilar(itemStack))) {
+                if(filter == null || filter.isEmpty() || Helper.shouldMoveItem(itemStack, filter, current)) {
                     if(Helper.hopperIsFull(current.getLocation(), itemStack)) continue hopperLoop;
                     HashMap<Integer, ItemStack> remainder = Helper.addItemToHopper(itemStack, current.getLocation());
                     if(!remainder.isEmpty()) itemStack.setAmount(remainder.get(0).getAmount());

@@ -31,7 +31,7 @@ public class ItemDropListener implements Listener {
         if(tileStates.isEmpty()) return;
         for(TileState current : tileStates) {
             List<ItemStack> filter = Helper.getHopperFilter(current);
-            if(filter == null || filter.isEmpty() || filter.stream().anyMatch(f -> f.isSimilar(itemStack))) {
+            if(filter == null || filter.isEmpty() || Helper.shouldMoveItem(itemStack, filter, current)) {
                 if(Helper.hopperIsFull(current.getLocation(), itemStack)) continue;
                 HashMap<Integer, ItemStack> remainder = Helper.addItemToHopper(itemStack, current.getLocation());
                 if(!remainder.isEmpty()) item.getItemStack().setAmount(remainder.get(0).getAmount());

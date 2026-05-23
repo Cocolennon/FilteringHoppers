@@ -24,6 +24,12 @@ public class Helper {
     private static NamespacedKey modeKey = new NamespacedKey(Main.getInstance(), "hopperMode");
     private static NamespacedKey buttonAction = new NamespacedKey(Main.getInstance(), "buttonAction");
 
+    public static boolean shouldMoveItem(ItemStack itemStack, List<ItemStack> filter, TileState hopper) {
+        if(itemStack == null) return false;
+        boolean matches = filter.stream().anyMatch(f -> f.isSimilar(itemStack));
+        return isWhitelist(hopper) == matches;
+    }
+
     public static List<ItemStack> getHopperFilter(TileState hopper) {
         PersistentDataContainer container = hopper.getPersistentDataContainer();
         ItemStack[] rawFilter = container.get(filterKey, DataType.ITEM_STACK_ARRAY);
