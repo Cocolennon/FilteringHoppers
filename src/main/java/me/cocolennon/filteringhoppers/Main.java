@@ -2,6 +2,7 @@ package me.cocolennon.filteringhoppers;
 
 import me.cocolennon.filteringhoppers.commands.FilteringHoppersCommand;
 import me.cocolennon.filteringhoppers.listeners.*;
+import me.cocolennon.filteringhoppers.utils.MetricsUtil;
 import me.cocolennon.filteringhoppers.utils.UpdateChecker;
 import me.cocolennon.filteringhoppers.utils.Updater;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -19,6 +20,7 @@ public class Main extends JavaPlugin {
         registerCommands();
         registerListeners();
         checkVersion();
+        MetricsUtil.register(instance);
         getLogger().info("Plugin enabled!");
     }
 

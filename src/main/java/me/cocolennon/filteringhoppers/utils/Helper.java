@@ -27,7 +27,10 @@ public class Helper {
     public static boolean shouldMoveItem(ItemStack itemStack, List<ItemStack> filter, TileState hopper) {
         if(itemStack == null) return false;
         boolean matches = filter.stream().anyMatch(f -> f.isSimilar(itemStack));
-        return isWhitelist(hopper) == matches;
+        boolean shouldMove = isWhitelist(hopper) == matches;
+        if(shouldMove) MetricsUtil.allowedItems.incrementAndGet();
+        else MetricsUtil.deniedItems.incrementAndGet();
+        return shouldMove;
     }
 
     public static List<ItemStack> getHopperFilter(TileState hopper) {
