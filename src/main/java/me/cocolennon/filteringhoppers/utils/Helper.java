@@ -128,6 +128,7 @@ public class Helper {
     public static void setWhitelistMode(TileState hopper) {
         PersistentDataContainer pdc = hopper.getPersistentDataContainer();
         pdc.set(modeKey, DataType.BOOLEAN, !isWhitelist(hopper));
+        hopper.update();
     }
 
     public static void setButtonAction(ItemMeta meta, String action) {
