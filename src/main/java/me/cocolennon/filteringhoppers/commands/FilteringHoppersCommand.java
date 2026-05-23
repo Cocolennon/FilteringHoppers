@@ -20,7 +20,7 @@ public class FilteringHoppersCommand implements TabExecutor {
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         if(!(sender instanceof Player player)) return false;
         if(args.length == 0) {
-            sender.sendMessage(Localization.get(player, "error.usage", true));
+            sender.sendMessage(Localization.get(player, "error.usage", false, label));
             return false;
         }
         switch (args[0]) {
@@ -37,7 +37,7 @@ public class FilteringHoppersCommand implements TabExecutor {
                 return ItemCollectionCommand.execute(player, args);
             }
             default -> {
-                sender.sendMessage(Localization.get(player, "error.usage", true));
+                sender.sendMessage(Localization.get(player, "error.usage", false, label));
                 return false;
             }
         }
