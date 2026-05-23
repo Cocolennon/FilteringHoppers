@@ -26,7 +26,7 @@ public class MenuCreator {
         player.sendMessage(Localization.get(player, "filter.open", true));
     }
 
-    private ItemStack getModeItem(Player player, boolean isWhitelist) {
+    public ItemStack getModeItem(Player player, boolean isWhitelist) {
         ItemStack item = new ItemStack(isWhitelist ? Material.WHITE_STAINED_GLASS_PANE : Material.BLACK_STAINED_GLASS_PANE, 1);
         ItemMeta meta = item.getItemMeta();
         assert meta != null;

@@ -2,10 +2,12 @@ package me.cocolennon.filteringhoppers.listeners;
 
 import me.cocolennon.filteringhoppers.Main;
 import me.cocolennon.filteringhoppers.utils.FilterInventoryHolder;
+import me.cocolennon.filteringhoppers.utils.Helper;
 import me.cocolennon.filteringhoppers.utils.Localization;
 import me.cocolennon.filteringhoppers.utils.MenuCreator;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
+import org.bukkit.block.TileState;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -20,17 +22,21 @@ public class InventoryClickListener implements Listener {
     @EventHandler
     public void inventoryClick(InventoryClickEvent event) {
         Inventory inv = event.getInventory();
-        if(!(inv.getHolder() instanceof FilterInventoryHolder)) return;
+        if(!(inv.getHolder() instanceof FilterInventoryHolder invHolder)) return;
         Player player = (Player) event.getWhoClicked();
         ItemStack current = event.getCurrentItem();
-        Inventory getClickedInv = event.getClickedInventory();
+        Inventory inventory = event.getClickedInventory();
         if(current == null) return;
         NamespacedKey buttonAction = new NamespacedKey(Main.getInstance(), "buttonAction");
-        if(current.hasItemMeta() && current.getItemMeta().getPersistentDataContainer().has(buttonAction) && current.getItemMeta().getPersistentDataContainer().get(buttonAction, PersistentDataType.STRING).equals("filler")) event.setCancelled(true);
-        else {
-            event.setCancelled(true);
+        if(current.hasItemMeta() && current.getItemMeta().getPersistentDataContainer().has(buttonAction)) {
+            if(current.getItemMeta().getPersistentDataContainer().get(buttonAction, PersistentDataType.STRING).equals("toggleMode")) {
+                TileState hopperState = Helper.getHopperState(invHolder.getBlock());
+                Helper.setWhitelistMode(hopperState);
+                inv.setItem(25, MenuCreator.getInstance().getModeItem(player, Helper.isWhitelist(hopperState)));
+            }
+        }else{
             int slot = MenuCreator.getInstance().getFirstFreeSlot(inv);
-            if(getClickedInv.equals(inv)) {
+            if(inventory.equals(inv)) {
                 inv.setItem(event.getSlot(), new ItemStack(Material.AIR));
                 return;
             }
@@ -46,5 +52,6 @@ public class InventoryClickListener implements Listener {
             }
             inv.setItem(slot, newItem);
         }
+        event.setCancelled(true);
     }
 }
