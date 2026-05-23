@@ -6,6 +6,7 @@ import me.cocolennon.filteringhoppers.utils.FilterInventoryHolder;
 import me.cocolennon.filteringhoppers.utils.Localization;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
+import org.bukkit.Sound;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockState;
 import org.bukkit.block.TileState;
@@ -43,6 +44,7 @@ public class InventoryCloseListener implements Listener {
         ItemStack[] arrayFilter = filter.toArray(new ItemStack[0]);
         container.set(key, DataType.ITEM_STACK_ARRAY, arrayFilter);
         tileState.update();
+        player.playSound(player.getLocation(), Sound.BLOCK_BARREL_CLOSE, 1.0f, 1.0f);
         player.sendMessage(Localization.get(player, "filter.save", true));
     }
 }

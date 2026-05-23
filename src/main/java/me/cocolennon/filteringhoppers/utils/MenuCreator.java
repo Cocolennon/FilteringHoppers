@@ -3,6 +3,7 @@ package me.cocolennon.filteringhoppers.utils;
 import me.cocolennon.filteringhoppers.Main;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Material;
+import org.bukkit.Sound;
 import org.bukkit.block.Block;
 import org.bukkit.block.Hopper;
 import org.bukkit.entity.Player;
@@ -22,6 +23,7 @@ public class MenuCreator {
         if(filter != null) for(ItemStack itemStack : filter) invHolder.addItem(itemStack);
         invHolder.setItem(25, getModeItem(player, whitelist));
         invHolder.fillEmpty(18, getFillerItem());
+        player.playSound(player.getLocation(), Sound.BLOCK_BARREL_OPEN, 1.0f, 1.0f);
         player.openInventory(inv);
         player.sendMessage(Localization.get(player, "filter.open", true));
     }
