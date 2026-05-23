@@ -30,8 +30,9 @@ public class ItemDropListener implements Listener {
         List<TileState> tileStates = Helper.getHopperStates(item.getLocation());
         if(tileStates.isEmpty()) return;
         for(TileState current : tileStates) {
+            boolean isWhitelist = Helper.isWhitelist(current);
             List<ItemStack> filter = Helper.getHopperFilter(current);
-            if(filter == null || filter.isEmpty() || Helper.shouldMoveItem(itemStack, filter, current)) {
+            if(filter == null || filter.isEmpty() || Helper.shouldMoveItem(itemStack, filter, isWhitelist)) {
                 if(Helper.hopperIsFull(current.getLocation(), itemStack)) continue;
                 HashMap<Integer, ItemStack> remainder = Helper.addItemToHopper(itemStack, current.getLocation());
                 if(!remainder.isEmpty()) item.getItemStack().setAmount(remainder.get(0).getAmount());

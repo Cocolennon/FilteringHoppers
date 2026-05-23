@@ -10,6 +10,7 @@ import org.bukkit.block.Hopper;
 import org.bukkit.block.TileState;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataContainer;
@@ -24,10 +25,9 @@ public class Helper {
     private static NamespacedKey modeKey = new NamespacedKey(Main.getInstance(), "hopperMode");
     private static NamespacedKey buttonAction = new NamespacedKey(Main.getInstance(), "buttonAction");
 
-    public static boolean shouldMoveItem(ItemStack itemStack, List<ItemStack> filter, TileState hopper) {
-        if(itemStack == null) return false;
+    public static boolean shouldMoveItem(ItemStack itemStack, List<ItemStack> filter, boolean isWhitelist) {
         boolean matches = filter.stream().anyMatch(f -> f.isSimilar(itemStack));
-        boolean shouldMove = isWhitelist(hopper) == matches;
+        boolean shouldMove = isWhitelist == matches;
         if(shouldMove) MetricsUtil.allowedItems.incrementAndGet();
         else MetricsUtil.deniedItems.incrementAndGet();
         return shouldMove;
