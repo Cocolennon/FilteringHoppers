@@ -14,9 +14,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 import java.util.List;
 
 public class MenuCreator {
-    private static final MenuCreator instance = new MenuCreator();
-
-    public void createFilterMenu(List<ItemStack> filter, Player player, Block block, boolean whitelist) {
+    public static void createFilterMenu(List<ItemStack> filter, Player player, Block block, boolean whitelist) {
         Hopper hopper = (Hopper) block.getState();
         FilterInventoryHolder invHolder = new FilterInventoryHolder(Main.getInstance(), 27, Localization.get(player, "menu-title", false), block);
         Inventory inv = invHolder.getInventory();
@@ -28,7 +26,7 @@ public class MenuCreator {
         player.sendMessage(Localization.get(player, "filter.open", true));
     }
 
-    public ItemStack getModeItem(Player player, boolean isWhitelist) {
+    public static ItemStack getModeItem(Player player, boolean isWhitelist) {
         ItemStack item = new ItemStack(isWhitelist ? Material.WHITE_STAINED_GLASS_PANE : Material.BLACK_STAINED_GLASS_PANE, 1);
         ItemMeta meta = item.getItemMeta();
         assert meta != null;
@@ -39,7 +37,7 @@ public class MenuCreator {
         return item;
     }
 
-    private ItemStack getFillerItem(){
+    private static ItemStack getFillerItem(){
         ItemStack item = new ItemStack(Material.LIGHT_GRAY_STAINED_GLASS_PANE, 1);
         ItemMeta meta = item.getItemMeta();
         assert meta != null;
@@ -50,7 +48,7 @@ public class MenuCreator {
         return item;
     }
 
-    public int getFirstFreeSlot(Inventory inv) {
+    public static int getFirstFreeSlot(Inventory inv) {
         int result = 2001;
         for(int i = 0; i < inv.getSize(); i++) {
             if(inv.getItem(i) == null) {
@@ -60,6 +58,4 @@ public class MenuCreator {
         }
         return result;
     }
-
-    public static MenuCreator getInstance() { return instance; }
 }

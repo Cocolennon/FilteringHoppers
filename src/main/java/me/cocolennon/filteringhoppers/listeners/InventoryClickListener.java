@@ -34,11 +34,11 @@ public class InventoryClickListener implements Listener {
             if(current.getItemMeta().getPersistentDataContainer().get(buttonAction, PersistentDataType.STRING).equals("toggleMode")) {
                 TileState hopperState = Helper.getHopperState(invHolder.getBlock());
                 Helper.setWhitelistMode(hopperState);
-                inv.setItem(25, MenuCreator.getInstance().getModeItem(player, Helper.isWhitelist(hopperState)));
+                inv.setItem(25, MenuCreator.getModeItem(player, Helper.isWhitelist(hopperState)));
                 player.playSound(player.getLocation(), Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 1.0f, 1.0f);
             }
         }else{
-            int slot = MenuCreator.getInstance().getFirstFreeSlot(inv);
+            int slot = MenuCreator.getFirstFreeSlot(inv);
             if(inventory.equals(inv)) {
                 inv.setItem(event.getSlot(), new ItemStack(Material.AIR));
                 player.playSound(player.getLocation(), Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 1.0f, 1.0f);
