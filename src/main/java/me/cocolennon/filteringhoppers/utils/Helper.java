@@ -51,8 +51,7 @@ public class Helper {
         return true;
     }
 
-    public static TileState getHopperState(Location location) {
-        Block block = location.getBlock();
+    public static TileState getHopperState(Block block) {
         if(block == null || block.getType() != Material.HOPPER) return null;
         BlockState blockState = block.getState();
         if(!(blockState instanceof TileState tileState)) return null;
