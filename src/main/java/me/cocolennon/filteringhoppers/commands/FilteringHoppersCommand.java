@@ -49,14 +49,14 @@ public class FilteringHoppersCommand {
     }
 
     private static int reloadConfig(CommandContext<CommandSourceStack> context) {
-        Player player = (Player) context.getSource();
+        Player player = (Player) context.getSource().getSender();
         Main.getInstance().loadConfig(true);
         player.sendMessage(Localization.get(player, "success.reload", true));
         return com.mojang.brigadier.Command.SINGLE_SUCCESS;
     }
 
     private static int setMaxHoppers(CommandContext<CommandSourceStack> context) {
-        Player player =  (Player) context.getSource();
+        Player player =  (Player) context.getSource().getSender();
         int hoppers = context.getArgument("hoppers", Integer.class);
         Main main = Main.getInstance();
         main.getConfig().set("max-hoppers-per-chunk", hoppers);
