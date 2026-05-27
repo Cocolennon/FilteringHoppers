@@ -1,5 +1,6 @@
 package me.cocolennon.filteringhoppers;
 
+import io.papermc.paper.plugin.lifecycle.event.types.LifecycleEvents;
 import me.cocolennon.filteringhoppers.commands.FilteringHoppersCommand;
 import me.cocolennon.filteringhoppers.listeners.*;
 import me.cocolennon.filteringhoppers.utils.MetricsUtil;
@@ -49,7 +50,9 @@ public class Main extends JavaPlugin {
     }
 
     private void registerCommands() {
-        getCommand("filteringhoppers").setExecutor(new FilteringHoppersCommand());
+        getLifecycleManager().registerEventHandler(LifecycleEvents.COMMANDS, commands -> {
+            commands.registrar().register(FilteringHoppersCommand.register());
+        });
     }
 
     private void registerListeners() {
