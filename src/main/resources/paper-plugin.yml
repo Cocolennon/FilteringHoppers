@@ -17,3 +17,5 @@ permissions:
     description: Allows user to set item collection mode
   filteringhoppers.item-collection.radius:
     description: Allows user to set item collection radius
+  filteringhoppers.item-collection.ignore-y:
+    description: Allows user to toggle Y axis ignoring on radius collection
