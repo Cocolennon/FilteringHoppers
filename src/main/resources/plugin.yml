@@ -17,9 +17,11 @@ permissions:
     description: Allows user to see the plugin's info
   filteringhoppers.set.max-hoppers-per-chunk:
     description: Allows user to set the maximum amount of hoppers per chunk
-  filteringhoppers.item-collection.enabled:
+  filteringhoppers.item-collection.toggle:
     description: Allows user to toggle item collection
   filteringhoppers.item-collection.mode:
     description: Allows user to set item collection mode
   filteringhoppers.item-collection.radius:
     description: Allows user to set item collection radius
+  filteringhoppers.item-collection.ignore-y:
+    description: Allows user to toggle Y ignore on radius collection
