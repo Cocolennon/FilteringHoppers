@@ -9,6 +9,8 @@ import me.cocolennon.filteringhoppers.utils.UpdateChecker;
 import me.cocolennon.filteringhoppers.utils.Updater;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import java.util.List;
+
 public class Main extends JavaPlugin {
     private String version;
     private boolean usingOldVersion = false;
@@ -52,7 +54,7 @@ public class Main extends JavaPlugin {
 
     private void registerCommands() {
         getLifecycleManager().registerEventHandler(LifecycleEvents.COMMANDS, commands -> {
-            commands.registrar().register(FilteringHoppersCommand.register());
+            commands.registrar().register(FilteringHoppersCommand.register(), List.of("fh"));
             commands.registrar().register(ItemCollectionCommand.register());
         });
     }
