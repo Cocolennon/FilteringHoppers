@@ -2,6 +2,7 @@ package me.cocolennon.filteringhoppers;
 
 import io.papermc.paper.plugin.lifecycle.event.types.LifecycleEvents;
 import me.cocolennon.filteringhoppers.commands.FilteringHoppersCommand;
+import me.cocolennon.filteringhoppers.commands.ItemCollectionCommand;
 import me.cocolennon.filteringhoppers.listeners.*;
 import me.cocolennon.filteringhoppers.utils.MetricsUtil;
 import me.cocolennon.filteringhoppers.utils.UpdateChecker;
@@ -52,6 +53,7 @@ public class Main extends JavaPlugin {
     private void registerCommands() {
         getLifecycleManager().registerEventHandler(LifecycleEvents.COMMANDS, commands -> {
             commands.registrar().register(FilteringHoppersCommand.register());
+            commands.registrar().register(ItemCollectionCommand.register());
         });
     }
 
