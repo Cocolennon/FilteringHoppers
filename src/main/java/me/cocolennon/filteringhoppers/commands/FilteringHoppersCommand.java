@@ -78,6 +78,7 @@ public class FilteringHoppersCommand implements TabExecutor {
     }
 
     private boolean sendInfo(Player player){
+        if(!Helper.hasPermission(player, "filteringhoppers.info")) return false;
         MiniMessage miniMessage = MiniMessage.miniMessage();
         List<Component> info = new LinkedList<>();
         info.add(miniMessage.deserialize("<#FF55FF><bold>========================="));
