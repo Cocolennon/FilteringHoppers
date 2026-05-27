@@ -39,8 +39,8 @@ public class InventoryMoveItemListener implements Listener {
         for(int slot = 0; slot < source.getSize(); slot++) {
             ItemStack itemStack = source.getItem(slot);
             if(itemStack == null) continue;
-            if(Helper.getFirstOccupiedSlot(source) == slot) return false;
             if(!Helper.shouldMoveItem(itemStack, filter, isWhitelist)) continue;
+            if(Helper.getFirstOccupiedSlot(source) == slot) return false;
             ItemStack cloned = itemStack.clone();
             cloned.setAmount(Helper.getHopperRate());
             HashMap<Integer, ItemStack> remainder = dest.addItem(cloned);
