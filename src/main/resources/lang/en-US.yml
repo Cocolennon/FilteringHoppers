@@ -25,6 +25,9 @@ success:
       chunk: "<#AA00AA>Item collection is now in chunk mode!"
       radius: "<#AA00AA>Item collection is now in radius mode!"
     radius: "<#AA00AA>Item collection radius is now %s blocks!"
+    ignore-y:
+      enabled: "<#AA00AA>Radius collection now ignores distance on the Y axis!"
+      disabled: "<#AA00AA>Radius collection now counts distance on the Y axis!"
 filter:
   open: "<#AA00AA>Successfully opened the filter menu."
   full: "<#FF5555>The filter is full!"

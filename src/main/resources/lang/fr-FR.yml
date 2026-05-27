@@ -25,6 +25,9 @@ success:
       chunk: "<#AA00AA>La collection d'objets est maintenant en mode chunk !"
       radius: "<#AA00AA>La collection d'objets est maintenant en mode rayon !"
     radius: "<#AA00AA>Le rayon de la collection d'objets est maintenant de %s blocs !"
+    ignore-y:
+      enabled: "<#AA00AA>La collection en rayon ignore maintenant la distance sur l'axe Y !"
+      disabled: "<#AA00AA>La collection en rayon prends maintenant en compte la distance sur l'axe Y !"
 filter:
   open: "<#AA00AA>Menu de filtre ouvert avec succès."
   full: "<#FF5555>Le filtre est plein !"
