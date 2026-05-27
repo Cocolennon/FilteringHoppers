@@ -1,5 +1,6 @@
 package me.cocolennon.filteringhoppers.commands;
 
+import com.mojang.brigadier.Command;
 import com.mojang.brigadier.arguments.IntegerArgumentType;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
@@ -45,14 +46,14 @@ public class FilteringHoppersCommand {
         info.add(miniMessage.deserialize("<#AA00AA>Made with <#FF5555>❤ <#AA00AA>by Cocolennon"));
         info.add(miniMessage.deserialize("<#FF55FF><bold>========================="));
         info.forEach(context.getSource().getSender()::sendMessage);
-        return com.mojang.brigadier.Command.SINGLE_SUCCESS;
+        return Command.SINGLE_SUCCESS;
     }
 
     private static int reloadConfig(CommandContext<CommandSourceStack> context) {
         Player player = (Player) context.getSource().getSender();
         Main.getInstance().loadConfig(true);
         player.sendMessage(Localization.get(player, "success.reload", true));
-        return com.mojang.brigadier.Command.SINGLE_SUCCESS;
+        return Command.SINGLE_SUCCESS;
     }
 
     private static int setMaxHoppers(CommandContext<CommandSourceStack> context) {
@@ -63,6 +64,6 @@ public class FilteringHoppersCommand {
         main.saveConfig();
         main.loadConfig(true);
         player.sendMessage(Localization.get(player, "success.max-hoppers", true, hoppers));
-        return com.mojang.brigadier.Command.SINGLE_SUCCESS;
+        return Command.SINGLE_SUCCESS;
     }
 }
