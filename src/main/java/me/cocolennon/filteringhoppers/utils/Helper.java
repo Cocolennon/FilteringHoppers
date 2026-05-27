@@ -10,6 +10,7 @@ import org.bukkit.block.Hopper;
 import org.bukkit.block.TileState;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -24,6 +25,7 @@ public class Helper {
     private static NamespacedKey filterKey = new NamespacedKey(Main.getInstance(), "hopperFilter");
     private static NamespacedKey modeKey = new NamespacedKey(Main.getInstance(), "hopperMode");
     private static NamespacedKey buttonAction = new NamespacedKey(Main.getInstance(), "buttonAction");
+    private static NamespacedKey tooltipShown = new NamespacedKey(Main.getInstance(), "tooltipShown");
 
     public static boolean shouldMoveItem(ItemStack itemStack, List<ItemStack> filter, boolean isWhitelist) {
         boolean matches = filter.stream().anyMatch(f -> f.isSimilar(itemStack));
@@ -150,5 +152,12 @@ public class Helper {
     public static void setButtonAction(ItemMeta meta, String action) {
         PersistentDataContainer pdc = meta.getPersistentDataContainer();
         pdc.set(buttonAction, PersistentDataType.STRING, action);
+    }
+
+    public static boolean hasTooltipShown(Player player) {
+        PersistentDataContainer pdc = player.getPersistentDataContainer();
+        boolean shown = pdc.has(tooltipShown, PersistentDataType.BOOLEAN);
+        if(!shown) pdc.set(tooltipShown, PersistentDataType.BOOLEAN, true);
+        return shown;
     }
 }

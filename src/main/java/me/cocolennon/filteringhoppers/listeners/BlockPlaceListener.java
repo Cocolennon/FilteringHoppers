@@ -1,6 +1,7 @@
 package me.cocolennon.filteringhoppers.listeners;
 
 import me.cocolennon.filteringhoppers.Main;
+import me.cocolennon.filteringhoppers.utils.Helper;
 import me.cocolennon.filteringhoppers.utils.Localization;
 import org.bukkit.Chunk;
 import org.bukkit.block.Block;
@@ -36,6 +37,8 @@ public class BlockPlaceListener implements Listener {
         if(hopperCount > maxHopper) {
             player.sendMessage(Localization.get(player, "error.hoppers", true, maxHopper));
             event.setCancelled(true);
+            return;
         }
+        if(!Helper.hasTooltipShown(player)) player.sendMessage(Localization.get(player, "tooltips.hopper-placed", true, true));
     }
 }
