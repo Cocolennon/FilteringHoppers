@@ -3,6 +3,7 @@ package me.cocolennon.filteringhoppers.utils;
 import me.cocolennon.filteringhoppers.Main;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.MiniMessage;
+import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
@@ -64,6 +65,11 @@ public final class Localization {
             String locale = file.getName().replace(".yml", "");
             locales.put(locale, YamlConfiguration.loadConfiguration(file));
         }
+    }
+
+    public static Component get(CommandSender sender, String path, boolean prefixed, Object... values) {
+        if(sender instanceof Player player) return get(player, path, prefixed, values);
+        else return get(fallback, path, prefixed, values);
     }
 
     public static Component get(Player player, String path, boolean prefixed, Object... values) {

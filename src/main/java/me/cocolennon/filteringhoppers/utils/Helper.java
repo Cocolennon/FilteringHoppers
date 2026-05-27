@@ -1,7 +1,6 @@
 package me.cocolennon.filteringhoppers.utils;
 
 import com.jeff_media.morepersistentdatatypes.DataType;
-import io.papermc.paper.command.brigadier.CommandSourceStack;
 import me.cocolennon.filteringhoppers.Config;
 import me.cocolennon.filteringhoppers.Main;
 import org.bukkit.*;
@@ -9,8 +8,8 @@ import org.bukkit.block.Block;
 import org.bukkit.block.BlockState;
 import org.bukkit.block.Hopper;
 import org.bukkit.block.TileState;
+import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.YamlConfiguration;
-import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -125,16 +124,9 @@ public class Helper {
         return "true".equalsIgnoreCase(s) || "false".equalsIgnoreCase(s);
     }
 
-    public static boolean hasPermission(Player player, String permission) {
-        boolean allowed = player.hasPermission(permission);
-        if(!allowed) player.sendMessage(Localization.get(player, "error.permission", true));
-        return allowed;
-    }
-
-    public static boolean hasPermission(CommandSourceStack sender, String permission) {
-        Player player = (Player) sender.getSender();
-        boolean allowed = player.hasPermission(permission);
-        if(!allowed) player.sendMessage(Localization.get(player, "error.permission", true));
+    public static boolean hasPermission(CommandSender sender, String permission) {
+        boolean allowed = sender.hasPermission(permission);
+        if(!allowed) sender.sendMessage(Localization.get(sender, "error.permission", true));
         return allowed;
     }
 

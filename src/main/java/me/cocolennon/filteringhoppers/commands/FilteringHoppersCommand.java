@@ -12,7 +12,7 @@ import me.cocolennon.filteringhoppers.utils.Helper;
 import me.cocolennon.filteringhoppers.utils.Localization;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.MiniMessage;
-import org.bukkit.entity.Player;
+import org.bukkit.entity.Entity;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -21,13 +21,13 @@ public class FilteringHoppersCommand {
     public static LiteralCommandNode<CommandSourceStack> register() {
         LiteralArgumentBuilder<CommandSourceStack> root = Commands.literal("filteringhoppers")
             .then(Commands.literal("info")
-                    .requires(sender -> Helper.hasPermission(sender, "filteringhoppers.info"))
+                    .requires(source -> Helper.hasPermission(source.getSender(), "filteringhoppers.info"))
                     .executes(FilteringHoppersCommand::sendInfo))
             .then(Commands.literal("reload")
-                    .requires(sender -> Helper.hasPermission(sender, "filteringhoppers.reload"))
+                    .requires(source -> Helper.hasPermission(source.getSender(), "filteringhoppers.reload"))
                     .executes(FilteringHoppersCommand::reloadConfig))
             .then(Commands.literal("max-hoppers-per-chunk")
-                    .requires(sender -> Helper.hasPermission(sender, "filteringhoppers.set.max-hoppers-per-chunk"))
+                    .requires(source -> Helper.hasPermission(source.getSender(), "filteringhoppers.set.max-hoppers-per-chunk"))
                     .then(Commands.argument("hoppers", IntegerArgumentType.integer(0))
                             .executes(FilteringHoppersCommand::setMaxHoppers)));
         return root.build();
@@ -50,20 +50,20 @@ public class FilteringHoppersCommand {
     }
 
     private static int reloadConfig(CommandContext<CommandSourceStack> context) {
-        Player player = (Player) context.getSource().getSender();
+        Entity executor = context.getSource().getExecutor();
         Main.getInstance().loadConfig(true);
-        player.sendMessage(Localization.get(player, "success.reload", true));
+        executor.sendMessage(Localization.get(executor, "success.reload", true));
         return Command.SINGLE_SUCCESS;
     }
 
     private static int setMaxHoppers(CommandContext<CommandSourceStack> context) {
-        Player player =  (Player) context.getSource().getSender();
+        Entity executor = context.getSource().getExecutor();
         int hoppers = context.getArgument("hoppers", Integer.class);
         Main main = Main.getInstance();
         main.getConfig().set("max-hoppers-per-chunk", hoppers);
         main.saveConfig();
         main.loadConfig(true);
-        player.sendMessage(Localization.get(player, "success.max-hoppers", true, hoppers));
+        executor.sendMessage(Localization.get(executor, "success.max-hoppers", true, hoppers));
         return Command.SINGLE_SUCCESS;
     }
 }
