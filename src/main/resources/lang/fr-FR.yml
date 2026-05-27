@@ -37,3 +37,4 @@ tooltips:
   item-collection-mode:
     chunk: "<#FF55FF>Collecte les objets dans le même chunk que l'entonnoir"
     radius: "<#FF55FF>Collecte les objets dans un rayon autour de l'entonnoir"
+  hopper-placed: "<#FF55FF>Shift + Clic Droit pour ouvrir le filtre d'un entonnoir !"

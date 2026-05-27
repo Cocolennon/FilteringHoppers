@@ -37,3 +37,4 @@ tooltips:
   item-collection-mode:
     chunk: "<#FF55FF>Collects items in the same chunk as the hopper"
     radius: "<#FF55FF>Collects items in a radius around the hopper"
+  hopper-placed: "<#FF55FF>Shift + Right Click to open a hopper's filter!"
