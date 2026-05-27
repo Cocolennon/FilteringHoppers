@@ -6,14 +6,7 @@ prefix: "<#FF55FF>[<#AA00AA>Filtering Hoppers<#FF55FF>]"
 menu-title: "<#AA00AA>Filtering Hoppers<#FFFFFF>: <#FF55FF>Menu de Filtre"
 error:
   permission: "<#FF5555>Vous n'avez pas la permission de faire ça !"
-  invalid:
-    option: "<#FF5555>Vous devez fournir une option valide !"
-    number: "<#FF5555>Vous devez fournir un nombre valide !"
-    boolean: "<#FF5555>Vous devez fournir un booléen valide !"
-    mode: "<#FF5555>Vous devez fournir un mode valide !!"
-    radius: "<#FF5555>Vous devez fournir un rayon valide !"
   hoppers: "<#FF5555>Vous pouvez avoir qu'un maximum de %s entonnoirs par chunk!"
-  usage: "<#FF5555>Utilisation: /%s <info/reload/max-hoppers-per-chunk/item-collection>"
 success:
   reload: "<#AA00AA>Configuration rechargée !"
   max-hoppers: "<#AA00AA>Le nombre d'entonnoirs par chunk est maintenant %s !"

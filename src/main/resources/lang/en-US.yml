@@ -6,14 +6,7 @@ prefix: "<#FF55FF>[<#AA00AA>Filtering Hoppers<#FF55FF>]"
 menu-title: "<#AA00AA>Filtering Hoppers<#FFFFFF>: <#FF55FF>Filter Menu"
 error:
   permission: "<#FF5555>You don't have the permission to do that!"
-  invalid:
-    option: "<#FF5555>Please provide a valid option to set!"
-    number: "<#FF5555>You must provide a valid number!"
-    boolean: "<#FF5555>You must provide a valid boolean!"
-    mode: "<#FF5555>You must provide a valid mode!"
-    radius: "<#FF5555>You must provide a valid radius!"
   hoppers: "<#FF5555>You can only have a maximum of %s hoppers per chunk!"
-  usage: "<#FF5555>Usage: /%s <info/reload/max-hoppers-per-chunk/item-collection>"
 success:
   reload: "<#AA00AA>Configuration reloaded!"
   max-hoppers: "<#AA00AA>Maximum hoppers per chunk is now %s!"
