@@ -1,13 +1,12 @@
 package me.cocolennon.filteringhoppers.listeners;
 
-import me.cocolennon.filteringhoppers.Main;
 import me.cocolennon.filteringhoppers.utils.Helper;
 import org.bukkit.Material;
-import org.bukkit.NamespacedKey;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockState;
 import org.bukkit.block.TileState;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryMoveItemEvent;
 import org.bukkit.event.inventory.InventoryPickupItemEvent;
@@ -19,9 +18,7 @@ import java.util.HashMap;
 import java.util.List;
 
 public class InventoryMoveItemListener implements Listener {
-    NamespacedKey key = new NamespacedKey(Main.getInstance(), "hopperFilter");
-
-    @EventHandler
+    @EventHandler(priority =  EventPriority.HIGH)
     public void inventoryMoveItem(InventoryMoveItemEvent event) {
         if(itemMove(event.getSource(), event.getDestination(), event.getItem())) event.setCancelled(true);
     }
