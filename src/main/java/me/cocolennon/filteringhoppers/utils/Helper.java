@@ -1,6 +1,7 @@
 package me.cocolennon.filteringhoppers.utils;
 
 import com.jeff_media.morepersistentdatatypes.DataType;
+import io.papermc.paper.command.brigadier.CommandSourceStack;
 import me.cocolennon.filteringhoppers.Config;
 import me.cocolennon.filteringhoppers.Main;
 import org.bukkit.*;
@@ -125,6 +126,13 @@ public class Helper {
     }
 
     public static boolean hasPermission(Player player, String permission) {
+        boolean allowed = player.hasPermission(permission);
+        if(!allowed) player.sendMessage(Localization.get(player, "error.permission", true));
+        return allowed;
+    }
+
+    public static boolean hasPermission(CommandSourceStack sender, String permission) {
+        Player player = (Player) sender.getSender();
         boolean allowed = player.hasPermission(permission);
         if(!allowed) player.sendMessage(Localization.get(player, "error.permission", true));
         return allowed;
