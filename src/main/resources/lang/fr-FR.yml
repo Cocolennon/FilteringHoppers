@@ -37,3 +37,7 @@ filter:
     blacklist:
       name: "<#AA00AA>Mode actuel: <#FF55FF>Liste noire"
       hint: "<#AA00AA>Cliquez pour changer en <#FF55FF>Liste blanche"
+tooltips:
+  item-collection-mode:
+    chunk: "<#FF55FF>Collecte les objets dans le même chunk que l'entonnoir"
+    radius: "<#FF55FF>Collecte les objets dans un rayon autour de l'entonnoir"
