@@ -22,19 +22,19 @@ public class ItemCollectionCommand {
     public static LiteralCommandNode<CommandSourceStack> register() {
         LiteralArgumentBuilder<CommandSourceStack> root = Commands.literal("item-collection")
                 .then(Commands.literal("toggle")
-                        .requires(source -> Helper.hasPermission(source.getSender(), "filteringhoppers.item-collection.toggle"))
+                        .requires(source -> source.getSender().hasPermission("filteringhoppers.item-collection.toggle"))
                         .executes(ItemCollectionCommand::toggle))
                 .then(Commands.literal("mode")
-                        .requires(source -> Helper.hasPermission(source.getSender(), "filteringhoppers.item-collection.mode"))
+                        .requires(source -> source.getSender().hasPermission("filteringhoppers.item-collection.mode"))
                         .then(Commands.argument("mode", StringArgumentType.word())
                                 .suggests(ItemCollectionCommand::getModeSuggestions)
                                 .executes(ItemCollectionCommand::setMode)))
                 .then(Commands.literal("radius")
-                        .requires(source -> Helper.hasPermission(source.getSender(), "filteringhoppers.item-collection.radius"))
+                        .requires(source -> source.getSender().hasPermission("filteringhoppers.item-collection.radius"))
                         .then(Commands.argument("radius", IntegerArgumentType.integer(1))
                                 .executes(ItemCollectionCommand::setRadius)))
                 .then(Commands.literal("ignore-y")
-                        .requires(source -> Helper.hasPermission(source.getSender(), "filteringhoppers.item-collection.ignore-y"))
+                        .requires(source -> source.getSender().hasPermission("filteringhoppers.item-collection.ignore-y"))
                         .executes(ItemCollectionCommand::toggleIgnoreY));
         return root.build();
     }

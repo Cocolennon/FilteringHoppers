@@ -21,13 +21,13 @@ public class FilteringHoppersCommand {
     public static LiteralCommandNode<CommandSourceStack> register() {
         LiteralArgumentBuilder<CommandSourceStack> root = Commands.literal("filteringhoppers")
             .then(Commands.literal("info")
-                    .requires(source -> Helper.hasPermission(source.getSender(), "filteringhoppers.info"))
+                    .requires(source -> source.getSender().hasPermission("filteringhoppers.info"))
                     .executes(FilteringHoppersCommand::sendInfo))
             .then(Commands.literal("reload")
-                    .requires(source -> Helper.hasPermission(source.getSender(), "filteringhoppers.reload"))
+                    .requires(source -> source.getSender().hasPermission("filteringhoppers.reload"))
                     .executes(FilteringHoppersCommand::reloadConfig))
             .then(Commands.literal("max-hoppers-per-chunk")
-                    .requires(source -> Helper.hasPermission(source.getSender(), "filteringhoppers.set.max-hoppers-per-chunk"))
+                    .requires(source -> source.getSender().hasPermission("filteringhoppers.set.max-hoppers-per-chunk"))
                     .then(Commands.argument("hoppers", IntegerArgumentType.integer(0))
                             .executes(FilteringHoppersCommand::setMaxHoppers)));
         return root.build();
