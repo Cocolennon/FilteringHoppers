@@ -8,7 +8,6 @@ import org.bukkit.block.Block;
 import org.bukkit.block.BlockState;
 import org.bukkit.block.Hopper;
 import org.bukkit.block.TileState;
-import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
@@ -124,12 +123,6 @@ public class Helper {
 
     public static boolean isBoolean(String s) {
         return "true".equalsIgnoreCase(s) || "false".equalsIgnoreCase(s);
-    }
-
-    public static boolean hasPermission(CommandSender sender, String permission) {
-        boolean allowed = sender.hasPermission(permission);
-        if(!allowed) sender.sendMessage(Localization.get(sender, "error.permission", true));
-        return allowed;
     }
 
     public static int getHopperRate() {
