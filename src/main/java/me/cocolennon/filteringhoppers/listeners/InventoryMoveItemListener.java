@@ -60,7 +60,7 @@ public class InventoryMoveItemListener implements Listener {
         if(block.getType() != Material.HOPPER || !(blockState instanceof TileState tileState)) return false;
         List<ItemStack> filter = Helper.getHopperFilter(tileState);
         if(filter == null || filter.isEmpty()) return false;
-        if(filter.stream().noneMatch(f -> f.isSimilar(item))) return true;
+        if(Helper.shouldMoveItem(item, filter, Helper.isWhitelist(tileState))) return true;
         return false;
     }
 }
