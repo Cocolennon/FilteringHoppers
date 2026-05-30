@@ -54,7 +54,7 @@ public class ItemCollectionCommand {
         CommandSender sender = context.getSource().getSender();
         String mode = context.getArgument("mode", String.class);
         configSet(Main.getInstance(), "item-collection.mode", mode);
-        sender.sendMessage(Localization.get(sender, "success.item-collection.toggle." + mode.toLowerCase(), true));
+        sender.sendMessage(Localization.get(sender, "success.item-collection.mode." + mode.toLowerCase(), true));
         if(sender instanceof Player player) player.playSound(player.getLocation(), Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 1.0f, 1.0f);
         return Command.SINGLE_SUCCESS;
     }
