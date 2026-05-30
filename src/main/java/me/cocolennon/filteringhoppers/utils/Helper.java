@@ -4,14 +4,11 @@ import com.jeff_media.morepersistentdatatypes.DataType;
 import me.cocolennon.filteringhoppers.Config;
 import me.cocolennon.filteringhoppers.Main;
 import org.bukkit.*;
-import org.bukkit.block.Block;
 import org.bukkit.block.BlockState;
 import org.bukkit.block.Hopper;
 import org.bukkit.block.TileState;
-import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
 
@@ -21,9 +18,7 @@ public class Helper {
     private static Config config = Main.getInstance().config();
     private static NamespacedKey filterKey = new NamespacedKey(Main.getInstance(), "hopperFilter");
     private static NamespacedKey modeKey = new NamespacedKey(Main.getInstance(), "hopperMode");
-    private static NamespacedKey buttonAction = new NamespacedKey(Main.getInstance(), "buttonAction");
     private static NamespacedKey destroyItems = new NamespacedKey(Main.getInstance(), "destroyItems");
-    private static NamespacedKey tooltipShown = new NamespacedKey(Main.getInstance(), "tooltipShown");
 
     public static boolean shouldMoveItem(ItemStack itemStack, List<ItemStack> filter, boolean isWhitelist) {
         boolean matches = filter.stream().anyMatch(f -> f.isSimilar(itemStack));
@@ -33,17 +28,23 @@ public class Helper {
         return shouldMove;
     }
 
-    public static int getFirstOccupiedSlot(Inventory inventory) {
-        for(int i = 0; i < inventory.getSize(); i++) {
-            if(inventory.getItem(i) != null) return i;
-        }
-        return 0;
-    }
-
     public static List<ItemStack> getHopperFilter(TileState hopper) {
         PersistentDataContainer container = hopper.getPersistentDataContainer();
         ItemStack[] rawFilter = container.get(filterKey, DataType.ITEM_STACK_ARRAY);
         return rawFilter == null ? null : Arrays.asList(rawFilter);
+    }
+
+    public static void saveFilter(TileState hopperState, Inventory filterInventory) {
+        PersistentDataContainer container = hopperState.getPersistentDataContainer();
+        List<ItemStack> filter = new LinkedList<>();
+        for (int i = 0; i < 18; i++) {
+            ItemStack item = filterInventory.getItem(i);
+            if (item == null) continue;
+            filter.add(item);
+        }
+        ItemStack[] arrayFilter = filter.toArray(new ItemStack[0]);
+        container.set(filterKey, DataType.ITEM_STACK_ARRAY, arrayFilter);
+        hopperState.update();
     }
 
     public static HashMap<Integer, ItemStack> addItemToHopper(ItemStack itemStack, Location hopperLocation) {
@@ -67,13 +68,6 @@ public class Helper {
         return true;
     }
 
-    public static TileState getHopperState(Block block) {
-        if(block == null || block.getType() != Material.HOPPER) return null;
-        BlockState blockState = block.getState();
-        if(!(blockState instanceof TileState tileState)) return null;
-        return tileState;
-    }
-
     public static List<TileState> getHopperStates(Location location) {
         return switch (config.itemCollection.mode.toLowerCase()) {
             case "chunk" -> getHopperStates(location.getChunk());
@@ -82,7 +76,7 @@ public class Helper {
         };
     }
 
-    private static List<TileState> getHopperStates(Chunk chunk) {
+    public static List<TileState> getHopperStates(Chunk chunk) {
         List<TileState> tileStates = new ArrayList<>();
         for(BlockState current : chunk.getTileEntities()) {
             if(!(current instanceof TileState tileState)) continue;
@@ -120,10 +114,6 @@ public class Helper {
         return tileStates;
     }
 
-    public static boolean isBoolean(String s) {
-        return "true".equalsIgnoreCase(s) || "false".equalsIgnoreCase(s);
-    }
-
     public static boolean isWhitelist(TileState hopper) {
         PersistentDataContainer container = hopper.getPersistentDataContainer();
         return container.has(modeKey) ? container.get(modeKey, DataType.BOOLEAN) : true;
@@ -133,18 +123,6 @@ public class Helper {
         PersistentDataContainer container = hopper.getPersistentDataContainer();
         container.set(modeKey, DataType.BOOLEAN, !isWhitelist(hopper));
         hopper.update();
-    }
-
-    public static void setButtonAction(ItemMeta meta, String action) {
-        PersistentDataContainer container = meta.getPersistentDataContainer();
-        container.set(buttonAction, PersistentDataType.STRING, action);
-    }
-
-    public static boolean hasTooltipShown(Player player) {
-        PersistentDataContainer container = player.getPersistentDataContainer();
-        boolean shown = container.has(tooltipShown, PersistentDataType.BOOLEAN);
-        if(!shown) container.set(tooltipShown, PersistentDataType.BOOLEAN, true);
-        return shown;
     }
 
     public static boolean shouldDestroy(TileState hopper) {

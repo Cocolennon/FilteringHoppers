@@ -4,41 +4,41 @@ import me.cocolennon.filteringhoppers.Main;
 import me.cocolennon.filteringhoppers.utils.Helper;
 import me.cocolennon.filteringhoppers.utils.Localization;
 import org.bukkit.Chunk;
+import org.bukkit.NamespacedKey;
 import org.bukkit.block.Block;
-import org.bukkit.block.BlockState;
-import org.bukkit.block.Hopper;
 import org.bukkit.block.TileState;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockPlaceEvent;
+import org.bukkit.persistence.PersistentDataContainer;
+import org.bukkit.persistence.PersistentDataType;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class BlockPlaceListener implements Listener {
+    private static NamespacedKey tooltipShown = new NamespacedKey(Main.getInstance(), "tooltipShown");
+
     @EventHandler
     public void blockPlace(BlockPlaceEvent event) {
         Player player = event.getPlayer();
         Block block = event.getBlockPlaced();
         Chunk chunk = block.getChunk();
-        List<TileState> tileStates = new ArrayList<>();
-        for(BlockState current : chunk.getTileEntities()) {
-            if(!(current instanceof TileState)) return;
-            TileState currentTileState = (TileState) current;
-            tileStates.add(currentTileState);
-        }
-        if(tileStates.isEmpty()) return;
-        int hopperCount = 0;
-        for(TileState current : tileStates) {
-            if(current instanceof Hopper) hopperCount++;
-        }
+        List<TileState> hopperStates = Helper.getHopperStates(chunk);
+        if(hopperStates.isEmpty()) return;
         int maxHopper = Main.getInstance().config().maxHoppersPerChunk;
-        if(hopperCount > maxHopper) {
+        if(hopperStates.size() > maxHopper) {
             player.sendMessage(Localization.get(player, "error.hoppers", true, maxHopper));
             event.setCancelled(true);
             return;
         }
-        if(!Helper.hasTooltipShown(player)) player.sendMessage(Localization.get(player, "tooltips.hopper-placed", true, true));
+        if(!hasTooltipShown(player)) player.sendMessage(Localization.get(player, "tooltips.hopper-placed", true, true));
+    }
+
+    public static boolean hasTooltipShown(Player player) {
+        PersistentDataContainer container = player.getPersistentDataContainer();
+        boolean shown = container.has(tooltipShown, PersistentDataType.BOOLEAN);
+        if(!shown) container.set(tooltipShown, PersistentDataType.BOOLEAN, true);
+        return shown;
     }
 }

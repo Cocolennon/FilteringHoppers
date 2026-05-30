@@ -3,6 +3,7 @@ package me.cocolennon.filteringhoppers.listeners;
 import com.jeff_media.morepersistentdatatypes.DataType;
 import me.cocolennon.filteringhoppers.Main;
 import me.cocolennon.filteringhoppers.utils.FilterInventoryHolder;
+import me.cocolennon.filteringhoppers.utils.Helper;
 import me.cocolennon.filteringhoppers.utils.Localization;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
@@ -24,26 +25,14 @@ import java.util.List;
 public class InventoryCloseListener implements Listener {
     @EventHandler
     public void inventoryClose(InventoryCloseEvent event) {
-        Player player = (Player) event.getPlayer();
-        Inventory inventory = event.getInventory();
-        if(!(inventory.getHolder() instanceof FilterInventoryHolder inventoryHolder)) return;
+        Inventory filterInventory = event.getInventory();
+        if(!(filterInventory.getHolder() instanceof FilterInventoryHolder inventoryHolder)) return;
         Block block = inventoryHolder.getBlock();
-        if(block == null) return;
-        if(block.getType() != Material.HOPPER) return;
+        if(block == null || block.getType() != Material.HOPPER) return;
         BlockState blockState = block.getState();
-        if(!(blockState instanceof TileState)) return;
-        TileState tileState = (TileState) blockState;
-        PersistentDataContainer container = tileState.getPersistentDataContainer();
-        NamespacedKey key = new NamespacedKey(Main.getInstance(), "hopperFilter");
-        List<ItemStack> filter = new LinkedList<>();
-        for (int i = 0; i < 18; i++) {
-            ItemStack item = inventory.getItem(i);
-            if (item == null) continue;
-            filter.add(item);
-        }
-        ItemStack[] arrayFilter = filter.toArray(new ItemStack[0]);
-        container.set(key, DataType.ITEM_STACK_ARRAY, arrayFilter);
-        tileState.update();
+        if(!(blockState instanceof TileState hopperState)) return;
+        Helper.saveFilter(hopperState, filterInventory);
+        Player player = (Player) event.getPlayer();
         player.playSound(player.getLocation(), Sound.BLOCK_BARREL_CLOSE, 1.0f, 1.0f);
         player.sendMessage(Localization.get(player, "filter.save", true));
     }

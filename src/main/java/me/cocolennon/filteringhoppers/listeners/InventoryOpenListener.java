@@ -15,9 +15,9 @@ import org.bukkit.inventory.Inventory;
 public class InventoryOpenListener implements Listener {
     @EventHandler
     public void inventoryOpen(InventoryOpenEvent event) {
-        Player player = (Player) event.getPlayer();
         Inventory inventory = event.getInventory();
         if(inventory.getType() != InventoryType.HOPPER) return;
+        Player player = (Player) event.getPlayer();
         if(!player.isSneaking()) return;
         Block block = inventory.getLocation().getBlock();
         if(block.getType() != Material.HOPPER) return;

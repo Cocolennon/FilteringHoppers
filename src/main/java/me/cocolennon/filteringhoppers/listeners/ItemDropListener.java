@@ -26,9 +26,9 @@ public class ItemDropListener implements Listener {
 
     private void itemDrop(Item item) {
         if(!Main.getInstance().config().itemCollection.enabled) return;
-        ItemStack itemStack = item.getItemStack();
         List<TileState> tileStates = Helper.getHopperStates(item.getLocation());
         if(tileStates.isEmpty()) return;
+        ItemStack itemStack = item.getItemStack();
         for(TileState current : tileStates) {
             boolean isWhitelist = Helper.isWhitelist(current);
             List<ItemStack> filter = Helper.getHopperFilter(current);

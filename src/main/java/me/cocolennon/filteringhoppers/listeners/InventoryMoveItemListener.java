@@ -3,6 +3,7 @@ package me.cocolennon.filteringhoppers.listeners;
 import me.cocolennon.filteringhoppers.Config;
 import me.cocolennon.filteringhoppers.Main;
 import me.cocolennon.filteringhoppers.utils.Helper;
+import me.cocolennon.filteringhoppers.utils.MenuUtil;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockState;
@@ -46,7 +47,7 @@ public class InventoryMoveItemListener implements Listener {
                 if(Helper.shouldDestroy(tileState)) itemStack.setAmount(0);
                 continue;
             }
-            if(Helper.getFirstOccupiedSlot(source) == slot) return false;
+            if(getFirstOccupiedSlot(source) == slot) return false;
             ItemStack cloned = itemStack.clone();
             cloned.setAmount(config.hopperRate);
             HashMap<Integer, ItemStack> remainder = dest.addItem(cloned);
@@ -68,5 +69,10 @@ public class InventoryMoveItemListener implements Listener {
         if(filter == null || filter.isEmpty()) return false;
         if(Helper.shouldMoveItem(item, filter, Helper.isWhitelist(tileState))) return true;
         return false;
+    }
+
+    private static int getFirstOccupiedSlot(Inventory inventory) {
+        for(int i = 0; i < inventory.getSize(); i++) if(inventory.getItem(i) != null) return i;
+        return 0;
     }
 }
