@@ -2,6 +2,7 @@ package me.cocolennon.filteringhoppers.utils;
 
 import me.cocolennon.filteringhoppers.Main;
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.TextDecoration;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.Sound;
@@ -24,7 +25,7 @@ public class MenuUtil {
         FilterInventoryHolder invHolder = new FilterInventoryHolder(Main.getInstance(), 27, Localization.get(player, "menu-title", false), block);
         Inventory inv = invHolder.getInventory();
         if(filter != null) for(ItemStack itemStack : filter) invHolder.addItem(itemStack);
-        invHolder.setItem(24, getItem(player, shouldDestroy ? Material.RED_STAINED_GLASS_PANE : Material.GREEN_STAINED_GLASS, shouldDestroy ? "destroy" : "keep", "toggleDestroy"));
+        invHolder.setItem(24, getItem(player, shouldDestroy ? Material.RED_STAINED_GLASS_PANE : Material.GREEN_STAINED_GLASS_PANE, shouldDestroy ? "destroy" : "keep", "toggleDestroy"));
         invHolder.setItem(25, getItem(player, whitelist ? Material.WHITE_STAINED_GLASS_PANE : Material.BLACK_STAINED_GLASS_PANE, whitelist ? "whitelist" : "blacklist", "toggleMode"));
         invHolder.fillEmpty(18, getFillerItem());
         player.playSound(player.getLocation(), Sound.BLOCK_BARREL_OPEN, 1.0f, 1.0f);
@@ -35,8 +36,8 @@ public class MenuUtil {
     public static ItemStack getItem(Player player, Material material, String mode, String buttonAction) {
         ItemStack item = new ItemStack(material, 1);
         ItemMeta meta = item.getItemMeta();
-        meta.displayName(Localization.get(player, "filter.mode-item." + mode + ".name", false));
-        meta.lore(List.of(Localization.get(player, "filter.mode-item." + mode + ".hint", false)));
+        meta.displayName(Localization.get(player, "filter.mode-item." + mode + ".name", false).decoration(TextDecoration.ITALIC, false));
+        meta.lore(List.of(Localization.get(player, "filter.mode-item." + mode + ".hint", false).decoration(TextDecoration.ITALIC, false)));
         setButtonAction(meta, buttonAction);
         item.setItemMeta(meta);
         return item;

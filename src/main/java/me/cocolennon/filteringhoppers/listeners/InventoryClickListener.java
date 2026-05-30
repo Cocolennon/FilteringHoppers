@@ -46,7 +46,7 @@ public class InventoryClickListener implements Listener {
             case "toggleDestroy" -> {
                 Helper.toggleDestroy(hopperState);
                 boolean shouldDestroy = Helper.shouldDestroy(hopperState);
-                inv.setItem(24, MenuUtil.getItem(player, shouldDestroy ? Material.RED_STAINED_GLASS_PANE : Material.GREEN_STAINED_GLASS, shouldDestroy ? "destroy" : "keep", "toggleDestroy"));
+                inv.setItem(24, MenuUtil.getItem(player, shouldDestroy ? Material.RED_STAINED_GLASS_PANE : Material.GREEN_STAINED_GLASS_PANE, shouldDestroy ? "destroy" : "keep", "toggleDestroy"));
                 player.playSound(player.getLocation(), Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 1.0f, 1.0f);
             }
         }
