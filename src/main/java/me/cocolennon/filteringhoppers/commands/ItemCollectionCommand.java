@@ -13,7 +13,10 @@ import io.papermc.paper.command.brigadier.Commands;
 import io.papermc.paper.command.brigadier.MessageComponentSerializer;
 import me.cocolennon.filteringhoppers.Main;
 import me.cocolennon.filteringhoppers.utils.Localization;
+import org.bukkit.Sound;
+import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.Player;
 
 import java.util.concurrent.CompletableFuture;
 
@@ -39,43 +42,47 @@ public class ItemCollectionCommand {
     }
 
     private static int toggle(CommandContext<CommandSourceStack> context) {
-        Entity executor = context.getSource().getExecutor();
+        CommandSender sender = context.getSource().getSender();
         Main main = Main.getInstance();
         boolean state = main.config().itemCollection.enabled;
         configSet(main, "item-collection.enabled", !state);
-        executor.sendMessage(Localization.get(executor, "success.item-collection.toggle." + (!state ? "enabled" : "disabled"), true));
+        sender.sendMessage(Localization.get(sender, "success.item-collection.toggle." + (!state ? "enabled" : "disabled"), true));
+        if(sender instanceof Player player) player.playSound(player.getLocation(), Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 1.0f, 1.0f);
         return Command.SINGLE_SUCCESS;
     }
 
     private static int setMode(CommandContext<CommandSourceStack> context) {
-        Entity executor = context.getSource().getExecutor();
+        CommandSender sender = context.getSource().getSender();
         String mode = context.getArgument("mode", String.class);
         configSet(Main.getInstance(), "item-collection.mode", mode);
-        executor.sendMessage(Localization.get(executor, "success.item-collection.toggle." + mode.toLowerCase(), true));
+        sender.sendMessage(Localization.get(sender, "success.item-collection.toggle." + mode.toLowerCase(), true));
+        if(sender instanceof Player player) player.playSound(player.getLocation(), Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 1.0f, 1.0f);
         return Command.SINGLE_SUCCESS;
     }
 
     private static int setRadius(CommandContext<CommandSourceStack> context) {
-        Entity executor = context.getSource().getExecutor();
+        CommandSender sender = context.getSource().getSender();
         int radius = context.getArgument("radius", Integer.class);
         configSet(Main.getInstance(), "item-collection.radius", radius);
-        executor.sendMessage(Localization.get(executor, "success.item-collection.radius", true, radius));
+        sender.sendMessage(Localization.get(sender, "success.item-collection.radius", true, radius));
+        if(sender instanceof Player player) player.playSound(player.getLocation(), Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 1.0f, 1.0f);
         return Command.SINGLE_SUCCESS;
     }
 
     private static int toggleIgnoreY(CommandContext<CommandSourceStack> context) {
-        Entity executor = context.getSource().getExecutor();
+        CommandSender sender = context.getSource().getSender();
         Main main = Main.getInstance();
         boolean state = main.config().itemCollection.ignoreY;
         configSet(main, "item-collection.ignore-y", !state);
-        executor.sendMessage(Localization.get(executor, "success.item-collection.toggle." + (!state ? "enabled" : "disabled"), true));
+        sender.sendMessage(Localization.get(sender, "success.item-collection.toggle." + (!state ? "enabled" : "disabled"), true));
+        if(sender instanceof Player player) player.playSound(player.getLocation(), Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 1.0f, 1.0f);
         return Command.SINGLE_SUCCESS;
     }
 
     private static CompletableFuture<Suggestions> getModeSuggestions(CommandContext<CommandSourceStack> context, SuggestionsBuilder builder) {
-        Entity executor = context.getSource().getExecutor();
-        builder.suggest("Chunk", MessageComponentSerializer.message().serialize(Localization.get(executor, "tooltips.item-collection-mode.chunk", false)));
-        builder.suggest("Radius", MessageComponentSerializer.message().serialize(Localization.get(executor, "tooltips.item-collection-mode.radius", false)));
+        CommandSender sender = context.getSource().getSender();
+        builder.suggest("Chunk", MessageComponentSerializer.message().serialize(Localization.get(sender, "tooltips.item-collection-mode.chunk", false)));
+        builder.suggest("Radius", MessageComponentSerializer.message().serialize(Localization.get(sender, "tooltips.item-collection-mode.radius", false)));
         return builder.buildFuture();
     }
 

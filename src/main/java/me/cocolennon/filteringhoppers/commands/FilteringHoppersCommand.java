@@ -11,7 +11,9 @@ import me.cocolennon.filteringhoppers.Main;
 import me.cocolennon.filteringhoppers.utils.Localization;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.MiniMessage;
-import org.bukkit.entity.Entity;
+import org.bukkit.Sound;
+import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -33,36 +35,37 @@ public class FilteringHoppersCommand {
     }
 
     private static int sendInfo(CommandContext<CommandSourceStack> context) {
+        CommandSender sender = context.getSource().getSender();
         MiniMessage miniMessage = MiniMessage.miniMessage();
         List<Component> info = new LinkedList<>();
         info.add(miniMessage.deserialize("<#FF55FF><bold>========================="));
         info.add(miniMessage.deserialize("<#AA00AA><bold>Filtering Hoppers <#AA00AA>" + Main.getInstance().getVersion()));
-        if(Main.getInstance().getUsingOldVersion()){
-            info.add(miniMessage.deserialize("<#FF55FF>An update is available!"));
-        }else{
-            info.add(miniMessage.deserialize("<#AA00AA>You're using the latest version"));
-        }
+        if(Main.getInstance().getUsingOldVersion()) info.add(miniMessage.deserialize("<#FF55FF>An update is available!"));
+        else info.add(miniMessage.deserialize("<#AA00AA>You're using the latest version"));
         info.add(miniMessage.deserialize("<#AA00AA>Made with <#FF5555>❤ <#AA00AA>by Cocolennon"));
         info.add(miniMessage.deserialize("<#FF55FF><bold>========================="));
-        info.forEach(context.getSource().getSender()::sendMessage);
+        info.forEach(sender::sendMessage);
+        if(sender instanceof Player player) player.playSound(player.getLocation(), Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 1.0f, 1.0f);
         return Command.SINGLE_SUCCESS;
     }
 
     private static int reloadConfig(CommandContext<CommandSourceStack> context) {
-        Entity executor = context.getSource().getExecutor();
+        CommandSender sender = context.getSource().getSender();
         Main.getInstance().loadConfig(true);
-        executor.sendMessage(Localization.get(executor, "success.reload", true));
+        sender.sendMessage(Localization.get(sender, "success.reload", true));
+        if(sender instanceof Player player) player.playSound(player.getLocation(), Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 1.0f, 1.0f);
         return Command.SINGLE_SUCCESS;
     }
 
     private static int setMaxHoppers(CommandContext<CommandSourceStack> context) {
-        Entity executor = context.getSource().getExecutor();
+        CommandSender sender = context.getSource().getSender();
         int hoppers = context.getArgument("hoppers", Integer.class);
         Main main = Main.getInstance();
         main.getConfig().set("max-hoppers-per-chunk", hoppers);
         main.saveConfig();
         main.loadConfig(true);
-        executor.sendMessage(Localization.get(executor, "success.max-hoppers", true, hoppers));
+        sender.sendMessage(Localization.get(sender, "success.max-hoppers", true, hoppers));
+        if(sender instanceof Player player) player.playSound(player.getLocation(), Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 1.0f, 1.0f);
         return Command.SINGLE_SUCCESS;
     }
 }
