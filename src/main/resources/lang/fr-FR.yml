@@ -33,6 +33,12 @@ filter:
     blacklist:
       name: "<#AA00AA>Mode actuel: <#FF55FF>Liste noire"
       hint: "<#AA00AA>Cliquez pour changer en <#FF55FF>Liste blanche"
+    destroy:
+      name: "<#AA00AA>Mode actuel: <#B50000>Détruire les objets bloqués"
+      hint: "<#AA00AA>Cliquez pour <#03B500>Garder les objets bloqués"
+    keep:
+      name: "<#AA00AA>Mode actuel: <#03B500>Garder les objets bloqués"
+      hint: "<#AA00AA>Cliquez pour <#B50000>Détruire les objets bloqués"
 tooltips:
   item-collection-mode:
     chunk: "<#FF55FF>Collecte les objets dans le même chunk que l'entonnoir"

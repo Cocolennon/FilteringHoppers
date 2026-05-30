@@ -33,6 +33,12 @@ filter:
     blacklist:
       name: "<#AA00AA>Current Mode: <#FF55FF>Blacklist"
       hint: "<#AA00AA>Click to change to <#FF55FF>Whitelist"
+    destroy:
+      name: "<#AA00AA>Current Mode: <#B50000>Destroy Blocked Items"
+      hint: "<#AA00AA>Click to change to <#03B500>Keep Blocked Items"
+    keep:
+      name: "<#AA00AA>Current Mode: <#03B500>Keep Blocked Items"
+      hint: "<#AA00AA>Click to change to <#B50000>Destroy Blocked Items"
 tooltips:
   item-collection-mode:
     chunk: "<#FF55FF>Collects items in the same chunk as the hopper"
