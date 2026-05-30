@@ -1,5 +1,7 @@
 package me.cocolennon.filteringhoppers.listeners;
 
+import me.cocolennon.filteringhoppers.Config;
+import me.cocolennon.filteringhoppers.Main;
 import me.cocolennon.filteringhoppers.utils.Helper;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -36,15 +38,15 @@ public class InventoryMoveItemListener implements Listener {
         List<ItemStack> filter = Helper.getHopperFilter(tileState);
         if(filter == null || filter.isEmpty()) return false;
         boolean isWhitelist = Helper.isWhitelist(tileState);
+        Config config = Main.getInstance().config();
         for(int slot = 0; slot < source.getSize(); slot++) {
             ItemStack itemStack = source.getItem(slot);
-            if(itemStack == null) continue;
-            if(!Helper.shouldMoveItem(itemStack, filter, isWhitelist)) continue;
+            if(itemStack == null || !Helper.shouldMoveItem(itemStack, filter, isWhitelist)) continue;
             if(Helper.getFirstOccupiedSlot(source) == slot) return false;
             ItemStack cloned = itemStack.clone();
-            cloned.setAmount(Helper.getHopperRate());
+            cloned.setAmount(config.hopperRate);
             HashMap<Integer, ItemStack> remainder = dest.addItem(cloned);
-            int amountToRemove = Helper.getHopperRate();
+            int amountToRemove = config.hopperRate;
             if(!remainder.isEmpty()) amountToRemove -= remainder.values().iterator().next().getAmount();
             itemStack.setAmount(itemStack.getAmount() - amountToRemove);
             source.setItem(slot, itemStack);

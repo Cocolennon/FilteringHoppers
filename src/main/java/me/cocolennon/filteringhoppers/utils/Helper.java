@@ -8,7 +8,6 @@ import org.bukkit.block.Block;
 import org.bukkit.block.BlockState;
 import org.bukkit.block.Hopper;
 import org.bukkit.block.TileState;
-import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
@@ -16,7 +15,6 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
 
-import java.io.File;
 import java.util.*;
 
 public class Helper {
@@ -123,12 +121,6 @@ public class Helper {
 
     public static boolean isBoolean(String s) {
         return "true".equalsIgnoreCase(s) || "false".equalsIgnoreCase(s);
-    }
-
-    public static int getHopperRate() {
-        File spigotFile = new File(Bukkit.getServer().getWorldContainer().getParentFile(), "spigot.yml");
-        YamlConfiguration spigotConfig = YamlConfiguration.loadConfiguration(spigotFile);
-        return spigotConfig.getInt("world-settings.default.hopper-amount", 1);
     }
 
     public static boolean isWhitelist(TileState hopper) {
