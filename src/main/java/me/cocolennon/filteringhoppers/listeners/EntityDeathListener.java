@@ -28,7 +28,7 @@ public class EntityDeathListener implements Listener {
                     HashMap<Integer, ItemStack> remainder = Helper.addItemToHopper(itemStack, current.getLocation());
                     if(!remainder.isEmpty()) itemStack.setAmount(remainder.get(0).getAmount());
                     else dropIterator.remove();
-                }
+                }else if(Helper.shouldDestroy(current)) itemStack.setAmount(0);
             }
         }
     }

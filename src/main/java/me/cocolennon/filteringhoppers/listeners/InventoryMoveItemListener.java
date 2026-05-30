@@ -41,7 +41,11 @@ public class InventoryMoveItemListener implements Listener {
         Config config = Main.getInstance().config();
         for(int slot = 0; slot < source.getSize(); slot++) {
             ItemStack itemStack = source.getItem(slot);
-            if(itemStack == null || !Helper.shouldMoveItem(itemStack, filter, isWhitelist)) continue;
+            if(itemStack == null) continue;
+            if(!Helper.shouldMoveItem(itemStack, filter, isWhitelist)) {
+                if(Helper.shouldDestroy(tileState)) itemStack.setAmount(0);
+                continue;
+            }
             if(Helper.getFirstOccupiedSlot(source) == slot) return false;
             ItemStack cloned = itemStack.clone();
             cloned.setAmount(config.hopperRate);

@@ -38,7 +38,7 @@ public class ItemDropListener implements Listener {
                 if(!remainder.isEmpty()) item.getItemStack().setAmount(remainder.get(0).getAmount());
                 else item.remove();
                 break;
-            }
+            }else if(Helper.shouldDestroy(current)) itemStack.setAmount(0);
         }
     }
 }
