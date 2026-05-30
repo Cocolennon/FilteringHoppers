@@ -23,13 +23,13 @@ public class Main extends JavaPlugin {
         loadConfig(false);
         registerCommands();
         registerListeners();
-        checkVersion();
         MetricsUtil.register(instance);
         getLogger().info("Plugin enabled!");
+        checkVersion();
     }
 
     private void checkVersion() {
-        new UpdateChecker(this, 111606).getVersion(cVersion -> {
+        new UpdateChecker(this, "filtering-hoppers").getVersion(cVersion -> {
             version = this.getPluginMeta().getVersion();
             if (!getVersion().equals(cVersion)) {
                 getLogger().info("You are using an older version of Filtering Hoppers, please update to version " + cVersion);
@@ -37,7 +37,7 @@ public class Main extends JavaPlugin {
             }
         });
         if(config.autoUpdaterEnabled) {
-            Updater updater = new Updater(this, 111606, getFile(), Updater.UpdateType.CHECK_DOWNLOAD, true);
+            Updater updater = new Updater(this, "filtering-hoppers", getFile(), Updater.UpdateType.CHECK_DOWNLOAD, true);
             if(updater.getResult().equals(Updater.Result.SUCCESS)) getLogger().info("Update will be applied after next restart!");
         }
     }

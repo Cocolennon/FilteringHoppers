@@ -1,5 +1,6 @@
 package me.cocolennon.filteringhoppers.utils;
 
+import com.google.gson.JsonParser;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.IOException;
@@ -10,19 +11,21 @@ import java.util.function.Consumer;
 
 public class UpdateChecker {
     private final JavaPlugin plugin;
-    private final int resourceId;
+    private final String projectId;
 
-    public UpdateChecker(JavaPlugin plugin, int resourceId) {
+    public UpdateChecker(JavaPlugin plugin, String projectId) {
         this.plugin = plugin;
-        this.resourceId = resourceId;
+        this.projectId = projectId;
     }
 
     public void getVersion(final Consumer<String> consumer) {
-        try (InputStream inputStream = URI.create("https://api.spigotmc.org/legacy/update.php?resource=" + this.resourceId).toURL().openStream(); Scanner scanner = new Scanner(inputStream)) {
-            if (scanner.hasNext()) {
-                consumer.accept(scanner.next());
+        try (InputStream inputStream = URI.create("https://api.modrinth.com/v2/project/" + this.projectId + "/version").toURL().openStream(); Scanner scanner = new Scanner(inputStream).useDelimiter("\\A")) {
+            if(scanner.hasNext()) {
+                String json = scanner.next();
+                String version = JsonParser.parseString(json).getAsJsonArray().get(0).getAsJsonObject().get("version_number").getAsString();
+                consumer.accept(version);
             }
-        } catch (IOException exception) {
+        }catch(IOException exception){
             plugin.getLogger().info("Unable to check for updates: " + exception.getMessage());
         }
     }

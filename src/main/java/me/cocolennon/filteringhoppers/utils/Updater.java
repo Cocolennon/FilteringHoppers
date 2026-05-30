@@ -1,7 +1,6 @@
 package me.cocolennon.filteringhoppers.utils;
 
 import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import org.bukkit.plugin.Plugin;
@@ -14,33 +13,28 @@ import java.util.logging.Level;
 
 public class Updater {
     private static final String USER_AGENT = "Spigot Plugin Updater";
-    private String downloadLink;
+    private static final String API_BASE = "https://api.modrinth.com/v2/project/";
+
     private Plugin plugin;
-    private File updateFolder;
+    private String id;
     private File file;
-    private int id;
-    private int page = 1;
     private UpdateType updateType;
-    private Result result = Result.SUCCESS;
-    private boolean emptyPage;
-    private String version;
     private boolean logger;
+
+    private File updateFolder;
+    private Result result = Result.SUCCESS;
+    private String version;
+    private String downloadUrl;
     private Thread thread;
 
-    private static final String DOWNLOAD = "/download";
-    private static final String VERSIONS = "/versions";
-    private static final String PAGE = "?page=";
-    private static final String API_RESOURCE = "https://api.spiget.org/v2/resources/";
-
-    public Updater(Plugin plugin, int id, File file, UpdateType updateType, boolean logger) {
+    public Updater(Plugin plugin, String id, File file, UpdateType updateType, boolean logger) {
         this.plugin = plugin;
-        plugin.getServer().getUpdateFolderFile().mkdir();
-        this.updateFolder = plugin.getServer().getUpdateFolderFile();
         this.id = id;
         this.file = file;
         this.updateType = updateType;
         this.logger = logger;
-        downloadLink = API_RESOURCE + id;
+        plugin.getServer().getUpdateFolderFile().mkdir();
+        this.updateFolder = plugin.getServer().getUpdateFolderFile();
         thread = new Thread(new UpdaterRunnable());
         thread.start();
     }
@@ -69,70 +63,54 @@ public class Updater {
         return version;
     }
 
-    private boolean checkResource(String link) {
-        try {
-            URL url = URI.create(link).toURL();
-            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-            connection.addRequestProperty("User-Agent", USER_AGENT);
-            int code = connection.getResponseCode();
-            if(code != 200) {
-                connection.disconnect();
-                result = Result.BAD_ID;
-                return false;
-            }
-            connection.disconnect();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return true;
-    }
-
     private void checkUpdate() {
         try {
-            String page = Integer.toString(this.page);
-            URL url = URI.create(API_RESOURCE+id+VERSIONS+PAGE+page).toURL();
+            URL url = URI.create(API_BASE + id + "/version").toURL();
             HttpURLConnection connection = (HttpURLConnection) url.openConnection();
             connection.addRequestProperty("User-Agent", USER_AGENT);
-            InputStream inputStream = connection.getInputStream();
-            InputStreamReader reader = new InputStreamReader(inputStream);
-            JsonElement element = JsonParser.parseReader(reader);
-            JsonArray jsonArray = element.getAsJsonArray();
-            if(jsonArray.size() == 10 && !emptyPage) {
+            if(connection.getResponseCode() != 200) {
                 connection.disconnect();
-                this.page++;
-                checkUpdate();
-            } else if(jsonArray.size() == 0) {
-                emptyPage = true;
-                this.page--;
-                checkUpdate();
-            } else if(jsonArray.size() < 10) {
-                element = jsonArray.get(jsonArray.size()-1);
-                JsonObject object = element.getAsJsonObject();
-                element = object.get("name");
-                version = element.toString().replaceAll("\"", "").replace("v","");
-                if(logger) plugin.getLogger().info("Checking for update...");
-                if(shouldUpdate(version, plugin.getPluginMeta().getVersion()) && updateType == UpdateType.VERSION_CHECK) {
-                    result = Result.UPDATE_FOUND;
-                    if(logger)
-                        plugin.getLogger().info("Update found!");
-                } else if(updateType == UpdateType.DOWNLOAD) {
-                    if(logger) plugin.getLogger().info("Downloading update... version not checked");
+                result = Result.BAD_ID;
+                return;
+            }
+            JsonArray versions = JsonParser.parseReader(new InputStreamReader(connection.getInputStream())).getAsJsonArray();
+            connection.disconnect();
+            if(versions.isEmpty()) {
+                result = Result.BAD_ID;
+                return;
+            }
+            JsonObject latest = versions.get(0).getAsJsonObject();
+            version = latest.get("version_number").getAsString();
+            downloadUrl = latest.get("files").getAsJsonArray().get(0).getAsJsonObject().get("url").getAsString();
+            if(logger) plugin.getLogger().info("Checking for update...");
+            boolean updateAvailable = shouldUpdate(version, plugin.getPluginMeta().getVersion());
+            switch(updateType) {
+                case VERSION_CHECK -> {
+                    if(updateAvailable) {
+                        result = Result.UPDATE_FOUND;
+                        if(logger) plugin.getLogger().info("Update found! New version: " + version);
+                    }else{
+                        result = Result.NO_UPDATE;
+                        if(logger) plugin.getLogger().info("No update found.");
+                    }
+                }
+                case DOWNLOAD -> {
+                    if(logger) plugin.getLogger().info("Downloading update (version not checked)...");
                     download();
-                } else if(updateType == UpdateType.CHECK_DOWNLOAD) {
-                    if(shouldUpdate(version, plugin.getPluginMeta().getVersion())) {
+                }
+                case CHECK_DOWNLOAD -> {
+                    if(updateAvailable) {
                         if(logger) plugin.getLogger().info("Update found, downloading now...");
                         download();
-                    } else {
-                        if(logger) plugin.getLogger().info("Update not found");
+                    }else{
                         result = Result.NO_UPDATE;
+                        if(logger) plugin.getLogger().info("No update found.");
                     }
-                } else {
-                    if(logger) plugin.getLogger().info("Update not found");
-                    result = Result.NO_UPDATE;
                 }
             }
-        } catch (Exception e) {
-            e.printStackTrace();
+        }catch(Exception exception) {
+            if (logger) plugin.getLogger().log(Level.SEVERE, "Failed to download update: " + exception.getMessage());
+            result = Result.FAILED;
         }
     }
 
@@ -141,52 +119,33 @@ public class Updater {
     }
 
     private void download() {
-        BufferedInputStream in = null;
-        FileOutputStream fout = null;
-        try {
-            URL url = URI.create(downloadLink).toURL();
-            in = new BufferedInputStream(url.openStream());
-            fout = new FileOutputStream(new File(updateFolder, file.getName()));
-            final byte[] data = new byte[4096];
+        try (BufferedInputStream in = new BufferedInputStream(URI.create(downloadUrl).toURL().openStream());
+             FileOutputStream fout = new FileOutputStream(new File(updateFolder, file.getName()))) {
+            byte[] data = new byte[4096];
             int count;
             while ((count = in.read(data, 0, 4096)) != -1) {
                 fout.write(data, 0, count);
             }
-        } catch (Exception e) {
-            if(logger) plugin.getLogger().log(Level.SEVERE, "Updater tried to download the update, but was unsuccessful.\n" + e.toString());
+            result = Result.SUCCESS;
+        } catch (Exception exception) {
+            if (logger) plugin.getLogger().log(Level.SEVERE, "Failed to download update: " + exception.getMessage());
             result = Result.FAILED;
-        } finally {
-            try {
-                if (in != null) in.close();
-            } catch (final IOException e) {
-                this.plugin.getLogger().log(Level.SEVERE, null, e);
-                e.printStackTrace();
-            } try {
-                if (fout != null) fout.close();
-            } catch (final IOException e) {
-                e.printStackTrace();
-                this.plugin.getLogger().log(Level.SEVERE, null, e);
-            }
         }
     }
 
-    private void waitThread()
-    {
+    private void waitThread() {
         if(thread != null && thread.isAlive()) {
             try {
                 thread.join();
-            } catch (InterruptedException e) {
-                this.plugin.getLogger().log(Level.SEVERE, null, e);
+            } catch (InterruptedException exception) {
+                this.plugin.getLogger().log(Level.SEVERE, null, exception);
             }
         }
     }
 
     public class UpdaterRunnable implements Runnable {
         public void run() {
-            if(checkResource(downloadLink)) {
-                downloadLink = downloadLink + DOWNLOAD;
-                checkUpdate();
-            }
+            checkUpdate();
         }
     }
 }
