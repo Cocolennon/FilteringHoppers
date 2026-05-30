@@ -22,6 +22,7 @@ public class Helper {
     private static NamespacedKey filterKey = new NamespacedKey(Main.getInstance(), "hopperFilter");
     private static NamespacedKey modeKey = new NamespacedKey(Main.getInstance(), "hopperMode");
     private static NamespacedKey buttonAction = new NamespacedKey(Main.getInstance(), "buttonAction");
+    private static NamespacedKey destroyItems = new NamespacedKey(Main.getInstance(), "destroyItems");
     private static NamespacedKey tooltipShown = new NamespacedKey(Main.getInstance(), "tooltipShown");
 
     public static boolean shouldMoveItem(ItemStack itemStack, List<ItemStack> filter, boolean isWhitelist) {
@@ -128,21 +129,32 @@ public class Helper {
         return container.has(modeKey) ? container.get(modeKey, DataType.BOOLEAN) : true;
     }
 
-    public static void setWhitelistMode(TileState hopper) {
-        PersistentDataContainer pdc = hopper.getPersistentDataContainer();
-        pdc.set(modeKey, DataType.BOOLEAN, !isWhitelist(hopper));
+    public static void toggleWhitelistMode(TileState hopper) {
+        PersistentDataContainer container = hopper.getPersistentDataContainer();
+        container.set(modeKey, DataType.BOOLEAN, !isWhitelist(hopper));
         hopper.update();
     }
 
     public static void setButtonAction(ItemMeta meta, String action) {
-        PersistentDataContainer pdc = meta.getPersistentDataContainer();
-        pdc.set(buttonAction, PersistentDataType.STRING, action);
+        PersistentDataContainer container = meta.getPersistentDataContainer();
+        container.set(buttonAction, PersistentDataType.STRING, action);
     }
 
     public static boolean hasTooltipShown(Player player) {
-        PersistentDataContainer pdc = player.getPersistentDataContainer();
-        boolean shown = pdc.has(tooltipShown, PersistentDataType.BOOLEAN);
-        if(!shown) pdc.set(tooltipShown, PersistentDataType.BOOLEAN, true);
+        PersistentDataContainer container = player.getPersistentDataContainer();
+        boolean shown = container.has(tooltipShown, PersistentDataType.BOOLEAN);
+        if(!shown) container.set(tooltipShown, PersistentDataType.BOOLEAN, true);
         return shown;
+    }
+
+    public static boolean shouldDestroy(TileState hopper) {
+        PersistentDataContainer container = hopper.getPersistentDataContainer();
+        return container.has(destroyItems) ? container.get(destroyItems, PersistentDataType.BOOLEAN) : false;
+    }
+
+    public static void toggleDestroy(TileState hopper) {
+        PersistentDataContainer container = hopper.getPersistentDataContainer();
+        container.set(destroyItems, PersistentDataType.BOOLEAN, !shouldDestroy(hopper));
+        hopper.update();
     }
 }

@@ -4,7 +4,7 @@ import me.cocolennon.filteringhoppers.Main;
 import me.cocolennon.filteringhoppers.utils.FilterInventoryHolder;
 import me.cocolennon.filteringhoppers.utils.Helper;
 import me.cocolennon.filteringhoppers.utils.Localization;
-import me.cocolennon.filteringhoppers.utils.MenuCreator;
+import me.cocolennon.filteringhoppers.utils.MenuUtil;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.Sound;
@@ -31,14 +31,22 @@ public class InventoryClickListener implements Listener {
         if(current == null) return;
         NamespacedKey buttonAction = new NamespacedKey(Main.getInstance(), "buttonAction");
         if(current.hasItemMeta() && current.getItemMeta().getPersistentDataContainer().has(buttonAction)) {
-            if(current.getItemMeta().getPersistentDataContainer().get(buttonAction, PersistentDataType.STRING).equals("toggleMode")) {
-                TileState hopperState = Helper.getHopperState(invHolder.getBlock());
-                Helper.setWhitelistMode(hopperState);
-                inv.setItem(25, MenuCreator.getModeItem(player, Helper.isWhitelist(hopperState)));
-                player.playSound(player.getLocation(), Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 1.0f, 1.0f);
+            String action = current.getItemMeta().getPersistentDataContainer().get(buttonAction, PersistentDataType.STRING);
+            TileState hopperState = Helper.getHopperState(invHolder.getBlock());
+            switch(action) {
+                case "toggleMode" -> {
+                    Helper.toggleWhitelistMode(hopperState);
+                    inv.setItem(25, MenuUtil.getModeItem(player, Helper.isWhitelist(hopperState)));
+                    player.playSound(player.getLocation(), Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 1.0f, 1.0f);
+                }
+                case "toggleDestroy" -> {
+                    Helper.toggleDestroy(hopperState);
+                    inv.setItem(24, MenuUtil.getDestroyItem(player, Helper.shouldDestroy(hopperState)));
+                    player.playSound(player.getLocation(), Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 1.0f, 1.0f);
+                }
             }
         }else{
-            int slot = MenuCreator.getFirstFreeSlot(inv);
+            int slot = MenuUtil.getFirstFreeSlot(inv);
             if(inventory.equals(inv)) {
                 inv.setItem(event.getSlot(), new ItemStack(Material.AIR));
                 player.playSound(player.getLocation(), Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 1.0f, 1.0f);

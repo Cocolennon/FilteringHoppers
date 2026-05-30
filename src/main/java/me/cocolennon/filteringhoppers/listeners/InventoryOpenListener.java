@@ -1,7 +1,7 @@
 package me.cocolennon.filteringhoppers.listeners;
 
 import me.cocolennon.filteringhoppers.utils.Helper;
-import me.cocolennon.filteringhoppers.utils.MenuCreator;
+import me.cocolennon.filteringhoppers.utils.MenuUtil;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.TileState;
@@ -23,6 +23,6 @@ public class InventoryOpenListener implements Listener {
         if(block.getType() != Material.HOPPER) return;
         event.setCancelled(true);
         TileState hopperState = (TileState) block.getState();
-        MenuCreator.createFilterMenu(Helper.getHopperFilter(hopperState), player, block, Helper.isWhitelist(hopperState));
+        MenuUtil.createFilterMenu(Helper.getHopperFilter(hopperState), player, block, Helper.isWhitelist(hopperState), Helper.shouldDestroy(hopperState));
     }
 }
