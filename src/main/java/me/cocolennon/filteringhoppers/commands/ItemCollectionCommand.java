@@ -15,7 +15,6 @@ import me.cocolennon.filteringhoppers.Main;
 import me.cocolennon.filteringhoppers.utils.Localization;
 import org.bukkit.Sound;
 import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 
 import java.util.concurrent.CompletableFuture;

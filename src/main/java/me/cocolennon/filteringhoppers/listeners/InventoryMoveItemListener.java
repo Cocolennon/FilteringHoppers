@@ -3,7 +3,6 @@ package me.cocolennon.filteringhoppers.listeners;
 import me.cocolennon.filteringhoppers.Config;
 import me.cocolennon.filteringhoppers.Main;
 import me.cocolennon.filteringhoppers.utils.Helper;
-import me.cocolennon.filteringhoppers.utils.MenuUtil;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockState;
