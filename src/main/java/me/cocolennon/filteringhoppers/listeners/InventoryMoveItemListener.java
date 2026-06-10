@@ -11,7 +11,6 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryMoveItemEvent;
-import org.bukkit.event.inventory.InventoryPickupItemEvent;
 import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
@@ -23,11 +22,6 @@ public class InventoryMoveItemListener implements Listener {
     @EventHandler(priority =  EventPriority.HIGH)
     public void inventoryMoveItem(InventoryMoveItemEvent event) {
         if(itemMove(event.getSource(), event.getDestination(), event.getItem())) event.setCancelled(true);
-    }
-
-    @EventHandler
-    public void inventoryPickupItem(InventoryPickupItemEvent event) {
-        if(itemMove(event.getInventory(), event.getItem().getItemStack())) event.setCancelled(true);
     }
 
     private boolean itemMove(Inventory source, Inventory dest, ItemStack original) {
@@ -57,17 +51,6 @@ public class InventoryMoveItemListener implements Listener {
             break;
         }
         return true;
-    }
-
-    private boolean itemMove(Inventory dest, ItemStack item) {
-        if(dest.getType() != InventoryType.HOPPER) return false;
-        Block block = dest.getLocation().getBlock();
-        BlockState blockState = block.getState();
-        if(block.getType() != Material.HOPPER || !(blockState instanceof TileState tileState)) return false;
-        List<ItemStack> filter = Helper.getHopperFilter(tileState);
-        if(filter == null || filter.isEmpty()) return false;
-        if(Helper.shouldMoveItem(item, filter, Helper.isWhitelist(tileState))) return true;
-        return false;
     }
 
     private static int getFirstOccupiedSlot(Inventory inventory) {

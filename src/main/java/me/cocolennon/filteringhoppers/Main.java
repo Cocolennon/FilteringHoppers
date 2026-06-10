@@ -61,6 +61,7 @@ public class Main extends JavaPlugin {
 
     private void registerListeners() {
         getServer().getPluginManager().registerEvents(new InventoryMoveItemListener(), instance);
+        getServer().getPluginManager().registerEvents(new InventoryPickupItemListener(), instance);
         getServer().getPluginManager().registerEvents(new InventoryOpenListener(), instance);
         getServer().getPluginManager().registerEvents(new InventoryCloseListener(), instance);
         getServer().getPluginManager().registerEvents(new InventoryClickListener(), instance);
