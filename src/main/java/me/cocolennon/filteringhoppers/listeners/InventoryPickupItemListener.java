@@ -25,6 +25,9 @@ public class InventoryPickupItemListener implements Listener {
         List<ItemStack> filter = Helper.getHopperFilter(tileState);
         if(filter == null || filter.isEmpty()) return;
         ItemStack itemStack = event.getItem().getItemStack();
-        if(Helper.shouldMoveItem(itemStack, filter, Helper.isWhitelist(tileState))) event.setCancelled(true);
+        if(Helper.shouldMoveItem(itemStack, filter, Helper.isWhitelist(tileState))) {
+            if(Helper.shouldDestroy(tileState)) event.getItem().remove();
+            event.setCancelled(true);
+        }
     }
 }
