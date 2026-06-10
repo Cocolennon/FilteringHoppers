@@ -33,7 +33,7 @@ public class InventoryMoveItemListener implements Listener {
         for(int slot = 0; slot < source.getSize(); slot++) {
             ItemStack itemStack = source.getItem(slot);
             if(itemStack == null) continue;
-            if(!Helper.shouldMoveItem(itemStack, filter, Helper.isWhitelist(tileState))) {
+            if(!Helper.shouldMoveItem(tileState, itemStack, filter)) {
                 if(Helper.shouldDestroy(tileState)) itemStack.setAmount(0);
                 continue;
             }

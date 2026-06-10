@@ -18,14 +18,42 @@ public class Helper {
     private static Config config = Main.getInstance().config();
     private static NamespacedKey filterKey = new NamespacedKey(Main.getInstance(), "hopperFilter");
     private static NamespacedKey modeKey = new NamespacedKey(Main.getInstance(), "hopperMode");
+    private static NamespacedKey filterTypeKey = new NamespacedKey(Main.getInstance(), "filterType");
+    private static NamespacedKey filterMetaKey = new NamespacedKey(Main.getInstance(), "filterMeta");
+    private static NamespacedKey filterEnchantedKey = new NamespacedKey(Main.getInstance(), "filterEnchanted");
     private static NamespacedKey destroyItems = new NamespacedKey(Main.getInstance(), "destroyItems");
 
-    public static boolean shouldMoveItem(ItemStack itemStack, List<ItemStack> filter, boolean isWhitelist) {
-        boolean matches = filter.stream().anyMatch(f -> f.isSimilar(itemStack));
-        boolean shouldMove = isWhitelist == matches;
+    public static boolean shouldMoveItem(TileState hopperState, ItemStack itemStack, List<ItemStack> filter) {
+        boolean useType = isFilterType(hopperState);
+        boolean useMeta = isFilterMeta(hopperState);
+        boolean useEnchants = isFilterEnchanted(hopperState);
+        boolean matches = filter.stream().anyMatch(filterItem -> {
+            if (!useType && !useMeta && !useEnchants) return filterItem.isSimilar(itemStack);
+            if (useType && !matchType(filterItem, itemStack)) return false;
+            if (useMeta && !matchMeta(filterItem, itemStack)) return false;
+            if (useEnchants && !matchEnchanted(filterItem, itemStack)) return false;
+            return true;
+        });
+        boolean shouldMove = isWhitelist(hopperState) == matches;
         if(shouldMove) MetricsUtil.allowedItems.incrementAndGet();
         else MetricsUtil.deniedItems.incrementAndGet();
         return shouldMove;
+    }
+
+    private static boolean matchType(ItemStack filterItem, ItemStack itemStack) {
+        return filterItem.getType().equals(itemStack.getType());
+    }
+
+    private static boolean matchMeta(ItemStack filterItem, ItemStack itemStack) {
+        if(!filterItem.hasItemMeta()) return !itemStack.hasItemMeta();
+        if(!itemStack.hasItemMeta()) return false;
+        return filterItem.getItemMeta().equals(itemStack.getItemMeta());
+    }
+
+    private static boolean matchEnchanted(ItemStack filterItem, ItemStack itemStack) {
+        if(!filterItem.hasItemMeta()) return !itemStack.hasItemMeta();
+        if(!itemStack.hasItemMeta()) return false;
+        return filterItem.getItemMeta().hasEnchants() && itemStack.getItemMeta().hasEnchants();
     }
 
     public static List<ItemStack> getHopperFilter(TileState hopper) {
@@ -133,6 +161,39 @@ public class Helper {
     public static void toggleDestroy(TileState hopper) {
         PersistentDataContainer container = hopper.getPersistentDataContainer();
         container.set(destroyItems, PersistentDataType.BOOLEAN, !shouldDestroy(hopper));
+        hopper.update();
+    }
+
+    public static boolean isFilterType(TileState hopper) {
+        PersistentDataContainer container = hopper.getPersistentDataContainer();
+        return container.has(filterTypeKey) ? container.get(filterTypeKey, DataType.BOOLEAN) : true;
+    }
+
+    public static void toggleFilterType(TileState hopper) {
+        PersistentDataContainer container = hopper.getPersistentDataContainer();
+        container.set(filterTypeKey, DataType.BOOLEAN, !isFilterType(hopper));
+        hopper.update();
+    }
+
+    public static boolean isFilterMeta(TileState hopper) {
+        PersistentDataContainer container = hopper.getPersistentDataContainer();
+        return container.has(filterMetaKey) ? container.get(filterMetaKey, DataType.BOOLEAN) : false;
+    }
+
+    public static void toggleFilterName(TileState hopper) {
+        PersistentDataContainer container = hopper.getPersistentDataContainer();
+        container.set(filterMetaKey, DataType.BOOLEAN, !isFilterMeta(hopper));
+        hopper.update();
+    }
+
+    public static boolean isFilterEnchanted(TileState hopper) {
+        PersistentDataContainer container = hopper.getPersistentDataContainer();
+        return container.has(filterEnchantedKey) ? container.get(filterEnchantedKey, DataType.BOOLEAN) : false;
+    }
+
+    public static void toggleFilterEnchanted(TileState hopper) {
+        PersistentDataContainer container = hopper.getPersistentDataContainer();
+        container.set(filterEnchantedKey, DataType.BOOLEAN, !isFilterEnchanted(hopper));
         hopper.update();
     }
 }

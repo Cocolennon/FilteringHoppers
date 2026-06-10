@@ -19,13 +19,12 @@ public class BlockDropItemListener implements Listener {
         List<TileState> tileStates = Helper.getHopperStates(event.getBlock().getLocation());
         if(tileStates.isEmpty()) return;
         hopperLoop:for(TileState current : tileStates) {
-            boolean isWhitelist = Helper.isWhitelist(current);
             List<ItemStack> filter = Helper.getHopperFilter(current);
             Iterator<Item> dropIterator = items.iterator();
             while(dropIterator.hasNext()) {
                 Item currentInDrops = dropIterator.next();
                 ItemStack itemStack = currentInDrops.getItemStack();
-                if(filter == null || filter.isEmpty() || Helper.shouldMoveItem(itemStack, filter, isWhitelist)) {
+                if(filter == null || filter.isEmpty() || Helper.shouldMoveItem(current, itemStack, filter)) {
                     if(Helper.hopperIsFull(current.getLocation(), itemStack)) continue hopperLoop;
                     HashMap<Integer, ItemStack> remainder = Helper.addItemToHopper(itemStack, current.getLocation());
                     if(!remainder.isEmpty()) itemStack.setAmount(remainder.get(0).getAmount());
