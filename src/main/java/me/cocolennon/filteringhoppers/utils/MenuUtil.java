@@ -30,7 +30,7 @@ public class MenuUtil {
         boolean isFilterMeta = Helper.isFilterMeta(hopperState);
         boolean isFilterEnchanted = Helper.isFilterEnchanted(hopperState);
         invHolder.setItem(19, getItem(player, isFilterType ? Material.GREEN_STAINED_GLASS_PANE : Material.RED_STAINED_GLASS_PANE, isFilterType ? "filter-type" : "ignore-type", "toggleType"));
-        invHolder.setItem(20, getItem(player, isFilterMeta ? Material.GREEN_STAINED_GLASS_PANE : Material.RED_STAINED_GLASS_PANE, isFilterType ? "filter-meta" : "ignore-meta", "toggleMeta"));
+        invHolder.setItem(20, getItem(player, isFilterMeta ? Material.GREEN_STAINED_GLASS_PANE : Material.RED_STAINED_GLASS_PANE, isFilterMeta ? "filter-meta" : "ignore-meta", "toggleMeta"));
         invHolder.setItem(21, getItem(player, isFilterEnchanted ? Material.GREEN_STAINED_GLASS_PANE : Material.RED_STAINED_GLASS_PANE, isFilterEnchanted ? "filter-enchanted" : "ignore-enchanted", "toggleEnchanted"));
         invHolder.setItem(24, getItem(player, shouldDestroy ? Material.RED_STAINED_GLASS_PANE : Material.GREEN_STAINED_GLASS_PANE, shouldDestroy ? "destroy" : "keep", "toggleDestroy"));
         invHolder.setItem(25, getItem(player, isWhitelist ? Material.WHITE_STAINED_GLASS_PANE : Material.BLACK_STAINED_GLASS_PANE, isWhitelist ? "whitelist" : "blacklist", "toggleMode"));
