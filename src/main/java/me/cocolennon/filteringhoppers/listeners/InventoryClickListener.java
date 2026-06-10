@@ -58,13 +58,13 @@ public class InventoryClickListener implements Listener {
             case "toggleMeta" -> {
                 Helper.toggleFilterMeta(hopperState);
                 boolean isFilterMeta = Helper.isFilterMeta(hopperState);
-                invHolder.setItem(19, MenuUtil.getItem(player, isFilterMeta ? Material.GREEN_STAINED_GLASS_PANE : Material.RED_STAINED_GLASS_PANE, isFilterMeta ? "filter-type" : "ignore-type", "toggleMeta"));
+                invHolder.setItem(20, MenuUtil.getItem(player, isFilterMeta ? Material.GREEN_STAINED_GLASS_PANE : Material.RED_STAINED_GLASS_PANE, isFilterMeta ? "filter-meta" : "ignore-meta", "toggleMeta"));
                 player.playSound(player.getLocation(), Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 1.0f, 1.0f);
             }
             case "toggleEnchanted" -> {
                 Helper.toggleFilterEnchanted(hopperState);
                 boolean isFilterEnchanted = Helper.isFilterEnchanted(hopperState);
-                invHolder.setItem(19, MenuUtil.getItem(player, isFilterEnchanted ? Material.GREEN_STAINED_GLASS_PANE : Material.RED_STAINED_GLASS_PANE, isFilterEnchanted ? "filter-type" : "ignore-type", "toggleEnchanted"));
+                invHolder.setItem(21, MenuUtil.getItem(player, isFilterEnchanted ? Material.GREEN_STAINED_GLASS_PANE : Material.RED_STAINED_GLASS_PANE, isFilterEnchanted ? "filter-enchanted" : "ignore-enchanted", "toggleEnchanted"));
                 player.playSound(player.getLocation(), Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 1.0f, 1.0f);
             }
         }
