@@ -55,8 +55,8 @@ filter:
       name: "<#AA00AA>Mode actuel: <#03B500>Filtrer les objets enchantés"
       hint: "<#AA00AA>Cliquez pour <#B50000>Ignorer les objets enchantés"
     ignore-enchanted:
-      name: "<#AA00AA>Mode actuel: <#B50000>Ignorer les objets enchantés"
-      hint: "<#AA00AA>Cliquez pour <#03B500>Filtrer les objets enchantés"
+      name: "<#AA00AA>Mode actuel: <#03B500>Ignorer les objets enchantés"
+      hint: "<#AA00AA>Cliquez pour <#B50000>Filtrer les objets enchantés"
 tooltips:
   item-collection-mode:
     chunk: "<#FF55FF>Collecte les objets dans le même chunk que l'entonnoir"
