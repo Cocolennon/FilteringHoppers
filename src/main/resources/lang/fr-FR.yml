@@ -39,6 +39,24 @@ filter:
     keep:
       name: "<#AA00AA>Mode actuel: <#03B500>Garder les objets bloqués"
       hint: "<#AA00AA>Cliquez pour <#B50000>Détruire les objets bloqués"
+    filter-type:
+      name: "<#AA00AA>Mode actuel: <#03B500>Filtrer le type"
+      hint: "<#AA00AA>Cliquez pour <#B50000>Ignorer le type"
+    ignore-type:
+      name: "<#AA00AA>Mode actuel: <#B50000>Ignorer le type"
+      hint: "<#AA00AA>Cliquez pour <#03B500>Filtrer le type"
+    filter-meta:
+      name: "<#AA00AA>Mode actuel: <#03B500>Filtrer les métadonnées"
+      hint: "<#AA00AA>Cliquez pour <#B50000>Ignorer les métadonnées"
+    ignore-meta:
+      name: "<#AA00AA>Mode actuel: <#B50000>Ignorer les métadonnées"
+      hint: "<#AA00AA>Cliquez pour <#03B500>Filtrer les métadonnées"
+    filter-enchanted:
+      name: "<#AA00AA>Mode actuel: <#03B500>Filtrer les objets enchantés"
+      hint: "<#AA00AA>Cliquez pour <#B50000>Ignorer les objets enchantés"
+    ignore-enchanted:
+      name: "<#AA00AA>Mode actuel: <#B50000>Ignorer les objets enchantés"
+      hint: "<#AA00AA>Cliquez pour <#03B500>Filtrer les objets enchantés"
 tooltips:
   item-collection-mode:
     chunk: "<#FF55FF>Collecte les objets dans le même chunk que l'entonnoir"

@@ -39,6 +39,24 @@ filter:
     keep:
       name: "<#AA00AA>Current Mode: <#03B500>Keep Blocked Items"
       hint: "<#AA00AA>Click to change to <#B50000>Destroy Blocked Items"
+    filter-type:
+      name: "<#AA00AA>Current Mode: <#03B500>Filter Type"
+      hint: "<#AA00AA>Click to change to <#B50000>Ignore Type"
+    ignore-type:
+      name: "<#AA00AA>Current Mode: <#B50000>Ignore Type"
+      hint: "<#AA00AA>Click to change to <#03B500>Filter Type"
+    filter-meta:
+      name: "<#AA00AA>Current Mode: <#03B500>Filter Metadata"
+      hint: "<#AA00AA>Click to change to <#B50000>Ignore Metadata"
+    ignore-meta:
+      name: "<#AA00AA>Current Mode: <#B50000>Ignore Metadata"
+      hint: "<#AA00AA>Click to change to <#03B500>Filter Metadata"
+    filter-enchanted:
+      name: "<#AA00AA>Current Mode: <#03B500>Filter Enchanted"
+      hint: "<#AA00AA>Click to change to <#B50000>Ignore Enchanted"
+    ignore-enchanted:
+      name: "<#AA00AA>Current Mode: <#B50000>Ignore Enchanted"
+      hint: "<#AA00AA>Click to change to <#03B500>Filter Enchanted"
 tooltips:
   item-collection-mode:
     chunk: "<#FF55FF>Collects items in the same chunk as the hopper"
