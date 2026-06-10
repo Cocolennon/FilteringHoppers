@@ -23,6 +23,6 @@ public class InventoryOpenListener implements Listener {
         if(block.getType() != Material.HOPPER) return;
         event.setCancelled(true);
         TileState hopperState = (TileState) block.getState();
-        MenuUtil.createFilterMenu(Helper.getHopperFilter(hopperState), player, block, Helper.isWhitelist(hopperState), Helper.shouldDestroy(hopperState));
+        MenuUtil.createFilterMenu(hopperState, Helper.getHopperFilter(hopperState), player, block);
     }
 }
