@@ -17,17 +17,14 @@ import java.util.List;
 public class InventoryPickupItemListener implements Listener {
     @EventHandler
     public void inventoryPickupItem(InventoryPickupItemEvent event) {
-        if(itemPickup(event.getInventory(), event.getItem().getItemStack())) event.setCancelled(true);
-    }
-
-    private boolean itemPickup(Inventory dest, ItemStack item) {
-        if(dest.getType() != InventoryType.HOPPER) return false;
+        Inventory dest = event.getInventory();
+        if(dest.getType() != InventoryType.HOPPER) return;
         Block block = dest.getLocation().getBlock();
         BlockState blockState = block.getState();
-        if(block.getType() != Material.HOPPER || !(blockState instanceof TileState tileState)) return false;
+        if(block.getType() != Material.HOPPER || !(blockState instanceof TileState tileState)) return;
         List<ItemStack> filter = Helper.getHopperFilter(tileState);
-        if(filter == null || filter.isEmpty()) return false;
-        if(Helper.shouldMoveItem(item, filter, Helper.isWhitelist(tileState))) return true;
-        return false;
+        if(filter == null || filter.isEmpty()) return;
+        ItemStack itemStack = event.getItem().getItemStack();
+        if(Helper.shouldMoveItem(itemStack, filter, Helper.isWhitelist(tileState))) event.setCancelled(true);
     }
 }

@@ -21,36 +21,31 @@ import java.util.List;
 public class InventoryMoveItemListener implements Listener {
     @EventHandler(priority =  EventPriority.HIGH)
     public void inventoryMoveItem(InventoryMoveItemEvent event) {
-        if(itemMove(event.getSource(), event.getDestination(), event.getItem())) event.setCancelled(true);
-    }
-
-    private boolean itemMove(Inventory source, Inventory dest, ItemStack original) {
-        if(dest.getType() != InventoryType.HOPPER) return false;
+        Inventory dest = event.getDestination();
+        if(dest.getType() != InventoryType.HOPPER) return;
         Block block = dest.getLocation().getBlock();
         BlockState blockState = block.getState();
-        if(block.getType() != Material.HOPPER || !(blockState instanceof TileState tileState)) return false;
+        if(block.getType() != Material.HOPPER || !(blockState instanceof TileState tileState)) return;
         List<ItemStack> filter = Helper.getHopperFilter(tileState);
-        if(filter == null || filter.isEmpty()) return false;
-        boolean isWhitelist = Helper.isWhitelist(tileState);
+        if(filter == null || filter.isEmpty()) return;
         Config config = Main.getInstance().config();
+        Inventory source = event.getSource();
         for(int slot = 0; slot < source.getSize(); slot++) {
             ItemStack itemStack = source.getItem(slot);
             if(itemStack == null) continue;
-            if(!Helper.shouldMoveItem(itemStack, filter, isWhitelist)) {
+            if(!Helper.shouldMoveItem(itemStack, filter, Helper.isWhitelist(tileState))) {
                 if(Helper.shouldDestroy(tileState)) itemStack.setAmount(0);
                 continue;
             }
-            if(getFirstOccupiedSlot(source) == slot) return false;
+            if(getFirstOccupiedSlot(source) == slot) return;
             ItemStack cloned = itemStack.clone();
             cloned.setAmount(config.hopperRate);
             HashMap<Integer, ItemStack> remainder = dest.addItem(cloned);
-            int amountToRemove = config.hopperRate;
-            if(!remainder.isEmpty()) amountToRemove -= remainder.values().iterator().next().getAmount();
-            itemStack.setAmount(itemStack.getAmount() - amountToRemove);
+            if(!remainder.isEmpty()) itemStack.setAmount(itemStack.getAmount() - (config.hopperRate - remainder.values().iterator().next().getAmount()));
             source.setItem(slot, itemStack);
             break;
         }
-        return true;
+        event.setCancelled(true);
     }
 
     private static int getFirstOccupiedSlot(Inventory inventory) {
