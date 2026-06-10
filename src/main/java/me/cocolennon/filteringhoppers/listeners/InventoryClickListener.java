@@ -49,6 +49,24 @@ public class InventoryClickListener implements Listener {
                 inv.setItem(24, MenuUtil.getItem(player, shouldDestroy ? Material.RED_STAINED_GLASS_PANE : Material.GREEN_STAINED_GLASS_PANE, shouldDestroy ? "destroy" : "keep", "toggleDestroy"));
                 player.playSound(player.getLocation(), Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 1.0f, 1.0f);
             }
+            case "toggleType" -> {
+                Helper.toggleFilterType(hopperState);
+                boolean isFilterType = Helper.isFilterType(hopperState);
+                invHolder.setItem(19, MenuUtil.getItem(player, isFilterType ? Material.GREEN_STAINED_GLASS_PANE : Material.RED_STAINED_GLASS_PANE, isFilterType ? "filter-type" : "ignore-type", "toggleType"));
+                player.playSound(player.getLocation(), Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 1.0f, 1.0f);
+            }
+            case "toggleMeta" -> {
+                Helper.toggleFilterMeta(hopperState);
+                boolean isFilterMeta = Helper.isFilterMeta(hopperState);
+                invHolder.setItem(19, MenuUtil.getItem(player, isFilterMeta ? Material.GREEN_STAINED_GLASS_PANE : Material.RED_STAINED_GLASS_PANE, isFilterMeta ? "filter-type" : "ignore-type", "toggleMeta"));
+                player.playSound(player.getLocation(), Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 1.0f, 1.0f);
+            }
+            case "toggleEnchanted" -> {
+                Helper.toggleFilterEnchanted(hopperState);
+                boolean isFilterEnchanted = Helper.isFilterEnchanted(hopperState);
+                invHolder.setItem(19, MenuUtil.getItem(player, isFilterEnchanted ? Material.GREEN_STAINED_GLASS_PANE : Material.RED_STAINED_GLASS_PANE, isFilterEnchanted ? "filter-type" : "ignore-type", "toggleEnchanted"));
+                player.playSound(player.getLocation(), Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 1.0f, 1.0f);
+            }
         }
     }
 

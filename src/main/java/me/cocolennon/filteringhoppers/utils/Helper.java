@@ -180,7 +180,7 @@ public class Helper {
         return container.has(filterMetaKey) ? container.get(filterMetaKey, DataType.BOOLEAN) : false;
     }
 
-    public static void toggleFilterName(TileState hopper) {
+    public static void toggleFilterMeta(TileState hopper) {
         PersistentDataContainer container = hopper.getPersistentDataContainer();
         container.set(filterMetaKey, DataType.BOOLEAN, !isFilterMeta(hopper));
         hopper.update();
