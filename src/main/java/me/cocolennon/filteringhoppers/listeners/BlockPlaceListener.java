@@ -35,7 +35,7 @@ public class BlockPlaceListener implements Listener {
         if(!hasTooltipShown(player)) player.sendMessage(Localization.get(player, "tooltips.hopper-placed", true, true));
     }
 
-    public static boolean hasTooltipShown(Player player) {
+    private static boolean hasTooltipShown(Player player) {
         PersistentDataContainer container = player.getPersistentDataContainer();
         boolean shown = container.has(tooltipShown, PersistentDataType.BOOLEAN);
         if(!shown) container.set(tooltipShown, PersistentDataType.BOOLEAN, true);
