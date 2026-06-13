@@ -108,7 +108,8 @@ public class Helper {
         List<TileState> tileStates = new ArrayList<>();
         for(BlockState current : chunk.getTileEntities()) {
             if(!(current instanceof TileState tileState)) continue;
-            if(current.getBlock().getType() != Material.HOPPER) continue;
+            if(!(current instanceof Hopper hopper)) continue;
+            if(hopper.getBlock().getType() != Material.HOPPER) continue;
             tileStates.add(tileState);
         }
         return tileStates;
@@ -132,7 +133,8 @@ public class Helper {
                 Chunk chunk = world.getChunkAt(cx, cz);
                 for(BlockState current : chunk.getTileEntities()) {
                     if(!(current instanceof TileState tileState)) continue;
-                    if(current.getBlock().getType() != Material.HOPPER) continue;
+                    if(!(current instanceof Hopper hopper)) continue;
+                    if(hopper.getBlock().getType() != Material.HOPPER) continue;
                     Location currentLoc = current.getLocation().clone();
                     if(config.itemCollection.ignoreY) currentLoc.setY(0);
                     if(currentLoc.distanceSquared(centerLoc) <= radiusSquared) tileStates.add(tileState);
