@@ -3,6 +3,8 @@ package me.cocolennon.filteringhoppers.listeners;
 import me.cocolennon.filteringhoppers.Config;
 import me.cocolennon.filteringhoppers.Main;
 import me.cocolennon.filteringhoppers.utils.Helper;
+import net.kyori.adventure.text.Component;
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockState;
@@ -38,10 +40,13 @@ public class InventoryMoveItemListener implements Listener {
                 continue;
             }
             if(getFirstOccupiedSlot(source) == slot) return;
+            Bukkit.broadcast(Component.text(itemStack.getAmount()));
             ItemStack cloned = itemStack.clone();
             cloned.setAmount(config.hopperRate);
             HashMap<Integer, ItemStack> remainder = dest.addItem(cloned);
             if(!remainder.isEmpty()) itemStack.setAmount(itemStack.getAmount() - (config.hopperRate - remainder.values().iterator().next().getAmount()));
+            else itemStack.setAmount(itemStack.getAmount() - config.hopperRate);
+            Bukkit.broadcast(Component.text(itemStack.getAmount()));
             source.setItem(slot, itemStack);
             break;
         }
