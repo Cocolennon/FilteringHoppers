@@ -15,7 +15,6 @@ import org.bukkit.persistence.PersistentDataType;
 import java.util.*;
 
 public class Helper {
-    private static Config config = Main.getInstance().config();
     private static NamespacedKey filterKey = new NamespacedKey(Main.getInstance(), "hopperFilter");
     private static NamespacedKey modeKey = new NamespacedKey(Main.getInstance(), "hopperMode");
     private static NamespacedKey filterTypeKey = new NamespacedKey(Main.getInstance(), "filterType");
@@ -82,7 +81,7 @@ public class Helper {
             hopper.update();
             return remainder;
         } catch (ClassCastException | ConcurrentModificationException ignored) {}
-        return null;
+        return new HashMap<>(); // prefer empty over null because might cause exception
     }
 
     public static boolean hopperIsFull(Location hopperLocation, ItemStack itemStack) {
@@ -97,10 +96,11 @@ public class Helper {
     }
 
     public static List<TileState> getHopperStates(Location location) {
+        Config config = Main.getInstance().config(); // might not sync even when /fh reload
         return switch (config.itemCollection.mode.toLowerCase()) {
             case "chunk" -> getHopperStates(location.getChunk());
             case "radius" -> getHopperStates(location, config.itemCollection.radius);
-            default -> null;
+            default -> Collections.emptyList(); // want a safe and empty list so callers don't freak out over a null
         };
     }
 
@@ -136,6 +136,7 @@ public class Helper {
                     if(!(current instanceof Hopper hopper)) continue;
                     if(hopper.getBlock().getType() != Material.HOPPER) continue;
                     Location currentLoc = current.getLocation().clone();
+                    if(!Bukkit.getServer().isOwnedByCurrentRegion(currentLoc)) continue; // simple fix for now, regional schedular would be ideal
                     if(config.itemCollection.ignoreY) currentLoc.setY(0);
                     if(currentLoc.distanceSquared(centerLoc) <= radiusSquared) tileStates.add(tileState);
                 }

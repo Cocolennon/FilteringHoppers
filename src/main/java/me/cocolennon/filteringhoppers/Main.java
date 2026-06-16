@@ -29,17 +29,19 @@ public class Main extends JavaPlugin {
     }
 
     private void checkVersion() {
-        new UpdateChecker(this, "filtering-hoppers").getVersion(cVersion -> {
-            version = this.getPluginMeta().getVersion();
-            if (!getVersion().equals(cVersion)) {
-                getLogger().info("You are using an older version of Filtering Hoppers, please update to version " + cVersion);
-                usingOldVersion = true;
+        getServer().getScheduler().runTaskAsynchronously(this, () -> { // we don't want to hold the server up for update check
+            new UpdateChecker(this, "filtering-hoppers").getVersion(cVersion -> {
+                version = this.getPluginMeta().getVersion();
+                if (!getVersion().equals(cVersion)) {
+                    getLogger().info("You are using an older version of Filtering Hoppers, please update to version " + cVersion);
+                    usingOldVersion = true;
+                }
+            });
+            if(config.autoUpdaterEnabled) {
+                Updater updater = new Updater(this, "filtering-hoppers", getFile(), Updater.UpdateType.CHECK_DOWNLOAD, true);
+                if(updater.getResult().equals(Updater.Result.SUCCESS)) getLogger().info("Update will be applied after next restart!");
             }
         });
-        if(config.autoUpdaterEnabled) {
-            Updater updater = new Updater(this, "filtering-hoppers", getFile(), Updater.UpdateType.CHECK_DOWNLOAD, true);
-            if(updater.getResult().equals(Updater.Result.SUCCESS)) getLogger().info("Update will be applied after next restart!");
-        }
     }
 
     public void loadConfig(boolean reload) {
