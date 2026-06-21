@@ -81,7 +81,7 @@ public class Helper {
             hopper.update();
             return remainder;
         } catch (ClassCastException | ConcurrentModificationException ignored) {}
-        return new HashMap<>(); // prefer empty over null because might cause exception
+        return new HashMap<>();
     }
 
     public static boolean hopperIsFull(Location hopperLocation, ItemStack itemStack) {
@@ -96,11 +96,11 @@ public class Helper {
     }
 
     public static List<TileState> getHopperStates(Location location) {
-        Config config = Main.getInstance().config(); // might not sync even when /fh reload
+        Config config = Main.getInstance().config();
         return switch (config.itemCollection.mode.toLowerCase()) {
             case "chunk" -> getHopperStates(location.getChunk());
             case "radius" -> getHopperStates(location, config.itemCollection.radius);
-            default -> Collections.emptyList(); // want a safe and empty list so callers don't freak out over a null
+            default -> Collections.emptyList();
         };
     }
 
