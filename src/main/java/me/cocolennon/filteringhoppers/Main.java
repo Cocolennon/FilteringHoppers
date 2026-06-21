@@ -5,7 +5,6 @@ import me.cocolennon.filteringhoppers.commands.FilteringHoppersCommand;
 import me.cocolennon.filteringhoppers.commands.ItemCollectionCommand;
 import me.cocolennon.filteringhoppers.listeners.*;
 import me.cocolennon.filteringhoppers.utils.MetricsUtil;
-import me.cocolennon.filteringhoppers.utils.UpdateChecker;
 import me.cocolennon.filteringhoppers.utils.Updater;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -29,17 +28,21 @@ public class Main extends JavaPlugin {
     }
 
     private void checkVersion() {
-        getServer().getScheduler().runTaskAsynchronously(this, () -> { // we don't want to hold the server up for update check
-            new UpdateChecker(this, "filtering-hoppers").getVersion(cVersion -> {
-                version = this.getPluginMeta().getVersion();
-                if (!getVersion().equals(cVersion)) {
-                    getLogger().info("You are using an older version of Filtering Hoppers, please update to version " + cVersion);
+        getServer().getScheduler().runTaskAsynchronously(this, () -> {
+            Updater updater = new Updater(this, "filtering-hoppers", getFile(), config.autoUpdaterEnabled ? Updater.UpdateType.CHECK_DOWNLOAD : Updater.UpdateType.VERSION_CHECK, false);
+            switch(updater.getResult()) {
+                case SUCCESS -> {
                     usingOldVersion = true;
+                    getLogger().info("Update will be applied after next restart!");
                 }
-            });
-            if(config.autoUpdaterEnabled) {
-                Updater updater = new Updater(this, "filtering-hoppers", getFile(), Updater.UpdateType.CHECK_DOWNLOAD, true);
-                if(updater.getResult().equals(Updater.Result.SUCCESS)) getLogger().info("Update will be applied after next restart!");
+                case UPDATE_FOUND -> {
+                    usingOldVersion = true;
+                    getLogger().info("You are using an older version of Filtering Hoppers, please update to version " + updater.getVersion());
+                }
+                case FAILED ->  {
+                    usingOldVersion = true;
+                    getLogger().warning("An update was found, but the updater failed to download it automatically. You might need to update manually!");
+                }
             }
         });
     }
