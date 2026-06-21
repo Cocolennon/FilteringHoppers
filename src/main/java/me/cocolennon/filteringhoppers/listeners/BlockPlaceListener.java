@@ -27,7 +27,7 @@ public class BlockPlaceListener implements Listener {
         List<TileState> hopperStates = Helper.getHopperStates(chunk);
         if(hopperStates.isEmpty()) return;
         int maxHopper = Main.getInstance().config().maxHoppersPerChunk;
-        if(hopperStates.size() >= maxHopper) { // correct max amount, was 1 over
+        if(hopperStates.size() > maxHopper) {
             player.sendMessage(Localization.get(player, "error.hoppers", true, maxHopper));
             event.setCancelled(true);
             return;
