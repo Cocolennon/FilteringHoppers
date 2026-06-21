@@ -11,7 +11,6 @@ import org.bukkit.plugin.java.JavaPlugin;
 import java.util.List;
 
 public class Main extends JavaPlugin {
-    private String version;
     private boolean usingOldVersion = false;
     private static Main instance;
     private Config config;
@@ -77,7 +76,6 @@ public class Main extends JavaPlugin {
     }
 
     public Config config() { return config; }
-    public String getVersion() { return instance.version; }
     public boolean getUsingOldVersion() { return instance.usingOldVersion; }
     public static Main getInstance() { return instance; }
 }

@@ -39,7 +39,7 @@ public class FilteringHoppersCommand {
         MiniMessage miniMessage = MiniMessage.miniMessage();
         List<Component> info = new LinkedList<>();
         info.add(miniMessage.deserialize("<#FF55FF><bold>========================="));
-        info.add(miniMessage.deserialize("<#AA00AA><bold>Filtering Hoppers <#AA00AA>" + Main.getInstance().getVersion()));
+        info.add(miniMessage.deserialize("<#AA00AA><bold>Filtering Hoppers <#AA00AA>" + Main.getInstance().getPluginMeta().getVersion()));
         if(Main.getInstance().getUsingOldVersion()) info.add(miniMessage.deserialize("<#FF55FF>An update is available!"));
         else info.add(miniMessage.deserialize("<#AA00AA>You're using the latest version"));
         info.add(miniMessage.deserialize("<#AA00AA>Made with <#FF5555>❤ <#AA00AA>by Cocolennon"));
