@@ -26,7 +26,7 @@ repositories {
 }
 
 dependencies {
-    compileOnly 'io.papermc.paper:paper-api:26.1.2.build.65-stable'
+    compileOnly 'io.papermc.paper:paper-api:26.1.2.build.72-stable'
     implementation 'org.bstats:bstats-bukkit:3.2.1'
     implementation 'com.jeff-media:MorePersistentDataTypes:2.4.0'
 }
