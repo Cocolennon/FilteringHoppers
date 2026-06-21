@@ -1,3 +1,5 @@
+import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
+
 plugins {
     id 'java'
     id "com.gradleup.shadow" version "9.4.1"
@@ -36,9 +38,9 @@ tasks.withType(JavaCompile).configureEach {
     options.release.set(25)
 }
 
-shadowJar {
+tasks.named('shadowJar', ShadowJar) {
+    relocate 'com.jeff_media.morepersistentdatatypes', 'me.cocolennon.morepersistentdatatypes'
     relocate 'org.bstats', 'me.cocolennon.bstats'
-    relocate 'com.jeff-media.morepersistentdatatypes', 'me.cocolennon.morepersistentdatatypes'
     archiveFileName = "FilteringHoppers-${version}.jar"
     destinationDirectory = file('./builds')
 }
