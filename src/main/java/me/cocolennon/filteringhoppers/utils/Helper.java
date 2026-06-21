@@ -15,12 +15,12 @@ import org.bukkit.persistence.PersistentDataType;
 import java.util.*;
 
 public class Helper {
-    private static NamespacedKey filterKey = new NamespacedKey(Main.getInstance(), "hopperFilter");
-    private static NamespacedKey modeKey = new NamespacedKey(Main.getInstance(), "hopperMode");
-    private static NamespacedKey filterTypeKey = new NamespacedKey(Main.getInstance(), "filterType");
-    private static NamespacedKey filterMetaKey = new NamespacedKey(Main.getInstance(), "filterMeta");
-    private static NamespacedKey filterEnchantedKey = new NamespacedKey(Main.getInstance(), "filterEnchanted");
-    private static NamespacedKey destroyItems = new NamespacedKey(Main.getInstance(), "destroyItems");
+    private static final NamespacedKey filterKey = new NamespacedKey(Main.getInstance(), "hopperFilter");
+    private static final NamespacedKey modeKey = new NamespacedKey(Main.getInstance(), "hopperMode");
+    private static final NamespacedKey filterTypeKey = new NamespacedKey(Main.getInstance(), "filterType");
+    private static final NamespacedKey filterMetaKey = new NamespacedKey(Main.getInstance(), "filterMeta");
+    private static final NamespacedKey filterEnchantedKey = new NamespacedKey(Main.getInstance(), "filterEnchanted");
+    private static final NamespacedKey destroyItems = new NamespacedKey(Main.getInstance(), "destroyItems");
 
     public static boolean shouldMoveItem(TileState hopperState, ItemStack itemStack, List<ItemStack> filter) {
         boolean useType = isFilterType(hopperState);
@@ -30,8 +30,7 @@ public class Helper {
             if (!useType && !useMeta && !useEnchants) return filterItem.isSimilar(itemStack);
             if (useType && !matchType(filterItem, itemStack)) return false;
             if (useMeta && !matchMeta(filterItem, itemStack)) return false;
-            if (useEnchants && !matchEnchanted(filterItem, itemStack)) return false;
-            return true;
+            return !useEnchants || matchEnchanted(filterItem, itemStack);
         });
         boolean shouldMove = isWhitelist(hopperState) == matches;
         if(shouldMove) MetricsUtil.allowedItems.incrementAndGet();
@@ -58,7 +57,7 @@ public class Helper {
     public static List<ItemStack> getHopperFilter(TileState hopper) {
         PersistentDataContainer container = hopper.getPersistentDataContainer();
         ItemStack[] rawFilter = container.get(filterKey, DataType.ITEM_STACK_ARRAY);
-        return rawFilter == null ? null : Arrays.asList(rawFilter);
+        return rawFilter == null ? Collections.emptyList() : Arrays.asList(rawFilter);
     }
 
     public static void saveFilter(TileState hopperState, Inventory filterInventory) {
