@@ -26,8 +26,9 @@ public class ItemDropListener implements Listener {
     }
 
     private void itemDrop(Item item) {
-        if(!Main.getInstance().config().itemCollection.enabled) return;
-        Bukkit.getRegionScheduler().execute(Main.getInstance(), item.getLocation(), () -> {
+        Main main = Main.getInstance();
+        if(!main.config().itemCollection.enabled) return;
+        Bukkit.getRegionScheduler().execute(main, item.getLocation(), () -> {
             List<TileState> tileStates = Helper.getHopperStates(item.getLocation());
             if(tileStates.isEmpty()) return;
             ItemStack itemStack = item.getItemStack();
@@ -35,8 +36,9 @@ public class ItemDropListener implements Listener {
                 List<ItemStack> filter = Helper.getHopperFilter(tileState);
                 if(filter.isEmpty() || Helper.shouldMoveItem(tileState, itemStack, filter)) {
                     if(Helper.hopperIsFull(tileState.getLocation(), itemStack)) continue;
+                    int moveAmount = Math.min(itemStack.getAmount(), main.config().hopperRate);
                     HashMap<Integer, ItemStack> remainder = Helper.addItemToHopper(itemStack, tileState.getLocation());
-                    if(!remainder.isEmpty()) item.getItemStack().setAmount(remainder.values().iterator().next().getAmount());
+                    if(!remainder.isEmpty()) itemStack.setAmount(itemStack.getAmount() - (moveAmount - remainder.values().iterator().next().getAmount()));
                     else item.remove();
                     break;
                 }else if(Helper.shouldDestroy(tileState)) itemStack.setAmount(0);
