@@ -27,7 +27,7 @@ public class InventoryMoveItemListener implements Listener {
         BlockState blockState = block.getState();
         if(block.getType() != Material.HOPPER || !(blockState instanceof TileState tileState)) return;
         List<ItemStack> filter = Helper.getHopperFilter(tileState);
-        if(filter == null || filter.isEmpty()) return;
+        if(filter.isEmpty()) return;
         Config config = Main.getInstance().config();
         Inventory source = event.getSource();
         for(int slot = 0; slot < source.getSize(); slot++) {

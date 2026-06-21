@@ -2,6 +2,7 @@ package me.cocolennon.filteringhoppers.listeners;
 
 import me.cocolennon.filteringhoppers.Main;
 import me.cocolennon.filteringhoppers.utils.Helper;
+import org.bukkit.Bukkit;
 import org.bukkit.block.TileState;
 import org.bukkit.entity.Item;
 import org.bukkit.event.EventHandler;
@@ -26,19 +27,20 @@ public class ItemDropListener implements Listener {
 
     private void itemDrop(Item item) {
         if(!Main.getInstance().config().itemCollection.enabled) return;
-        List<TileState> tileStates = Helper.getHopperStates(item.getLocation());
-        if(tileStates.isEmpty()) return;
-        ItemStack itemStack = item.getItemStack();
-        for(TileState current : tileStates) {
-            boolean isWhitelist = Helper.isWhitelist(current);
-            List<ItemStack> filter = Helper.getHopperFilter(current);
-            if(filter == null || filter.isEmpty() || Helper.shouldMoveItem(current, itemStack, filter)) {
-                if(Helper.hopperIsFull(current.getLocation(), itemStack)) continue;
-                HashMap<Integer, ItemStack> remainder = Helper.addItemToHopper(itemStack, current.getLocation());
-                if(!remainder.isEmpty()) item.getItemStack().setAmount(remainder.get(0).getAmount());
-                else item.remove();
-                break;
-            }else if(Helper.shouldDestroy(current)) itemStack.setAmount(0);
-        }
+        Bukkit.getRegionScheduler().execute(Main.getInstance(), item.getLocation(), () -> {
+            List<TileState> tileStates = Helper.getHopperStates(item.getLocation());
+            if(tileStates.isEmpty()) return;
+            ItemStack itemStack = item.getItemStack();
+            for(TileState tileState : tileStates) {
+                List<ItemStack> filter = Helper.getHopperFilter(tileState);
+                if(filter.isEmpty() || Helper.shouldMoveItem(tileState, itemStack, filter)) {
+                    if(Helper.hopperIsFull(tileState.getLocation(), itemStack)) continue;
+                    HashMap<Integer, ItemStack> remainder = Helper.addItemToHopper(itemStack, tileState.getLocation());
+                    if(!remainder.isEmpty()) item.getItemStack().setAmount(remainder.get(0).getAmount());
+                    else item.remove();
+                    break;
+                }else if(Helper.shouldDestroy(tileState)) itemStack.setAmount(0);
+            }
+        });
     }
 }

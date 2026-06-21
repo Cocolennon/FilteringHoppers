@@ -23,7 +23,7 @@ public class InventoryPickupItemListener implements Listener {
         BlockState blockState = block.getState();
         if(block.getType() != Material.HOPPER || !(blockState instanceof TileState tileState)) return;
         List<ItemStack> filter = Helper.getHopperFilter(tileState);
-        if(filter == null || filter.isEmpty()) return;
+        if(filter.isEmpty()) return;
         ItemStack itemStack = event.getItem().getItemStack();
         if(Helper.shouldMoveItem(tileState, itemStack, filter)) return;
         if(Helper.shouldDestroy(tileState)) event.getItem().remove();

@@ -2,6 +2,7 @@ package me.cocolennon.filteringhoppers.listeners;
 
 import me.cocolennon.filteringhoppers.Main;
 import me.cocolennon.filteringhoppers.utils.Helper;
+import org.bukkit.Bukkit;
 import org.bukkit.block.TileState;
 import org.bukkit.entity.Item;
 import org.bukkit.event.EventHandler;
@@ -15,22 +16,22 @@ public class BlockDropItemListener implements Listener {
     @EventHandler
     public void blockDropItem(BlockDropItemEvent event) {
         if(!Main.getInstance().config().itemCollection.enabled) return;
-        List<Item> items = event.getItems();
-        List<TileState> tileStates = Helper.getHopperStates(event.getBlock().getLocation());
-        if(tileStates.isEmpty()) return;
-        hopperLoop:for(TileState current : tileStates) {
-            List<ItemStack> filter = Helper.getHopperFilter(current);
-            Iterator<Item> dropIterator = items.iterator();
-            while(dropIterator.hasNext()) {
-                Item currentInDrops = dropIterator.next();
-                ItemStack itemStack = currentInDrops.getItemStack();
-                if(filter == null || filter.isEmpty() || Helper.shouldMoveItem(current, itemStack, filter)) {
-                    if(Helper.hopperIsFull(current.getLocation(), itemStack)) continue hopperLoop;
-                    HashMap<Integer, ItemStack> remainder = Helper.addItemToHopper(itemStack, current.getLocation());
-                    if(!remainder.isEmpty()) itemStack.setAmount(remainder.get(0).getAmount());
-                    else dropIterator.remove();
-                }else if(Helper.shouldDestroy(current)) itemStack.setAmount(0);
+        List<Item> items = new ArrayList<>(event.getItems());
+        Bukkit.getRegionScheduler().execute(Main.getInstance(), event.getBlock().getLocation(), () -> {
+            List<TileState> tileStates = Helper.getHopperStates(event.getBlock().getLocation());
+            if(tileStates.isEmpty()) return;
+            hopperLoop:for(TileState tileState : tileStates) {
+                List<ItemStack> filter = Helper.getHopperFilter(tileState);
+                for(Item drop : items) {
+                    ItemStack itemStack = drop.getItemStack();
+                    if(filter.isEmpty() || Helper.shouldMoveItem(tileState, itemStack, filter)) {
+                        if(Helper.hopperIsFull(tileState.getLocation(), itemStack)) continue hopperLoop;
+                        HashMap<Integer, ItemStack> remainder = Helper.addItemToHopper(itemStack, tileState.getLocation());
+                        if(!remainder.isEmpty()) itemStack.setAmount(remainder.get(0).getAmount());
+                        else drop.remove();
+                    }else if (Helper.shouldDestroy(tileState)) drop.remove();
+                }
             }
-        }
+        });
     }
 }
