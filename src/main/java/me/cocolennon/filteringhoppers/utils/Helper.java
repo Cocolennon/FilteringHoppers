@@ -136,7 +136,6 @@ public class Helper {
                     if(!(current instanceof Hopper hopper)) continue;
                     if(hopper.getBlock().getType() != Material.HOPPER) continue;
                     Location currentLoc = current.getLocation().clone();
-                    if(!Bukkit.getServer().isOwnedByCurrentRegion(currentLoc)) continue; // simple fix for now, regional schedular would be ideal
                     if(config.itemCollection.ignoreY) currentLoc.setY(0);
                     if(currentLoc.distanceSquared(centerLoc) <= radiusSquared) tileStates.add(tileState);
                 }
