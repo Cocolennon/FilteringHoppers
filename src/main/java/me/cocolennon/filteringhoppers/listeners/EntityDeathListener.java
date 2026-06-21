@@ -14,10 +14,9 @@ import java.util.*;
 public class EntityDeathListener implements Listener {
     @EventHandler
     public void entityDeath(EntityDeathEvent event) {
-        Main main = Main.getInstance();
-        if(!main.config().itemCollection.enabled) return;
+        if(!Main.getInstance().config().itemCollection.enabled) return;
         List<ItemStack> items = new ArrayList<>(event.getDrops());
-        Bukkit.getRegionScheduler().execute(main, event.getEntity().getLocation(), () -> {
+        Bukkit.getRegionScheduler().execute(Main.getInstance(), event.getEntity().getLocation(), () -> {
             List<TileState> tileStates = Helper.getHopperStates(event.getEntity().getLocation());
             if(tileStates.isEmpty()) return;
             hopperLoop:for(TileState tileState : tileStates) {
@@ -25,9 +24,8 @@ public class EntityDeathListener implements Listener {
                 for(ItemStack itemStack : items) {
                     if(filter.isEmpty() || Helper.shouldMoveItem(tileState, itemStack, filter)) {
                         if(Helper.hopperIsFull(tileState.getLocation(), itemStack)) continue hopperLoop;
-                        int moveAmount = Math.min(itemStack.getAmount(), main.config().hopperRate);
                         HashMap<Integer, ItemStack> remainder = Helper.addItemToHopper(itemStack, tileState.getLocation());
-                        if(!remainder.isEmpty()) itemStack.setAmount(itemStack.getAmount() - (moveAmount - remainder.values().iterator().next().getAmount()));
+                        if(!remainder.isEmpty()) itemStack.setAmount(remainder.values().iterator().next().getAmount());
                         else itemStack.setAmount(0);
                     }else if(Helper.shouldDestroy(tileState)) itemStack.setAmount(0);
                 }
