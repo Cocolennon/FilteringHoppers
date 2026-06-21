@@ -15,7 +15,6 @@ import org.bukkit.persistence.PersistentDataType;
 import java.util.*;
 
 public class Helper {
-    private static Config config = Main.getInstance().config();
     private static NamespacedKey filterKey = new NamespacedKey(Main.getInstance(), "hopperFilter");
     private static NamespacedKey modeKey = new NamespacedKey(Main.getInstance(), "hopperMode");
     private static NamespacedKey filterTypeKey = new NamespacedKey(Main.getInstance(), "filterType");
@@ -82,7 +81,7 @@ public class Helper {
             hopper.update();
             return remainder;
         } catch (ClassCastException | ConcurrentModificationException ignored) {}
-        return null;
+        return new HashMap<>();
     }
 
     public static boolean hopperIsFull(Location hopperLocation, ItemStack itemStack) {
@@ -97,10 +96,11 @@ public class Helper {
     }
 
     public static List<TileState> getHopperStates(Location location) {
+        Config config = Main.getInstance().config();
         return switch (config.itemCollection.mode.toLowerCase()) {
             case "chunk" -> getHopperStates(location.getChunk());
             case "radius" -> getHopperStates(location, config.itemCollection.radius);
-            default -> null;
+            default -> Collections.emptyList();
         };
     }
 
