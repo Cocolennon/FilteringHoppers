@@ -16,26 +16,29 @@ public class BlockDropItemListener implements Listener {
     @EventHandler
     public void blockDropItem(BlockDropItemEvent event) {
         if(!Main.getInstance().config().itemCollection.enabled) return;
-        List<Item> items = new ArrayList<>(event.getItems());
         Bukkit.getRegionScheduler().execute(Main.getInstance(), event.getBlock().getLocation(), () -> {
+            List<Item> items = new ArrayList<>(event.getItems());
+            Iterator<Item> iterator = items.iterator();
             List<TileState> tileStates = Helper.getHopperStates(event.getBlock().getLocation());
             if(tileStates.isEmpty()) return;
-            hopperLoop:for(TileState tileState : tileStates) {
-                List<ItemStack> filter = Helper.getHopperFilter(tileState);
-                for(Item drop : items) {
-                    ItemStack itemStack = drop.getItemStack();
+            itemLoop:while(iterator.hasNext()) {
+                Item drop = iterator.next();
+                ItemStack itemStack = drop.getItemStack();
+                for(TileState tileState : tileStates) {
+                    List<ItemStack> filter = Helper.getHopperFilter(tileState);
                     if(filter.isEmpty() || Helper.shouldMoveItem(tileState, itemStack, filter)) {
-                        if(Helper.hopperIsFull(tileState.getLocation(), itemStack)) continue hopperLoop;
+                        if(Helper.hopperIsFull(tileState.getLocation(), itemStack)) continue;
                         HashMap<Integer, ItemStack> remainder = Helper.addItemToHopper(itemStack, tileState.getLocation());
                         if(!remainder.isEmpty()) itemStack.setAmount(remainder.values().iterator().next().getAmount());
                         else {
-                            items.remove(drop);
+                            iterator.remove();
                             drop.remove();
                         }
                     }else if (Helper.shouldDestroy(tileState)) {
-                        items.remove(drop);
+                        iterator.remove();
                         drop.remove();
                     }
+                    continue itemLoop;
                 }
             }
         });

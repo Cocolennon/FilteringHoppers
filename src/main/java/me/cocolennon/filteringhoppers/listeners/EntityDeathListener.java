@@ -15,15 +15,17 @@ public class EntityDeathListener implements Listener {
     @EventHandler
     public void entityDeath(EntityDeathEvent event) {
         if(!Main.getInstance().config().itemCollection.enabled) return;
-        List<ItemStack> items = new ArrayList<>(event.getDrops());
         Bukkit.getRegionScheduler().execute(Main.getInstance(), event.getEntity().getLocation(), () -> {
+            List<ItemStack> items = new ArrayList<>(event.getDrops());
+            Iterator<ItemStack> iterator = items.iterator();
             List<TileState> tileStates = Helper.getHopperStates(event.getEntity().getLocation());
             if(tileStates.isEmpty()) return;
-            hopperLoop:for(TileState tileState : tileStates) {
-                List<ItemStack> filter = Helper.getHopperFilter(tileState);
-                for(ItemStack itemStack : items) {
+            itemLoop:while(iterator.hasNext()) {
+                ItemStack itemStack = iterator.next();
+                for(TileState tileState : tileStates) {
+                    List<ItemStack> filter = Helper.getHopperFilter(tileState);
                     if(filter.isEmpty() || Helper.shouldMoveItem(tileState, itemStack, filter)) {
-                        if(Helper.hopperIsFull(tileState.getLocation(), itemStack)) continue hopperLoop;
+                        if(Helper.hopperIsFull(tileState.getLocation(), itemStack)) continue;
                         HashMap<Integer, ItemStack> remainder = Helper.addItemToHopper(itemStack, tileState.getLocation());
                         if(!remainder.isEmpty()) itemStack.setAmount(remainder.values().iterator().next().getAmount());
                         else {
@@ -34,6 +36,7 @@ public class EntityDeathListener implements Listener {
                         items.remove(itemStack);
                         itemStack.setAmount(0);
                     }
+                    continue itemLoop;
                 }
             }
         });
