@@ -63,7 +63,7 @@ public class Helper {
     public static void saveFilter(TileState hopperState, Inventory filterInventory) {
         PersistentDataContainer container = hopperState.getPersistentDataContainer();
         List<ItemStack> filter = new LinkedList<>();
-        for (int i = 0; i < 18; i++) {
+        for (int i = 0; i < 27; i++) {
             ItemStack item = filterInventory.getItem(i);
             if (item == null) continue;
             filter.add(item);

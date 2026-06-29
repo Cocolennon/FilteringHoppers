@@ -21,7 +21,7 @@ public class MenuUtil {
     public static NamespacedKey buttonAction = new NamespacedKey(Main.getInstance(), "buttonAction");
 
     public static void createFilterMenu(TileState hopperState, List<ItemStack> filter, Player player, Block block) {
-        FilterInventoryHolder invHolder = new FilterInventoryHolder(Main.getInstance(), 27, Localization.get(player, "menu-title", false), block);
+        FilterInventoryHolder invHolder = new FilterInventoryHolder(Main.getInstance(), 36, Localization.get(player, "menu-title", false), block);
         Inventory inv = invHolder.getInventory();
         if(filter != null) for(ItemStack itemStack : filter) invHolder.addItem(itemStack);
         boolean shouldDestroy = Helper.shouldDestroy(hopperState);
@@ -29,12 +29,12 @@ public class MenuUtil {
         boolean isFilterType = Helper.isFilterType(hopperState);
         boolean isFilterMeta = Helper.isFilterMeta(hopperState);
         boolean isFilterEnchanted = Helper.isFilterEnchanted(hopperState);
-        invHolder.setItem(19, getItem(player, isFilterType ? Material.GREEN_STAINED_GLASS_PANE : Material.RED_STAINED_GLASS_PANE, isFilterType ? "filter-type" : "ignore-type", "toggleType"));
-        invHolder.setItem(20, getItem(player, isFilterMeta ? Material.GREEN_STAINED_GLASS_PANE : Material.RED_STAINED_GLASS_PANE, isFilterMeta ? "filter-meta" : "ignore-meta", "toggleMeta"));
-        invHolder.setItem(21, getItem(player, isFilterEnchanted ? Material.GREEN_STAINED_GLASS_PANE : Material.RED_STAINED_GLASS_PANE, isFilterEnchanted ? "filter-enchanted" : "ignore-enchanted", "toggleEnchanted"));
-        invHolder.setItem(24, getItem(player, shouldDestroy ? Material.RED_STAINED_GLASS_PANE : Material.GREEN_STAINED_GLASS_PANE, shouldDestroy ? "destroy" : "keep", "toggleDestroy"));
-        invHolder.setItem(25, getItem(player, isWhitelist ? Material.WHITE_STAINED_GLASS_PANE : Material.BLACK_STAINED_GLASS_PANE, isWhitelist ? "whitelist" : "blacklist", "toggleMode"));
-        invHolder.fillEmpty(18, getFillerItem());
+        invHolder.setItem(28, getItem(player, isFilterType ? Material.GREEN_STAINED_GLASS_PANE : Material.RED_STAINED_GLASS_PANE, isFilterType ? "filter-type" : "ignore-type", "toggleType"));
+        invHolder.setItem(29, getItem(player, isFilterMeta ? Material.GREEN_STAINED_GLASS_PANE : Material.RED_STAINED_GLASS_PANE, isFilterMeta ? "filter-meta" : "ignore-meta", "toggleMeta"));
+        invHolder.setItem(30, getItem(player, isFilterEnchanted ? Material.GREEN_STAINED_GLASS_PANE : Material.RED_STAINED_GLASS_PANE, isFilterEnchanted ? "filter-enchanted" : "ignore-enchanted", "toggleEnchanted"));
+        invHolder.setItem(33, getItem(player, shouldDestroy ? Material.RED_STAINED_GLASS_PANE : Material.GREEN_STAINED_GLASS_PANE, shouldDestroy ? "destroy" : "keep", "toggleDestroy"));
+        invHolder.setItem(34, getItem(player, isWhitelist ? Material.WHITE_STAINED_GLASS_PANE : Material.BLACK_STAINED_GLASS_PANE, isWhitelist ? "whitelist" : "blacklist", "toggleMode"));
+        invHolder.fillEmpty(27, getFillerItem());
         player.playSound(player.getLocation(), Sound.BLOCK_BARREL_OPEN, 1.0f, 1.0f);
         player.openInventory(inv);
         player.sendMessage(Localization.get(player, "filter.open", true));
