@@ -26,8 +26,14 @@ public class EntityDeathListener implements Listener {
                         if(Helper.hopperIsFull(tileState.getLocation(), itemStack)) continue hopperLoop;
                         HashMap<Integer, ItemStack> remainder = Helper.addItemToHopper(itemStack, tileState.getLocation());
                         if(!remainder.isEmpty()) itemStack.setAmount(remainder.values().iterator().next().getAmount());
-                        else itemStack.setAmount(0);
-                    }else if(Helper.shouldDestroy(tileState)) itemStack.setAmount(0);
+                        else {
+                            items.remove(itemStack);
+                            itemStack.setAmount(0);
+                        }
+                    }else if(Helper.shouldDestroy(tileState)) {
+                        items.remove(itemStack);
+                        itemStack.setAmount(0);
+                    }
                 }
             }
         });

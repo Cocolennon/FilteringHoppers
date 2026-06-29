@@ -28,8 +28,14 @@ public class BlockDropItemListener implements Listener {
                         if(Helper.hopperIsFull(tileState.getLocation(), itemStack)) continue hopperLoop;
                         HashMap<Integer, ItemStack> remainder = Helper.addItemToHopper(itemStack, tileState.getLocation());
                         if(!remainder.isEmpty()) itemStack.setAmount(remainder.values().iterator().next().getAmount());
-                        else drop.remove();
-                    }else if (Helper.shouldDestroy(tileState)) drop.remove();
+                        else {
+                            items.remove(drop);
+                            drop.remove();
+                        }
+                    }else if (Helper.shouldDestroy(tileState)) {
+                        items.remove(drop);
+                        drop.remove();
+                    }
                 }
             }
         });
