@@ -17,7 +17,7 @@ import org.bukkit.persistence.PersistentDataType;
 import java.util.List;
 
 public class BlockPlaceListener implements Listener {
-    private static NamespacedKey tooltipShown = new NamespacedKey(Main.getInstance(), "tooltipShown");
+    private static final NamespacedKey tooltipShown = new NamespacedKey(Main.getInstance(), "tooltipShown");
 
     @EventHandler
     public void blockPlace(BlockPlaceEvent event) {
